@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE generatorConfiguration-->
+        <!--PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"-->
+        <!--"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">-->
+<!--标签为对象, property为对象的属性-->
+<generatorConfiguration>
+    <!--导入配置文件-->
+    <properties resource="datasource.properties"/>
+
+    <!--jdbc的数据库连接 -->
+    <dataSource>
+        <!--driverLocation非必须参数-->
+        <property name="driverLocation" value="src/main/resources/mysql-connector-java-5.1.6-bin.jar"/>
+        <!--driverClass非必须参数-->
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/cloud_user?characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </dataSource>
+
+    <!-- optional，旨在创建class时，对注释进行控制 -->
+    <commentGenerator>
+        <!--代码注释配置-->
+        <property name="author" value="liuhf"/>
+        <property name="company" value="example"/>
+        <property name="basePackageName" value="com.mss.framework.base.server.user"/>
+        <property name="suppressAllComments" value="true"/>
+        <property name="suppressDate" value="true"/>
+        <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+        <property name="addRemarkComments" value="true"/>
+    </commentGenerator>
+
+    <!--java类型适配-->
+    <javaTypeResolver>
+        <!-- 当表名或者字段名为SQL关键字的时候，可以设置该属性为true，MBG会自动给表名或字段名添加分隔符  -->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!--
+            默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer
+            true，把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal
+        -->
+        <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+    <!--service层开始要和dao能够分开,不提供重写文件功能-->
+    <serviceGenerator>
+        <!--是否生成代码-->
+        <property name="generator" value="true"/>
+        <!--是否允许子包，即targetPackage.schemaName.tableName-->
+        <property name="enableSubPackages" value="false"/>
+        <property name="targetProject" value="./src/main/java"/>
+        <property name="controller" value="com.mss.framework.base.server.user.controller"/>
+        <property name="service" value="com.mss.framework.base.server.user.service"/>
+        <property name="serviceImpl" value="com.mss.framework.base.server.user.service.impl"/>
+    </serviceGenerator>
+    <!--dao层开始要和service能够分开,提供是否重写文件功能-->
+    <commonGenerator>
+        <!--是否重写文件-->
+        <property name="overwrite" value="true"/>
+        <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+        <property name="enableSubPackages" value="false"/>
+        <dtoGenerator>
+            <property name="targetProject" value="./src/main/java"/>
+            <property name="targetPackage" value="com.mss.framework.base.server.user.dto"/>
+            <!--是否对dto添加全参构造函数, 添加全参构造函数时需添加无参构造-->
+            <property name="allConstructor" value="true"/>
+            <!--是否对dto中char类型的列进行trim操作-->
+            <property name="trimStrings" value="true"/>
+            <!--建立的dto对象是否不可改变, 即生成的dto对象不会有setter方法,只有构造方法-->
+            <property name="immutable" value="false"/>
+            <!--是否对dto使用lombok注解, 使用lombok注解将不会生成getter,setter和constructor方法-->
+            <property name="useLombok" value="true"/>
+        </dtoGenerator>
+        <modelGenerator>
+            <property name="targetProject" value="./src/main/java"/>
+            <property name="targetPackage" value="com.mss.framework.base.server.user.po"/>
+            <!--是否对model添加全参构造函数, 添加全参构造函数时需添加无参构造-->
+            <property name="allConstructor" value="true"/>
+            <!--是否对model中char类型的列进行trim操作-->
+            <property name="trimStrings" value="true"/>
+            <!--建立的Model对象是否不可改变, 即生成的Model对象不会有setter方法,只有构造方法-->
+            <property name="immutable" value="false"/>
+            <!--是否对model使用lombok注解, 使用lombok注解将不会生成getter,setter和constructor方法-->
+            <property name="useLombok" value="true"/>
+        </modelGenerator>
+        <!--
+            客户端代码，生成易于使用的针对Model对象和XML配置文件的代码
+            type="ANNOTATEDMAPPER",生成Java Model和基于注解的Mapper对象
+            type="MIXEDMAPPER",生成基于注解的Java Model和相应的Mapper对象
+            type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
+        -->
+        <daoGenerator>
+            <property name="targetProject" value="./src/main/java"/>
+            <property name="targetPackage" value="com.mss.framework.base.server.user.dao"/>
+        </daoGenerator>
+        <mapperGenerator>
+            <property name="targetProject" value="./src/main/resources"/>
+            <property name="targetPackage" value="mappers"/>
+        </mapperGenerator>
+    </commonGenerator>
+
+    <!-- 数据库对应数据表-->
+    <tablesConfiguration>
+        <!--<table tableName="oauth_access_token" domainName="OAuthAccessToken">-->
+        <!--</table>-->
+        <!--<table tableName="oauth_client_detail" domainName="OAuthClientDetail">-->
+        <!--</table>-->
+        <!--<table tableName="oauth_client_user" domainName="OAuthClientUser">-->
+        <!--</table>-->
+        <!--<table tableName="oauth_refresh_token" domainName="OAuthRefreshToken">-->
+        <!--</table>-->
+        <!--<table tableName="oauth_scope" domainName="OAuthScope">-->
+        <!--</table>-->
+        <!--<table tableName="sso_access_token" domainName="SSOAccessToken">-->
+        <!--</table>-->
+        <!--<table tableName="sso_client_detail" domainName="SSOClientDetail">-->
+        <!--</table>-->
+        <!--<table tableName="sso_refresh_token" domainName="SSORefreshToken">-->
+        <!--</table>-->
+        <!--<table tableName="user" domainName="User">-->
+            <!--<columnOverride columnName="avatar" jdbcType="VARCHAR"/>-->
+        <!--</table>-->
+        <!--<table tableName="user_auth" domainName="UserAuth">-->
+        <!--</table>-->
+    </tablesConfiguration>
+
+    <!-- 数据库对应数据视图-->
+    <viewsConfiguration>
+        <!--<view viewName="lottery_result" domainName="Result">-->
+        <!--</view>-->
+    </viewsConfiguration>
+
+    <!-- mybatis插件的搭建 -->
+</generatorConfiguration>

@@ -15,19 +15,14 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.M3</spring-cloud.version>
     </properties>
 
     <modules>
-        <module>base-admin</module>
-        <module>base-config</module>
-        <module>base-gateway</module>
-        <module>base-logs</module>
-        <module>base-message</module>
-        <module>base-monitor</module>
-        <module>base-nacos</module>
-        <module>base-register</module>
-        <module>base-schedule</module>
+        <module>base-server</module>
         <module>base-user</module>
         <module>server-email</module>
         <module>server-im</module>

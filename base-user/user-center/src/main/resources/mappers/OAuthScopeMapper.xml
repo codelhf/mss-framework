@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mss.framework.base.user.server.dao.OAuthScopeMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.server.user.po.OAuthScope">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="scope_name" jdbcType="VARCHAR" property="scopeName"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, scope_name, description
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from oauth_scope
+        where id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="String">
+        delete from oauth_scope
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+        insert into oauth_scope
+        (id, scope_name, description)
+        values
+        (#{id, jdbcType=VARCHAR}, #{scopeName, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+        insert into oauth_scope
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="scopeName != null">
+                scope_name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=VARCHAR},
+            </if>
+            <if test="scopeName != null">
+                #{scopeName, jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description, jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+        update oauth_scope
+        <set>
+            <if test="scopeName != null">
+                scope_name = #{scopeName, jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description, jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+        update oauth_scope
+        set
+            scope_name = #{scopeName, jdbcType=VARCHAR},
+            description = #{description, jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    <delete id="deleteByIdList" parameterType="map">
+        delete from oauth_scope
+        where id in
+        <foreach collection="idList" index="index" item="id" open="(" separator="," close=")" >
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectPageList" parameterType="com.mss.framework.base.server.user.po.OAuthScope" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from oauth_scope
+        <where>
+            <if test="id != null">
+                and id like #{id}
+            </if>
+            <if test="scopeName != null">
+                and scope_name like #{scopeName}
+            </if>
+            <if test="description != null">
+                and description like #{description}
+            </if>
+        </where>
+    </select>
+    <select id="selectByScopeName" parameterType="string" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from oauth_scope
+        where scope_name = #{scopeName}
+    </select>
+</mapper>

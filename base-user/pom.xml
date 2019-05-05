@@ -22,10 +22,10 @@
     </properties>
 
     <modules>
-        <module>client-oauth</module>
-        <module>client-other</module>
-        <module>client-sso</module>
-        <module>server-user</module>
+        <module>user-center</module>
+        <module>user-oauth</module>
+        <module>user-social</module>
+        <module>user-sso</module>
     </modules>
 
 </project>

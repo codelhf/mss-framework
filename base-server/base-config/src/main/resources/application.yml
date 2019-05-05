@@ -1,0 +1,27 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-1:8761/eureka/,http://eureka-2:8762/eureka/,http://eureka-3:8763/eureka/
+  instance:
+    prefer-ip-address: true
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+     server:
+      git:
+        uri: https://gitee.com/codelhf/spring-cloud-config
+        username: lhf635@163.com
+        password: my597849899.
+        basedir: D:\\IdeaProjects\\imooc\\spring-cloud\\config\\basedir
+management:
+  endpoint:
+    # 自动刷新
+    bus-refresh:
+      enabled: true
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
