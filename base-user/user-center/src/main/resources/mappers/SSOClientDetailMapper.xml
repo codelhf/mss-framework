@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mss.framework.base.user.server.dao.SSOClientDetailMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.po.SSOClientDetail">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.SSOClientDetail">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
@@ -21,13 +21,13 @@
         delete from sso_client_detail
         where id = #{id}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.user.server.po.SSOClientDetail">
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
         insert into sso_client_detail
         (id, client_name, description, redirect_url, logout_url, status)
         values
         (#{id, jdbcType=VARCHAR}, #{clientName, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{redirectUrl, jdbcType=VARCHAR}, #{logoutUrl, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.po.SSOClientDetail">
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
         insert into sso_client_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -70,7 +70,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.po.SSOClientDetail">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
         update sso_client_detail
         <set>
             <if test="clientName != null">
@@ -91,7 +91,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.po.SSOClientDetail">
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
         update sso_client_detail
         set
             client_name = #{clientName, jdbcType=VARCHAR},
@@ -108,7 +108,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.po.SSOClientDetail" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from sso_client_detail
         <where>

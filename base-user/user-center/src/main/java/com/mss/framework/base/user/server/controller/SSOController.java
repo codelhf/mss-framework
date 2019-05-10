@@ -1,17 +1,15 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.user.server.common.Constants;
-import com.mss.framework.base.user.server.common.SpringContextUtil;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
-import com.mss.framework.base.user.server.po.SSOAccessToken;
-import com.mss.framework.base.user.server.po.SSOClientDetail;
-import com.mss.framework.base.user.server.po.SSORefreshToken;
+import com.mss.framework.base.user.server.pojo.SSOAccessToken;
+import com.mss.framework.base.user.server.pojo.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.IRedisService;
 import com.mss.framework.base.user.server.service.ISSOService;
 import com.mss.framework.base.user.server.service.IUserService;
-import com.mss.framework.base.user.server.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

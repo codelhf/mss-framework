@@ -1,8 +1,8 @@
 package com.mss.framework.base.user.server.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mss.framework.base.user.server.common.ResponseCode;
-import com.mss.framework.base.user.server.common.ServerResponse;
+import com.mss.framework.base.core.common.ResponseCode;
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.UserMapper;
 import com.mss.framework.base.user.server.dto.UserDTO;
 import com.mss.framework.base.user.server.enums.ScopeEnum;

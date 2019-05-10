@@ -1,8 +1,6 @@
 package com.mss.framework.base.user.server.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mss.framework.base.user.server.common.ResponseCode;
-import com.mss.framework.base.user.server.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.OAuthClientUserMapper;
 import com.mss.framework.base.user.server.dto.OAuthClientUserDTO;
 import com.mss.framework.base.server.user.po.OAuthClientUser;

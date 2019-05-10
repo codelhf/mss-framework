@@ -1,6 +1,6 @@
 package com.mss.framework.base.user.server.dao;
 
-import com.mss.framework.base.user.server.po.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 

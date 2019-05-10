@@ -1,6 +1,5 @@
 package com.mss.framework.base.user.server.controller;
 
-import com.mss.framework.base.user.server.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.UserDTO;
 import com.mss.framework.base.user.server.service.IRedisService;
 import com.mss.framework.base.user.server.service.IUserService;

@@ -1,6 +1,6 @@
 package com.mss.framework.base.user.server.service;
 
-import com.mss.framework.base.user.server.common.ServerResponse;
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.UserDTO;
 import com.github.pagehelper.PageInfo;
 import com.mss.framework.base.user.server.pojo.User;

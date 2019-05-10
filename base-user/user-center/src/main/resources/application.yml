@@ -2,3 +2,56 @@
 spring:
   profiles:
     active: dev
+    include: application-dev.yml, application-prod.yml
+  mvc:
+    view:
+      prefix: /WEB-INF/view
+      suffix: .html
+
+  #热部署
+  devtools:
+    restart:
+      #热部署生效
+      enabled: true
+      #设置重启的目录
+      additional-paths: src/main/java
+      #classpath目录下的WEB-INF文件夹内容修改不重启
+      exclude: WEB-INF/**,static/**,templates/**
+
+#开启debug模式
+debug: false
+#追踪核心loggers
+trace: false
+
+## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis:
+  #注意：一定要对应mapper映射xml文件的所在路径
+  mapper-locations: classpath:mappers/*.xml
+  # 注意：对应实体类的路径
+  type-aliases-package: com.mss.framework.base.user.server.pojo
+
+#pagehelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+#Swagger2接口文档
+swagger:
+  ui:
+    title: 接口自动化测试 APIs
+    version: 1.0
+    description: 接口自动化测试 APIs
+    contact:
+      name: liuhf
+      email: liuhf@si-tech.com.cn
+      #url: "http://blog.didispace.com/"
+    #许可人
+    #license: "程序猿DD"
+    #licenseUrl: "http://blog.didispace.com/"
+    #服务条款URL
+    #termsOfServiceUrl: "http://blog.didispace.com/"
+
+#MD5加密延值
+passwordSalt: djfi#$%a;ijejie@#%$##vfa;ljfi@#$d;jafoie

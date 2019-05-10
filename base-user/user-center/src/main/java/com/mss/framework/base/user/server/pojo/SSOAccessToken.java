@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.po;
+package com.mss.framework.base.user.server.pojo;
 
 import lombok.*;
 
@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Title: SSORefreshToken
- * @Description: SSORefreshToken实体类
+ * @Title: SSOAccessToken
+ * @Description: SSOAccessToken实体类
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-04 10:00:17
@@ -17,14 +17,22 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SSORefreshToken implements Serializable {
+public class SSOAccessToken implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
     
-    private String tokenId;
+    private String accessToken;
     
-    private String refreshToken;
+    private String userId;
+    
+    private String userName;
+    
+    private String ip;
+    
+    private String clientId;
+    
+    private String channel;
     
     private long expiresIn;
     

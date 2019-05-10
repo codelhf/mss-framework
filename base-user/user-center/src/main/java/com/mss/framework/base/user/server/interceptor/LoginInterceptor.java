@@ -1,7 +1,6 @@
 package com.mss.framework.base.user.server.interceptor;
 
 import com.mss.framework.base.user.server.common.Constants;
-import com.mss.framework.base.user.server.common.SpringContextUtil;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;

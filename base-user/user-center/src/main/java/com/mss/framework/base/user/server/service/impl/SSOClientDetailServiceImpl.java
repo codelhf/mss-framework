@@ -1,11 +1,9 @@
 package com.mss.framework.base.user.server.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mss.framework.base.user.server.common.ResponseCode;
-import com.mss.framework.base.user.server.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.SSOClientDetailMapper;
 import com.mss.framework.base.user.server.dto.SSOClientDetailDTO;
-import com.mss.framework.base.user.server.po.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.service.ISSOClientDetailService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

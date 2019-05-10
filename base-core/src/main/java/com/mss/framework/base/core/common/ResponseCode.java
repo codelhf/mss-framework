@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.common;
+package com.mss.framework.base.core.common;
 
 /**
  * @Title: ResponseCode

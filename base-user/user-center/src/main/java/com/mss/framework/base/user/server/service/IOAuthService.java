@@ -1,6 +1,5 @@
 package com.mss.framework.base.user.server.service;
 
-import com.mss.framework.base.server.user.pojo.*;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
 import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;

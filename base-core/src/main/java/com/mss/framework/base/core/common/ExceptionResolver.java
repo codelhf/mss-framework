@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.common;
+package com.mss.framework.base.core.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

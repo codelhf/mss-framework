@@ -1,6 +1,6 @@
 package com.mss.framework.base.user.server.dao;
 
-import com.mss.framework.base.user.server.po.SSOAccessToken;
+import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 

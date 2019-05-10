@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.po;
+package com.mss.framework.base.user.server.pojo;
 
 import lombok.*;
 

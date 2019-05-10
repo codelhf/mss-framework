@@ -1,8 +1,8 @@
 package com.mss.framework.base.user.server.service;
 
-import com.mss.framework.base.user.server.po.SSOAccessToken;
-import com.mss.framework.base.user.server.po.SSOClientDetail;
-import com.mss.framework.base.user.server.po.SSORefreshToken;
+import com.mss.framework.base.user.server.pojo.SSOAccessToken;
+import com.mss.framework.base.user.server.pojo.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 
 /**

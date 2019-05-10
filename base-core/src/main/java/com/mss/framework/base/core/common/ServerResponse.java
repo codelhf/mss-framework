@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.common;
+package com.mss.framework.base.core.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

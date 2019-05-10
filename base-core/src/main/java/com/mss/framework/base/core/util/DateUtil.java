@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.util;
+package com.mss.framework.base.core.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

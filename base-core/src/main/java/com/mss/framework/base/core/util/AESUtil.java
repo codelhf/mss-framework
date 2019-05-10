@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.util;
+package com.mss.framework.base.core.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;

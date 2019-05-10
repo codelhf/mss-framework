@@ -1,10 +1,11 @@
-package com.mss.framework.base.user.server.common;
+package com.mss.framework.base.core.common;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -19,6 +20,7 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/3 16:39
  */
+@Component
 public class SpringContextUtil implements ApplicationContextAware {
     private static ConfigurableApplicationContext applicationContext;
 

@@ -1,6 +1,5 @@
-package com.mss.framework.base.user.server.controller;
+package com.mss.framework.base.user.server.controller.manage;
 
-import com.mss.framework.base.user.server.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
 import com.mss.framework.base.user.server.service.ISSORefreshTokenService;
 import com.github.pagehelper.PageInfo;

@@ -1,11 +1,9 @@
 package com.mss.framework.base.user.server.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mss.framework.base.user.server.common.ResponseCode;
-import com.mss.framework.base.user.server.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.SSORefreshTokenMapper;
 import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
-import com.mss.framework.base.user.server.po.SSORefreshToken;
+import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.service.ISSORefreshTokenService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

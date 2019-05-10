@@ -1,5 +1,7 @@
 package com.mss.framework.base.user.server.controller;
 
+import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
@@ -11,7 +13,6 @@ import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.IOAuthService;
 import com.mss.framework.base.user.server.service.IUserService;
 import com.mss.framework.base.user.server.service.IRedisService;
-import com.mss.framework.base.user.server.util.DateUtil;
 import com.mss.framework.base.user.server.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,16 +52,12 @@ public class OauthController {
      * @createtime 2019/5/3 23:20
      */
     @PostMapping("/clientRegister")
-    public Map<String, Object> clientRegister(@RequestBody OAuthClientDetail clientDetail) {
-        Map<String, Object> result = new HashMap<>();
+    public ServerResponse<OAuthClientDetail> clientRegister(@RequestBody OAuthClientDetail clientDetail) {
         boolean success = ioAuthService.register(clientDetail);
         if (success) {
-            result.put("code", 200);
-        } else {
-            result.put("code", 500);
-            result.put("msg", "注册失败");
+            return ServerResponse.createBySuccess(clientDetail);
         }
-        return result;
+        return ServerResponse.createByErrorMessage("注册失败");
     }
 
     /**
