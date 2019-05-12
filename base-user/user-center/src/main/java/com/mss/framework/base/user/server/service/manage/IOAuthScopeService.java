@@ -1,22 +1,22 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
-import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
+import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: OAuthAccessTokenService
- * @Description: OAuthAccessToken接口层
+ * @Title: OAuthScopeService
+ * @Description: OAuthScope接口层
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-03 19:20:47
  */
-public interface IOAuthAccessTokenService {
+public interface IOAuthScopeService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询OAuthAccessToken列表
+	 * @Description: 查询OAuthScope列表
 	 * @Company: example
 	 * @Author: liuhf
 	 * @CreateTime: 2019-05-03 19:20:47
@@ -30,44 +30,44 @@ public interface IOAuthAccessTokenService {
 
     /**
      * @Title: select
-     * @Description: 查询OAuthAccessToken对象
+     * @Description: 查询OAuthScope对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<OAuthAccessTokenDTO>
+     * @return ServerResponse<OAuthScopeDTO>
      */
-	ServerResponse<OAuthAccessTokenDTO> select(String id);
+	ServerResponse<OAuthScopeDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存OAuthAccessToken对象
+     * @Description: 保存OAuthScope对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
-     * @param oAuthAccessTokenDTO
+     * @param oAuthScopeDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(OAuthAccessTokenDTO oAuthAccessTokenDTO);
+	ServerResponse<String> insert(OAuthScopeDTO oAuthScopeDTO);
 
     /**
      * @Title: update
-     * @Description: 更新OAuthAccessToken对象
+     * @Description: 更新OAuthScope对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @param oAuthAccessTokenDTO
+     * @param oAuthScopeDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, OAuthAccessTokenDTO oAuthAccessTokenDTO);
+	ServerResponse<String> update(String id, OAuthScopeDTO oAuthScopeDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除OAuthAccessToken对象
+     * @Description: 批量删除OAuthScope对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47

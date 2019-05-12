@@ -13,16 +13,6 @@ import com.mss.framework.base.user.server.pojo.User;
 public interface IOAuthService {
 
     /**
-     * @description: 注册需要接入的客户端信息
-     * @author liuhf
-     * @createtime 2019/5/3 20:56
-     *
-     * @param [oAuthClientDetail] 用户传递进来的关键信息
-     * @return boolean
-     */
-    boolean register(OAuthClientDetail oAuthClientDetail);
-
-    /**
      * @description: 通过id查询客户端信息
      * @author liuhf
      * @createtime 2019/5/3 22:38
@@ -71,6 +61,16 @@ public interface IOAuthService {
      * @return OAuthRefreshToken
      */
     OAuthRefreshToken selectByRefreshToken(String refreshToken);
+
+    /**
+     * @description: 注册需要接入的客户端信息
+     * @author liuhf
+     * @createtime 2019/5/3 20:56
+     *
+     * @param [oAuthClientDetail] 用户传递进来的关键信息
+     * @return OAuthClientDetail
+     */
+    OAuthClientDetail register(OAuthClientDetail oAuthClientDetail);
 
     /**
      * @description: 保存哪个用户授权哪个接入的客户端哪种访问范围的权限

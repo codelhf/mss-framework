@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.user.server.dto.OAuthClientDetailDTO;
-import com.mss.framework.base.user.server.service.IOAuthClientDetailService;
+import com.mss.framework.base.user.server.service.manage.IOAuthClientDetailService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

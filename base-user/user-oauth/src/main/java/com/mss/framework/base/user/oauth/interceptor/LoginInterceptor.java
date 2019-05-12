@@ -26,13 +26,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         //获取session中存储的token
         String accessToken = (String) session.getAttribute(Constants.SESSION_ACCESS_TOKEN);
 
-        if(StringUtils.isNoneBlank(accessToken)){
-            return true;
-        }else{
+        if (StringUtils.isBlank(accessToken)) {
             //如果token不存在，则跳转等登录页面
             response.sendRedirect(request.getContextPath() + "/login?redirectUrl=" + SpringContextUtil.getRequestUrl(request));
-
             return false;
         }
+        return true;
     }
 }

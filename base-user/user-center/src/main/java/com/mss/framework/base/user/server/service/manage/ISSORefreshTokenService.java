@@ -1,22 +1,22 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
-import com.mss.framework.base.user.server.dto.SSOAccessTokenDTO;
+import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: SSOAccessTokenService
- * @Description: SSOAccessToken接口层
+ * @Title: SSORefreshTokenService
+ * @Description: SSORefreshToken接口层
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-04 10:00:17
  */
-public interface ISSOAccessTokenService {
+public interface ISSORefreshTokenService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询SSOAccessToken列表
+	 * @Description: 查询SSORefreshToken列表
 	 * @Company: example
 	 * @Author: liuhf
 	 * @CreateTime: 2019-05-04 10:00:17
@@ -30,44 +30,44 @@ public interface ISSOAccessTokenService {
 
     /**
      * @Title: select
-     * @Description: 查询SSOAccessToken对象
+     * @Description: 查询SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-04 10:00:17
      *
      * @param id
-     * @return ServerResponse<SSOAccessTokenDTO>
+     * @return ServerResponse<SSORefreshTokenDTO>
      */
-	ServerResponse<SSOAccessTokenDTO> select(String id);
+	ServerResponse<SSORefreshTokenDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存SSOAccessToken对象
+     * @Description: 保存SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-04 10:00:17
      *
-     * @param sSOAccessTokenDTO
+     * @param sSORefreshTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(SSOAccessTokenDTO sSOAccessTokenDTO);
+	ServerResponse<String> insert(SSORefreshTokenDTO sSORefreshTokenDTO);
 
     /**
      * @Title: update
-     * @Description: 更新SSOAccessToken对象
+     * @Description: 更新SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-04 10:00:17
      *
      * @param id
-     * @param sSOAccessTokenDTO
+     * @param sSORefreshTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, SSOAccessTokenDTO sSOAccessTokenDTO);
+	ServerResponse<String> update(String id, SSORefreshTokenDTO sSORefreshTokenDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除SSOAccessToken对象
+     * @Description: 批量删除SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-04 10:00:17

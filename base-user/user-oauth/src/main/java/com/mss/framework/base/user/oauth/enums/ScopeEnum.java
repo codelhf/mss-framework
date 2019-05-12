@@ -6,7 +6,8 @@ package com.mss.framework.base.user.oauth.enums;
  * @CreateTime: 2019/5/4 22:57
  */
 public enum ScopeEnum {
-    BASIC("basic","基础权限"),SUPER("super","所有权限");
+    BASIC("basic","基础权限"),
+    SUPER("super","所有权限");
 
     private String code;
     private String description;

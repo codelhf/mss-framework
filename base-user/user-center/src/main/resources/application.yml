@@ -5,7 +5,7 @@ spring:
     include: application-dev.yml, application-prod.yml
   mvc:
     view:
-      prefix: /WEB-INF/view
+      prefix: /WEB-INF/page
       suffix: .html
 
   #热部署

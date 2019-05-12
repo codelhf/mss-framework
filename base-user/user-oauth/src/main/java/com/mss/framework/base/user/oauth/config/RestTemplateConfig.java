@@ -65,8 +65,7 @@ public class RestTemplateConfig {
                 .build();
 
         //创建HttpComponentsClientHttpRequestFactory实例
-        HttpComponentsClientHttpRequestFactory requestFactory =
-                new HttpComponentsClientHttpRequestFactory(httpClient);
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
         //设置客户端和服务端建立连接的超时时间
         requestFactory.setConnectTimeout(5000);

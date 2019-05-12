@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.user.server.dto.SSOAccessTokenDTO;
-import com.mss.framework.base.user.server.service.ISSOAccessTokenService;
+import com.mss.framework.base.user.server.service.manage.ISSOAccessTokenService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -3,6 +3,7 @@ package com.mss.framework.base.user.server.controller;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
+import com.mss.framework.base.user.server.common.RequestHolder;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;
@@ -53,11 +54,11 @@ public class OauthController {
      */
     @PostMapping("/clientRegister")
     public ServerResponse<OAuthClientDetail> clientRegister(@RequestBody OAuthClientDetail clientDetail) {
-        boolean success = ioAuthService.register(clientDetail);
-        if (success) {
-            return ServerResponse.createBySuccess(clientDetail);
+        OAuthClientDetail oAuthClientDetail = ioAuthService.register(clientDetail);
+        if (oAuthClientDetail == null) {
+            return ServerResponse.createByErrorMessage("注册失败");
         }
-        return ServerResponse.createByErrorMessage("注册失败");
+        return ServerResponse.createBySuccess(clientDetail);
     }
 
     /**
@@ -70,22 +71,24 @@ public class OauthController {
     @GetMapping("/authorizePage")
     public ModelAndView authorizePage(HttpSession session, String redirectUri, String clientId, String scope) {
         if (StringUtils.isNotBlank(redirectUri)) {
-            //将回调地址添加到session中
+            //将第三方的回调地址添加到session中
             session.setAttribute(Constants.SESSION_AUTH_REDIRECT_URL, redirectUri);
         }
+        //将第三方客户端跳转到授权页
         ModelAndView modelAndView = new ModelAndView("authorize");
         //查询请求授权的客户端信息
         OAuthClientDetail clientDetail = ioAuthService.selectByClientId(clientId);
         modelAndView.addObject("clientId", clientId);
         modelAndView.addObject("clientName", clientDetail.getClientName());
         modelAndView.addObject("scope", scope);
+        //授权页会有用户未登录的情况,登录后再次跳转回授权页
         return modelAndView;
     }
 
     /**
      * @param [session, clientId, scope]
      * @return java.util.Map<java.lang.String, java.lang.Object>
-     * @description: 同意授权
+     * @description: 授权页同意授权
      * @author liuhf
      * @createtime 2019/5/3 23:21
      */
@@ -93,21 +96,21 @@ public class OauthController {
     public Map<String, Object> agree(HttpSession session, String clientId, String scope) {
         Map<String, Object> result = new HashMap<>();
         if (StringUtils.isAnyBlank(clientId, scope)) {
-            result.put("msg", "请求参数不能为空！");
+            result.put("msg", "请求参数不能为空");
         }
-        User user = iRedisService.get(Constants.SESSION_USER);
         //1. 向数据库中保存授权信息
-        boolean success = ioAuthService.saveOAuthClientUser(user.getId(), clientId, scope);
+        boolean success = ioAuthService.saveOAuthClientUser(RequestHolder.getCurrentUser().getId(), clientId, scope);
         //2. 返回给页面的数据
-        if (success) {
+        if (!success) {
+            result.put("msg", "授权失败");
+        } else {
             result.put("code", 200);
             //授权成功之后的回调地址
             String redirectUri = (String) session.getAttribute(Constants.SESSION_AUTH_REDIRECT_URL);
             session.removeAttribute(Constants.SESSION_AUTH_REDIRECT_URL);
-            if (StringUtils.isNotBlank(redirectUri)) ;
+            if (StringUtils.isNotBlank(redirectUri)) {
                 result.put("redirect_uri", redirectUri);
-        } else {
-            result.put("msg", "授权失败");
+            }
         }
         return result;
     }
@@ -123,13 +126,13 @@ public class OauthController {
     public ModelAndView authorizeCode(String clientId, String scope, String redirectUri,
                                       //status，用于防止CSRF攻击（非必填）
                                       @RequestParam(value = "status", required = false) String status) {
-        User user = iRedisService.get(Constants.SESSION_USER);
         //生成Authorization Code
-        String authorizationCode = ioAuthService.createAuthorizationCode(clientId, scope, user);
+        String authorizationCode = ioAuthService.createAuthorizationCode(clientId, scope, RequestHolder.getCurrentUser());
         String params = "?code=" + authorizationCode;
         if (StringUtils.isNoneBlank(status)) {
             params = params + "&status=" + status;
         }
+        //重定向到第三方的服务地址
         return new ModelAndView("redirect:" + redirectUri + params);
     }
 
@@ -268,8 +271,7 @@ public class OauthController {
                     //新的过期时间
                     Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
                     //生成新的Access Token
-                    String newAccessTokenStr = ioAuthService.createAccessToken(user, savedClientDetails
-                            , authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
+                    String newAccessTokenStr = ioAuthService.createAccessToken(user, savedClientDetails, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
 
                     //返回数据
                     result.put("access_token", newAccessTokenStr);

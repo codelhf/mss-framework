@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.user.server.dto.OAuthRefreshTokenDTO;
 import com.github.pagehelper.PageInfo;

@@ -1,22 +1,22 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
-import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
+import com.mss.framework.base.user.server.dto.OAuthClientUserDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: OAuthScopeService
- * @Description: OAuthScope接口层
+ * @Title: OAuthClientUserService
+ * @Description: OAuthClientUser接口层
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-03 19:20:47
  */
-public interface IOAuthScopeService {
+public interface IOAuthClientUserService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询OAuthScope列表
+	 * @Description: 查询OAuthClientUser列表
 	 * @Company: example
 	 * @Author: liuhf
 	 * @CreateTime: 2019-05-03 19:20:47
@@ -30,44 +30,44 @@ public interface IOAuthScopeService {
 
     /**
      * @Title: select
-     * @Description: 查询OAuthScope对象
+     * @Description: 查询OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<OAuthScopeDTO>
+     * @return ServerResponse<OAuthClientUserDTO>
      */
-	ServerResponse<OAuthScopeDTO> select(String id);
+	ServerResponse<OAuthClientUserDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存OAuthScope对象
+     * @Description: 保存OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
-     * @param oAuthScopeDTO
+     * @param oAuthClientUserDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(OAuthScopeDTO oAuthScopeDTO);
+	ServerResponse<String> insert(OAuthClientUserDTO oAuthClientUserDTO);
 
     /**
      * @Title: update
-     * @Description: 更新OAuthScope对象
+     * @Description: 更新OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @param oAuthScopeDTO
+     * @param oAuthClientUserDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, OAuthScopeDTO oAuthScopeDTO);
+	ServerResponse<String> update(String id, OAuthClientUserDTO oAuthClientUserDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除OAuthScope对象
+     * @Description: 批量删除OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47

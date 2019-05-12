@@ -7,8 +7,8 @@ import com.mss.framework.base.user.oauth.util.EncryptUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,7 +21,7 @@ import java.text.MessageFormat;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 22:54
  */
-@Controller
+@RestController
 public class LoginController {
     @Autowired
     private RestTemplate restTemplate;
@@ -53,7 +53,7 @@ public class LoginController {
      * @date 2018/7/25 16:42
      * @since 1.0.0
      */
-    @RequestMapping("/login")
+    @RequestMapping("/login/other")
     public ModelAndView login(HttpServletRequest request) {
         //当前系统登录成功之后的回调URL
         String redirectUrl = request.getParameter("redirectUrl");
@@ -72,7 +72,6 @@ public class LoginController {
             if (StringUtils.isNoneBlank(redirectUrl)) {
                 session.setAttribute(Constants.SESSION_LOGIN_REDIRECT_URL, redirectUrl);
             }
-
             //生成随机的状态码，用于防止CSRF攻击
             String status = EncryptUtils.getRandomStr1(6);
             session.setAttribute(Constants.SESSION_AUTH_CODE_STATUS, status);
@@ -80,21 +79,17 @@ public class LoginController {
             resultUrl += MessageFormat.format(authorizationUri, clientId, status, currentUrl);
         } else {
             //2. 通过Authorization Code获取Access Token
-            AuthorizationResponse response = restTemplate.getForObject(accessTokenUri, AuthorizationResponse.class
-                    , clientId, clientSecret, code, currentUrl);
-
+            AuthorizationResponse response = restTemplate.getForObject(accessTokenUri, AuthorizationResponse.class, clientId, clientSecret, code, currentUrl);
             //如果正常返回
-            if (StringUtils.isNoneBlank(response.getAccess_token())) {
+            if (response != null && StringUtils.isNotBlank(response.getAccess_token())) {
                 System.out.println(response);
 
                 //2.1 将Access Token存到session
                 session.setAttribute(Constants.SESSION_ACCESS_TOKEN, response.getAccess_token());
 
                 //2.2 再次查询用户基础信息，并将用户ID存到session
-                User user = restTemplate.getForObject(userInfoUri, User.class
-                        , response.getAccess_token());
-
-                if (StringUtils.isNoneBlank(user.getUsername())) {
+                User user = restTemplate.getForObject(userInfoUri, User.class, response.getAccess_token());
+                if (user != null && StringUtils.isNotBlank(user.getUsername())) {
                     session.setAttribute(Constants.SESSION_USER, user);
                 }
             }
@@ -102,7 +97,7 @@ public class LoginController {
             //3. 从session中获取回调URL，并返回
             redirectUrl = (String) session.getAttribute(Constants.SESSION_LOGIN_REDIRECT_URL);
             session.removeAttribute("redirectUrl");
-            if (StringUtils.isNoneBlank(redirectUrl)) {
+            if (StringUtils.isNotBlank(redirectUrl)) {
                 resultUrl += redirectUrl;
             } else {
                 resultUrl += "/user/userIndex";

@@ -1,22 +1,22 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
-import com.mss.framework.base.user.server.dto.OAuthClientUserDTO;
+import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: OAuthClientUserService
- * @Description: OAuthClientUser接口层
+ * @Title: OAuthAccessTokenService
+ * @Description: OAuthAccessToken接口层
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-03 19:20:47
  */
-public interface IOAuthClientUserService {
+public interface IOAuthAccessTokenService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询OAuthClientUser列表
+	 * @Description: 查询OAuthAccessToken列表
 	 * @Company: example
 	 * @Author: liuhf
 	 * @CreateTime: 2019-05-03 19:20:47
@@ -30,44 +30,44 @@ public interface IOAuthClientUserService {
 
     /**
      * @Title: select
-     * @Description: 查询OAuthClientUser对象
+     * @Description: 查询OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<OAuthClientUserDTO>
+     * @return ServerResponse<OAuthAccessTokenDTO>
      */
-	ServerResponse<OAuthClientUserDTO> select(String id);
+	ServerResponse<OAuthAccessTokenDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存OAuthClientUser对象
+     * @Description: 保存OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
-     * @param oAuthClientUserDTO
+     * @param oAuthAccessTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(OAuthClientUserDTO oAuthClientUserDTO);
+	ServerResponse<String> insert(OAuthAccessTokenDTO oAuthAccessTokenDTO);
 
     /**
      * @Title: update
-     * @Description: 更新OAuthClientUser对象
+     * @Description: 更新OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @param oAuthClientUserDTO
+     * @param oAuthAccessTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, OAuthClientUserDTO oAuthClientUserDTO);
+	ServerResponse<String> update(String id, OAuthAccessTokenDTO oAuthAccessTokenDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除OAuthClientUser对象
+     * @Description: 批量删除OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
      * @CreateTime: 2019-05-03 19:20:47

@@ -1,12 +1,15 @@
-package com.mss.framework.base.user.server.service.impl;
+package com.mss.framework.base.user.server.service.manage.impl;
 
+import com.mss.framework.base.core.util.DateUtil;
+import com.mss.framework.base.core.util.EncryptUtil;
+import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.server.common.Constants;
+import com.mss.framework.base.user.server.common.RequestHolder;
 import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
 import com.mss.framework.base.user.server.service.IOAuthService;
 import com.mss.framework.base.user.server.service.IRedisService;
-import com.mss.framework.base.user.server.util.IDUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,42 +38,6 @@ public class OAuthServiceImpl implements IOAuthService {
     @Autowired
     private OAuthClientUserMapper oAuthClientUserMapper;
 
-
-    @Override
-    public boolean register(OAuthClientDetail oAuthClientDetail) {
-        //客户端的名称和回调地址不能为空
-        if (StringUtils.isNoneBlank(oAuthClientDetail.getClientName(), oAuthClientDetail.getRedirectUri())) {
-            //生成24位随机的clientId
-            String clientId = EncryptUtil.getRandomStr1(24);
-            OAuthClientDetail clientDetail = oAuthClientDetailMapper.selectByClientId(clientId);
-            //生成的clientId必须是唯一的
-            for (int i = 0; i < 10; i++) {
-                if (clientDetail == null) {
-                    break;
-                } else {
-                    clientId = EncryptUtil.getRandomStr1(24);
-                    clientDetail = oAuthClientDetailMapper.selectByClientId(clientId);
-                }
-            }
-            //生成32位随机的clientSecret
-            String clientSecret = EncryptUtil.getRandomStr1(32);
-
-            User user = iRedisService.get(Constants.SESSION_USER);
-            Date current = new Date();
-            oAuthClientDetail.setId(IDUtil.UUIDStr());
-            oAuthClientDetail.setClientId(clientId);
-            oAuthClientDetail.setClientSecret(clientSecret);
-            oAuthClientDetail.setCreateUser(user.getId());
-            oAuthClientDetail.setUpdateUser(user.getId());
-            oAuthClientDetail.setCreateTime(current);
-            oAuthClientDetail.setUpdateTime(current);
-            oAuthClientDetail.setStatus(1);
-            int rowCount = oAuthClientDetailMapper.insertSelective(oAuthClientDetail);
-            return rowCount != 0;
-        }
-        return false;
-    }
-
     @Override
     public OAuthClientDetail selectById(String id) {
         return oAuthClientDetailMapper.selectByPrimaryKey(id);
@@ -94,6 +61,41 @@ public class OAuthServiceImpl implements IOAuthService {
     @Override
     public OAuthRefreshToken selectByRefreshToken(String refreshToken) {
         return oAuthRefreshTokenMapper.selectByRefreshToken(refreshToken);
+    }
+
+    @Override
+    public OAuthClientDetail register(OAuthClientDetail clientDetail) {
+        //客户端的名称和回调地址不能为空
+        if (StringUtils.isAnyBlank(clientDetail.getClientName(), clientDetail.getRedirectUri())) {
+            return null;
+        }
+        //生成24位随机的clientId
+        String clientId = null;
+        OAuthClientDetail detail;
+        //生成的clientId必须是唯一的
+        for (int i = 0; i < 10; i++) {
+            clientId = EncryptUtil.getRandomStr1(24);
+            detail = oAuthClientDetailMapper.selectByClientId(clientId);
+            if (detail == null) {
+                break;
+            }
+        }
+        //生成32位随机的clientSecret
+        String clientSecret = EncryptUtil.getRandomStr1(32);
+
+        User user = RequestHolder.getCurrentUser();
+        Date current = new Date();
+        clientDetail.setId(IDUtil.UUIDStr());
+        clientDetail.setClientId(clientId);
+        clientDetail.setClientSecret(clientSecret);
+        //此用户为开发者
+        clientDetail.setCreateUser(user.getId());
+        clientDetail.setUpdateUser(user.getId());
+        clientDetail.setCreateTime(current);
+        clientDetail.setUpdateTime(current);
+        clientDetail.setStatus(1);
+        int rowCount = oAuthClientDetailMapper.insertSelective(clientDetail);
+        return rowCount == 1 ? clientDetail : null;
     }
 
     @Override

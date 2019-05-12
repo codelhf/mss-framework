@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;

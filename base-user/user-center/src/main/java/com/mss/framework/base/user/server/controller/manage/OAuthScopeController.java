@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
-import com.mss.framework.base.user.server.service.IOAuthScopeService;
+import com.mss.framework.base.user.server.service.manage.IOAuthScopeService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

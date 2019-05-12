@@ -1,10 +1,10 @@
-package com.mss.framework.base.user.server.service.impl;
+package com.mss.framework.base.user.server.service.manage.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.user.server.dao.OAuthAccessTokenMapper;
 import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
 import com.mss.framework.base.server.user.po.OAuthAccessToken;
-import com.mss.framework.base.user.server.service.IOAuthAccessTokenService;
+import com.mss.framework.base.user.server.service.manage.IOAuthAccessTokenService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
