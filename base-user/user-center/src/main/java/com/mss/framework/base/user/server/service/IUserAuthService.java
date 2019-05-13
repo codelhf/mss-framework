@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.service;
 
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.UserAuthDTO;
 import com.github.pagehelper.PageInfo;
 

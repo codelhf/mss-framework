@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mss.framework.base.user.server.dao.UserMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.server.user.po.User">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.User">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
@@ -24,13 +24,13 @@
         delete from user
         where id = #{id}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.server.user.po.User">
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.User">
         insert into user
         (id, nickname, avatar, phone, email, sex, birthday, create_time, update_time)
         values
         (#{id, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{avatar, jdbcType=VARCHAR}, #{phone, jdbcType=INTEGER}, #{email, jdbcType=VARCHAR}, #{sex, jdbcType=INTEGER}, #{birthday, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.server.user.po.User">
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.User">
         insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -91,7 +91,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.server.user.po.User">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.User">
         update user
         <set>
             <if test="nickname != null">
@@ -121,7 +121,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.server.user.po.User">
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.User">
         update user
         set
             nickname = #{nickname, jdbcType=VARCHAR},
@@ -141,7 +141,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.server.user.po.User" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.User" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from user
         <where>

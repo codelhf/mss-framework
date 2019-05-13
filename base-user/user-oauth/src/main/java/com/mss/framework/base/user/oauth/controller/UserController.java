@@ -1,38 +1,30 @@
 package com.mss.framework.base.user.oauth.controller;
 
-import org.springframework.stereotype.Controller;
+import com.mss.framework.base.user.oauth.common.Constants;
+import com.mss.framework.base.user.oauth.model.User;
+import com.mss.framework.base.user.oauth.util.JsonResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @Description: 用户相关controller
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 22:55
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
-    /**
-     * 用户首页
-     * @author zifangsky
-     * @date 2018/7/9 17:10
-     * @since 1.0.0
-     * @return java.lang.String
-     */
-    @RequestMapping("/userIndex")
-    public String userIndex(){
-        return "userIndex";
-    }
-
-    /**
-     * 一个测试的受保护的页面
-     * @author zifangsky
-     * @date 2018/7/9 17:10
-     * @since 1.0.0
-     * @return java.lang.String
-     */
-    @RequestMapping("/protected")
-    public String protectedPage(){
-        return "protected";
+    @GetMapping("/getUserInfo")
+    public JsonResult getUserInfo(HttpSession session) {
+        User user = (User) session.getAttribute(Constants.SESSION_USER);
+        if (user == null) {
+            return JsonResult.error("用户未登录");
+        }
+        return JsonResult.success(user);
     }
 }

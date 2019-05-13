@@ -33,7 +33,7 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/3 22:51
  */
-@Controller
+@RestController
 @RequestMapping("/oauth2.0")
 public class OauthController {
 
@@ -69,7 +69,10 @@ public class OauthController {
      * @createtime 2019/5/3 23:21
      */
     @GetMapping("/authorizePage")
-    public ModelAndView authorizePage(HttpSession session, String redirectUri, String clientId, String scope) {
+    public ModelAndView authorizePage(HttpSession session,
+                                      @RequestParam("client_id") String clientId,
+                                      @RequestParam("redirect_uri") String redirectUri,
+                                      @RequestParam("scope") String scope) {
         if (StringUtils.isNotBlank(redirectUri)) {
             //将第三方的回调地址添加到session中
             session.setAttribute(Constants.SESSION_AUTH_REDIRECT_URL, redirectUri);
@@ -122,8 +125,10 @@ public class OauthController {
      * @author liuhf
      * @createtime 2019/5/3 23:21
      */
-    @GetMapping("/authorizeCode")
-    public ModelAndView authorizeCode(String clientId, String scope, String redirectUri,
+    @GetMapping("/authorize")
+    public ModelAndView authorizeCode(@RequestParam("client_id") String clientId,
+                                      @RequestParam("redirect_uri") String redirectUri,
+                                      @RequestParam("scope") String scope,
                                       //status，用于防止CSRF攻击（非必填）
                                       @RequestParam(value = "status", required = false) String status) {
         //生成Authorization Code

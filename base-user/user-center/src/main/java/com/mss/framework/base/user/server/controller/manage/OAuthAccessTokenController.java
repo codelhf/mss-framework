@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.controller.manage;
 
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
 import com.mss.framework.base.user.server.service.manage.IOAuthAccessTokenService;
 import com.github.pagehelper.PageInfo;

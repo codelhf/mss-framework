@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mss.framework.base.user.server.dao.OAuthClientUserMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.server.user.po.OAuthClientUser">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthClientUser">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="client_id" jdbcType="VARCHAR" property="clientId"/>
@@ -19,13 +19,13 @@
         delete from oauth_client_user
         where id = #{id}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.server.user.po.OAuthClientUser">
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
         insert into oauth_client_user
         (id, user_id, client_id, scope_id)
         values
         (#{id, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{clientId, jdbcType=VARCHAR}, #{scopeId, jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.server.user.po.OAuthClientUser">
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
         insert into oauth_client_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -56,7 +56,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.server.user.po.OAuthClientUser">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
         update oauth_client_user
         <set>
             <if test="userId != null">
@@ -71,7 +71,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.server.user.po.OAuthClientUser">
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
         update oauth_client_user
         set
             user_id = #{userId, jdbcType=VARCHAR},
@@ -86,7 +86,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.server.user.po.OAuthClientUser" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from oauth_client_user
         <where>

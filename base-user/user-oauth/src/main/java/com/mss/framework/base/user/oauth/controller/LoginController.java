@@ -4,6 +4,7 @@ import com.mss.framework.base.user.oauth.common.Constants;
 import com.mss.framework.base.user.oauth.model.AuthorizationResponse;
 import com.mss.framework.base.user.oauth.model.User;
 import com.mss.framework.base.user.oauth.util.EncryptUtils;
+import com.mss.framework.base.user.oauth.util.JsonResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,14 +55,14 @@ public class LoginController {
      * @since 1.0.0
      */
     @RequestMapping("/login/other")
-    public ModelAndView login(HttpServletRequest request) {
+    public JsonResult login(HttpServletRequest request) {
         //当前系统登录成功之后的回调URL
         String redirectUrl = request.getParameter("redirectUrl");
         //当前系统请求认证服务器成功之后返回的Authorization Code
         String code = request.getParameter("code");
 
         //最后重定向的URL
-        String resultUrl = "redirect:";
+        String resultUrl = "";
         HttpSession session = request.getSession();
         //当前请求路径
         String currentUrl = request.getRequestURL().toString();
@@ -100,10 +101,10 @@ public class LoginController {
             if (StringUtils.isNotBlank(redirectUrl)) {
                 resultUrl += redirectUrl;
             } else {
-                resultUrl += "/user/userIndex";
+                resultUrl += "/index.html";
             }
         }
 
-        return new ModelAndView(resultUrl);
+        return JsonResult.success("", resultUrl);
     }
 }

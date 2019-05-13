@@ -16,9 +16,36 @@
             <div class="col-md-12 column">
                 <h2 class="text-center">登录页</h2>
                 <p class="text-center">
-                    <a href="/login/other">第三方登录</a>
+                    <a class="login" href="#">第三方登录</a>
                 </p>
             </div>
         </div>
     </div>
+<script type="text/javascript">
+    var redirectUrl = getUrlParam('redirect');
+    $(document).on('click', '.login', function () {
+        $.ajax({
+            url: '/login/other',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                redirectUrl: redirectUrl
+            },
+            success: function (res) {
+                if (res.code == 200) {
+                    window.location.href = res.data;
+                }
+            },
+            error: function (err) {
+                alert(err.statusText)
+            }
+        });
+    });
+    function getUrlParam(name) {
+        var reg     = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        var result  = window.location.search.substr(1).match(reg);
+        return result ? decodeURIComponent(result[2]) : null;
+    }
+</script>
+</body>
 </html>

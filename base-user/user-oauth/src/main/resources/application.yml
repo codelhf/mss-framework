@@ -3,7 +3,10 @@ spring:
   profiles:
     active: dev
     include: application-dev.yml,application-prod.yml
-  mvc:
-    static-path-pattern: /**
+#  mvc:
+#    static-path-pattern: /page/**
 #  resources:
 #    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+#  jackson:
+#    deserialization: true
+#    serialization: true

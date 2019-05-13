@@ -9,7 +9,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/auto_test?useUnicode=true&characterEncoding=utf-8
+      url: jdbc:mysql://localhost:3306/cloud_user?useUnicode=true&characterEncoding=utf-8
       username: root
       password: root
       # 监控统计拦截的filters
@@ -33,14 +33,3 @@ spring:
       #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
       pool-prepared-statements: false
       max-pool-prepared-statement-per-connection-size: 20
-  redis:
-    jedis:
-      pool:
-        max-active: 20
-        max-idle: 8
-        min-idle: 2
-  mail:
-    host: smtp.163.com
-    username: lhf635@163.com
-    password: 123456
-    default-encoding: utf-8

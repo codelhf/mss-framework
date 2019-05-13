@@ -1,13 +1,15 @@
 package com.mss.framework.base.user.server.service.manage.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mss.framework.base.user.server.dao.OAuthScopeMapper;
-import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
-import com.mss.framework.base.server.user.po.OAuthScope;
-import com.mss.framework.base.user.server.service.manage.IOAuthScopeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
+import com.mss.framework.base.core.common.ResponseCode;
+import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.user.server.dao.OAuthScopeMapper;
+import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
+import com.mss.framework.base.user.server.pojo.OAuthScope;
+import com.mss.framework.base.user.server.service.manage.IOAuthScopeService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;

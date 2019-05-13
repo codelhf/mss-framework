@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.controller.manage;
 
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
 import com.mss.framework.base.user.server.service.manage.ISSORefreshTokenService;
 import com.github.pagehelper.PageInfo;
@@ -31,8 +32,8 @@ public class SSORefreshTokenController {
     })
     @GetMapping("")
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
-                                           @RequestParam("pageSize") Integer pageSize,
-                                           @RequestParam("params") Map<String, String> params) {
+                                         @RequestParam("pageSize") Integer pageSize,
+                                         @RequestParam("params") Map<String, String> params) {
         return iSSORefreshTokenService.list(pageNum, pageSize, params);
     }
 

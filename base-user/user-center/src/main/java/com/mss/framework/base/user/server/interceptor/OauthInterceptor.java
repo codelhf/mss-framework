@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.interceptor;
 
+import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.dao.OAuthClientDetailMapper;
 import com.mss.framework.base.user.server.dao.OAuthClientUserMapper;

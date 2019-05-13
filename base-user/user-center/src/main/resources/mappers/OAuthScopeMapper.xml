@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mss.framework.base.user.server.dao.OAuthScopeMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.server.user.po.OAuthScope">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthScope">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="scope_name" jdbcType="VARCHAR" property="scopeName"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
@@ -18,13 +18,13 @@
         delete from oauth_scope
         where id = #{id}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         insert into oauth_scope
         (id, scope_name, description)
         values
         (#{id, jdbcType=VARCHAR}, #{scopeName, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         insert into oauth_scope
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -49,7 +49,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         update oauth_scope
         <set>
             <if test="scopeName != null">
@@ -61,7 +61,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.server.user.po.OAuthScope">
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         update oauth_scope
         set
             scope_name = #{scopeName, jdbcType=VARCHAR},
@@ -75,7 +75,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.server.user.po.OAuthScope" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from oauth_scope
         <where>

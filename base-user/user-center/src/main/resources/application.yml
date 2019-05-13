@@ -3,20 +3,6 @@ spring:
   profiles:
     active: dev
     include: application-dev.yml, application-prod.yml
-  mvc:
-    view:
-      prefix: /WEB-INF/page
-      suffix: .html
-
-  #热部署
-  devtools:
-    restart:
-      #热部署生效
-      enabled: true
-      #设置重启的目录
-      additional-paths: src/main/java
-      #classpath目录下的WEB-INF文件夹内容修改不重启
-      exclude: WEB-INF/**,static/**,templates/**
 
 #开启debug模式
 debug: false
@@ -40,18 +26,18 @@ pagehelper:
 #Swagger2接口文档
 swagger:
   ui:
-    title: 接口自动化测试 APIs
+    title: User Center Server APIs
     version: 1.0
-    description: 接口自动化测试 APIs
+    description: User Center Server APIs
     contact:
       name: liuhf
       email: liuhf@si-tech.com.cn
-      #url: "http://blog.didispace.com/"
+      url: "http://blog.didispace.com/"
     #许可人
-    #license: "程序猿DD"
-    #licenseUrl: "http://blog.didispace.com/"
+    license: "liuhf"
+    licenseUrl: "http://blog.didispace.com/"
     #服务条款URL
-    #termsOfServiceUrl: "http://blog.didispace.com/"
+    termsOfServiceUrl: "http://blog.didispace.com/"
 
 #MD5加密延值
 passwordSalt: djfi#$%a;ijejie@#%$##vfa;ljfi@#$d;jafoie

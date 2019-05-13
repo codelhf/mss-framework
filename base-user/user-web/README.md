@@ -1,15 +1,30 @@
+# vue-demo
 
-项目初始化步骤
+> vue-demo
 
-1.安装nodejs环境,推荐使用v4.4.7
-    下载地址 : https://nodejs.org/download/release/v4.4.7/
+## Build Setup
 
-2.在项目根目录执行npm初始化
-    命令: npm install (--registry=https://registry.npm.taobao.org)
+``` bash
+# install dependencies
+npm install
 
-3.启动项目
-    开发模式: npm run dev  (windows系统上为npm run dev_win)
-    生产模式: npm run dist (windows系统上为npm run dist_win)
+# serve with hot reload at localhost:8080
+npm run dev
 
-4.开发模式下预览项目
-    访问：http://localhost:8088/dist/view/index.html
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+
+# run unit tests
+npm run unit
+
+# run e2e tests
+npm run e2e
+
+# run all tests
+npm test
+```
+
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

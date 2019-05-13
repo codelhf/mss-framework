@@ -9,6 +9,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,23 +30,29 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         String resultStatus = request.getParameter("status");
 
         //code不为空，则说明当前请求是从认证服务器返回的回调请求
-        if (StringUtils.isNoneBlank(code)) {
+        if (StringUtils.isNotBlank(code)) {
             //从session获取保存的状态码
             String savedStatus = (String) session.getAttribute(Constants.SESSION_AUTH_CODE_STATUS);
             //1. 校验状态码是否匹配
-            if (savedStatus != null && resultStatus != null && savedStatus.equals(resultStatus)) {
+            if (savedStatus != null && savedStatus.equals(resultStatus)) {
                 return true;
             } else {
-                response.setCharacterEncoding("UTF-8");
-                response.setHeader("Content-type", "application/json;charset=UTF-8");
-                Map<String, String> result = new HashMap<>(2);
-                result.put("error", ErrorCodeEnum.INVALID_STATUS.getError());
-                result.put("error_description", ErrorCodeEnum.INVALID_STATUS.getErrorDescription());
-
-                response.getWriter().write(JSON.toJSONString(result));
+                error(response);
                 return false;
             }
         }
         return true;
+    }
+
+    private void error(HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-type", "application/json;charset=UTF-8");
+
+        Map<String, String> result = new HashMap<>(2);
+        result.put("error", ErrorCodeEnum.INVALID_STATUS.getError());
+        result.put("error_description", ErrorCodeEnum.INVALID_STATUS.getErrorDescription());
+
+        response.getWriter().write(JSON.toJSONString(result));
     }
 }

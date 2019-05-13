@@ -54,7 +54,7 @@ public class Swagger2 extends WebMvcConfigurationSupport {
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包路径
-                .apis(RequestHandlerSelectors.basePackage("com.exmaple.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.mss.framework.base.user.server.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -88,6 +88,9 @@ public class Swagger2 extends WebMvcConfigurationSupport {
      */
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
+
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 
