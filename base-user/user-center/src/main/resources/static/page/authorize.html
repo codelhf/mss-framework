@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta content="text/html;charset=UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -38,15 +39,12 @@
 <div class="container">
     <div class="form row">
         <div class="form-horizontal col-md-offset-3" id="login_form">
-            <h3 class="form-title">应用 <span style="color:#FF0000" th:text="${clientName}">xxx</span> 请求连接：</h3>
+            <h3 class="form-title">应用 <span style="color:#FF0000" id="clientName">xxx</span> 请求连接：</h3>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input type="hidden" id="clientId" name="clientId" th:value="${clientId}">
-                    <input type="hidden" id="scope" name="scope" th:value="${scope}">
-                    <i class="fa fa-check-square" aria-hidden="true" th:switch="${scope}">
-                        <span th:case="super">获得你的所有信息</span>
-                        <span th:case="*">获得你的昵称、邮箱等基本信息</span>
-                    </i>
+                    <input type="hidden" id="clientId" name="clientId">
+                    <input type="hidden" id="scope" name="scope">
+                    <i class="fa fa-check-square" aria-hidden="true" id="scopeDesc"></i>
                 </div>
                 <div class="form-group">
                     <span class="errMsg" id="errMsg" style="display: none">错误提示</span>
@@ -59,7 +57,26 @@
         </div>
     </div>
 </div>
+<script src="/static/util/mm.js"></script>
 <script type="text/javascript">
+    $(function () {
+        init();
+    });
+    function init() {
+        var clientId = _mm.getUrlParam('clientId');
+        var clientName = _mm.getUrlParam("clientName");
+        var scope = _mm.getUrlParam('scope');
+        var scopeDesc = '';
+        if ('super' === scope) {
+            scopeDesc = '<span>获得你的所有信息</span>'
+        } else {
+            scopeDesc = '<span>获得你的昵称、邮箱等基本信息</span>'
+        }
+        $('#clientName').val(clientName);
+        $('#clientId').val(clientId);
+        $('#scope').val(scope);
+        $('#scopeDesc').html(scopeDesc);
+    }
     //同意授权
     function agree() {
         //获取用户名、密码
@@ -75,18 +92,15 @@
                 "client_id": clientId,
                 "scope": scope
             },
-            success: function (data) {
-                if (data.code == "200") {
+            success: function (res) {
+                if (res.code === 200) {
                     $("#errMsg").attr("style", "display:none");
 
-                    if (data.redirect_uri != null) {
-                        window.location.href = data.redirect_uri;
+                    if (res.data != null) {
+                        window.location.href = res.data;
                     }
-                } else if (data.result != null) {
-                    $("#errMsg").text(data.result);
-                    $("#errMsg").attr("style", "display:block");
                 } else {
-                    $("#errMsg").text(data.msg);
+                    $("#errMsg").text(res.msg);
                     $("#errMsg").attr("style", "display:block");
                 }
             }

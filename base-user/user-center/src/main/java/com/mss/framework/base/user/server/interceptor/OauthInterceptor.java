@@ -53,14 +53,14 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
         //获取session中存储的token
         User user = (User) session.getAttribute(Constants.SESSION_USER);
 
-        if(StringUtils.isNoneBlank(clientIdStr) && StringUtils.isNoneBlank(scopeStr) && StringUtils.isNoneBlank(redirectUri) && "code".equals(responseType)){
+        if(StringUtils.isNoneBlank(clientIdStr, scopeStr, redirectUri) && "code".equals(responseType)){
             params = params + "&client_id=" + clientIdStr + "&scope=" + scopeStr;
 
             //1. 查询是否存在授权信息
-            OAuthClientDetail clientDetails = oAuthClientDetailMapper.selectByClientId(clientIdStr);
+            OAuthClientDetail clientDetail = oAuthClientDetailMapper.selectByClientId(clientIdStr);
             OAuthScope scope = oAuthScopeMapper.selectByScopeName(scopeStr);
 
-            if(clientDetails == null){
+            if(clientDetail == null){
                 return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_CLIENT);
             }
 
@@ -68,12 +68,12 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
                 return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_SCOPE);
             }
 
-            if(!clientDetails.getRedirectUri().equals(redirectUri)){
+            if(!clientDetail.getRedirectUri().equals(redirectUri)){
                 return this.generateErrorResponse(response, ErrorCodeEnum.REDIRECT_URI_MISMATCH);
             }
 
             //2. 查询用户给接入的客户端是否已经授权
-            OAuthClientUser clientUser = oAuthClientUserMapper.selectByExample(clientDetails.getId(), user.getId(), scope.getId());
+            OAuthClientUser clientUser = oAuthClientUserMapper.selectByExample(clientDetail.getId(), user.getId(), scope.getId());
             if(clientUser != null){
                 return true;
             }
@@ -88,8 +88,10 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
      * 组装错误请求的返回
      */
     private boolean generateErrorResponse(HttpServletResponse response, ErrorCodeEnum errorCodeEnum) throws Exception {
+        response.reset();
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-type", "application/json;charset=UTF-8");
+
         Map<String,String> result = new HashMap<>(2);
         result.put("error", errorCodeEnum.getCode());
         result.put("error_description",errorCodeEnum.getDesc());

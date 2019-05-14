@@ -4,7 +4,6 @@ import com.mss.framework.base.user.oauth.common.Constants;
 import com.mss.framework.base.user.oauth.model.AuthorizationResponse;
 import com.mss.framework.base.user.oauth.model.User;
 import com.mss.framework.base.user.oauth.util.EncryptUtils;
-import com.mss.framework.base.user.oauth.util.JsonResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +54,7 @@ public class LoginController {
      * @since 1.0.0
      */
     @RequestMapping("/login/other")
-    public JsonResult login(HttpServletRequest request) {
+    public ModelAndView login(HttpServletRequest request) {
         //当前系统登录成功之后的回调URL
         String redirectUrl = request.getParameter("redirectUrl");
         //当前系统请求认证服务器成功之后返回的Authorization Code
@@ -74,10 +73,10 @@ public class LoginController {
                 session.setAttribute(Constants.SESSION_LOGIN_REDIRECT_URL, redirectUrl);
             }
             //生成随机的状态码，用于防止CSRF攻击
-            String status = EncryptUtils.getRandomStr1(6);
-            session.setAttribute(Constants.SESSION_AUTH_CODE_STATUS, status);
+            String state = EncryptUtils.getRandomStr1(6);
+            session.setAttribute(Constants.SESSION_AUTH_CODE_STATUS, state);
             //拼装请求Authorization Code的地址
-            resultUrl += MessageFormat.format(authorizationUri, clientId, status, currentUrl);
+            resultUrl += MessageFormat.format(authorizationUri, clientId, state, currentUrl);
         } else {
             //2. 通过Authorization Code获取Access Token
             AuthorizationResponse response = restTemplate.getForObject(accessTokenUri, AuthorizationResponse.class, clientId, clientSecret, code, currentUrl);
@@ -105,6 +104,6 @@ public class LoginController {
             }
         }
 
-        return JsonResult.success("", resultUrl);
+        return new ModelAndView("redirect:" + resultUrl);
     }
 }

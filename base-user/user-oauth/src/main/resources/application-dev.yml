@@ -11,7 +11,7 @@ own:
     client-id: 7Ugj6XWmTDpyYp8M8njG3hqx
     client-secret: tur2rlFfywR9OOP3fB5ZbsLTnNuNabI3
     scope: super
-    user-authorization-uri: http://localhost:8080/oauth2.0/authorize?client_id={0}&response_type=code&scope=super&&status={1}&redirect_uri={2}
+    user-authorization-uri: http://localhost:8080/oauth2.0/authorize?response_type=code&client_id={0}&scope=super&state={1}&redirect_uri={2}
     access-token-uri: http://localhost:8080/oauth2.0/token?client_id={1}&client_secret={2}&grant_type=authorization_code&code={3}&redirect_uri={4}
     resource:
       userInfoUri: http://localhost:8080/api/users/getInfo?access_token={1}
