@@ -44,7 +44,7 @@ public abstract class UsernamePasswordAndClientRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken) throws AuthenticationException {
         	UsernamePasswordAndClientToken passwordAndClientToken = (UsernamePasswordAndClientToken)authenticationToken;
-        	if(passwordAndClientToken.getTokenType()==TokenType.CLIENT)
+        	if(passwordAndClientToken.getTokenType()==UsernamePasswordAndClientToken.TokenType.CLIENT)
         		return internalClientGetAuthenticationInfo(authenticationToken);	//第三方登录认证
         	else
         		return internalUsernamePasswordGetAuthenticationInfo(authenticationToken);//用户名密码登录认证

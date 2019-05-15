@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Title: UserOAuthDTO
- * @Description: UserOAuthDTO对象
+ * @Title: UserLoginDTO
+ * @Description: UserLoginDTO对象
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-15 15:24:33
@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserOAuthDTO implements Serializable {
+public class UserLoginDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //
@@ -27,13 +27,22 @@ public class UserOAuthDTO implements Serializable {
     private String userId;
 
     //
-    private int loginType;
+    private String username;
 
     //
-    private String identify;
+    private int phone;
 
     //
-    private String credential;
+    private String email;
+
+    //
+    private String password;
+
+    //
+    private String accessToken;
+
+    //
+    private String refreshToken;
 
     //
     private Date createTime;

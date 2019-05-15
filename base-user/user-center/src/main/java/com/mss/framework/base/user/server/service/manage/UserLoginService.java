@@ -1,26 +1,26 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.UserOAuthDTO;
+import com.mss.framework.base.user.server.dto.UserLoginDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: UserAuthService
- * @Description: UserAuth接口层
+ * @Title: UserLoginService
+ * @Description: UserLogin接口层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-03 19:20:47
+ * @CreateTime: 2019-05-15 15:24:33
  */
-public interface IUserAuthService {
+public interface UserLoginService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询UserAuth列表
+	 * @Description: 查询UserLogin列表
 	 * @Company: example
 	 * @Author: liuhf
-	 * @CreateTime: 2019-05-03 19:20:47
+	 * @CreateTime: 2019-05-15 15:24:33
 	 *
 	 * @param pageNum
 	 * @param pageSize
@@ -31,47 +31,47 @@ public interface IUserAuthService {
 
     /**
      * @Title: select
-     * @Description: 查询UserAuth对象
+     * @Description: 查询UserLogin对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-15 15:24:33
      *
      * @param id
-     * @return ServerResponse<UserOAuthDTO>
+     * @return ServerResponse<UserLoginDTO>
      */
-	ServerResponse<UserOAuthDTO> select(String id);
+	ServerResponse<UserLoginDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存UserAuth对象
+     * @Description: 保存UserLogin对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-15 15:24:33
      *
-     * @param userAuthDTO
+     * @param userLoginDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(UserOAuthDTO userAuthDTO);
+	ServerResponse<String> insert(UserLoginDTO userLoginDTO);
 
     /**
      * @Title: update
-     * @Description: 更新UserAuth对象
+     * @Description: 更新UserLogin对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-15 15:24:33
      *
      * @param id
-     * @param userAuthDTO
+     * @param userLoginDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, UserOAuthDTO userAuthDTO);
+	ServerResponse<String> update(String id, UserLoginDTO userLoginDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除UserAuth对象
+     * @Description: 批量删除UserLogin对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-15 15:24:33
      *
      * @param ids
      * @return ServerResponse<String>

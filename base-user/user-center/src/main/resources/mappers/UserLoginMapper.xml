@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mss.framework.base.user.server.dao.UserLoginMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.UserLogin">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="phone" jdbcType="INTEGER" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
+        <result column="refresh_token" jdbcType="VARCHAR" property="refreshToken"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,user_id,username,phone,email,password,access_token,refresh_token,create_time,update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from user_login
+        where id = #{id, jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="String">
+        delete from user_login
+        where id = #{id, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.UserLogin">
+        insert into user_login
+        (id, user_id, username, phone, email, password, access_token, refresh_token, create_time, update_time)
+        values
+        (#{id, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{username, jdbcType=VARCHAR}, #{phone, jdbcType=INTEGER}, #{email, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{accessToken, jdbcType=VARCHAR}, #{refreshToken, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.UserLogin">
+        insert into user_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="accessToken != null">
+                access_token,
+            </if>
+            <if test="refreshToken != null">
+                refresh_token,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId, jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username, jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone, jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null">
+                #{accessToken, jdbcType=VARCHAR},
+            </if>
+            <if test="refreshToken != null">
+                #{refreshToken, jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime, jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.UserLogin">
+        update user_login
+        <set>
+            <if test="id != null">
+                id = #{id, jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId, jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                username = #{username, jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone, jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                email = #{email, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null">
+                access_token = #{accessToken, jdbcType=VARCHAR},
+            </if>
+            <if test="refreshToken != null">
+                refresh_token = #{refreshToken, jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime, jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id, jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.UserLogin">
+        update user_login
+        set
+            id = #{id, jdbcType=VARCHAR},
+            user_id = #{userId, jdbcType=VARCHAR},
+            username = #{username, jdbcType=VARCHAR},
+            phone = #{phone, jdbcType=INTEGER},
+            email = #{email, jdbcType=VARCHAR},
+            password = #{password, jdbcType=VARCHAR},
+            access_token = #{accessToken, jdbcType=VARCHAR},
+            refresh_token = #{refreshToken, jdbcType=VARCHAR},
+            create_time = #{createTime, jdbcType=TIMESTAMP},
+            update_time = #{updateTime, jdbcType=TIMESTAMP}
+        where id = #{id, jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteByIdList" parameterType="map">
+        delete from user_login
+        where id in
+        <foreach collection="idList" index="index" item="id" open="(" separator="," close=")" >
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.UserLogin" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from user_login
+        <where>
+            <if test="id != null">
+                and id like #{id}
+            </if>
+            <if test="userId != null">
+                and user_id like #{userId}
+            </if>
+            <if test="username != null">
+                and username like #{username}
+            </if>
+            <if test="phone != null">
+                and phone like #{phone}
+            </if>
+            <if test="email != null">
+                and email like #{email}
+            </if>
+            <if test="password != null">
+                and password like #{password}
+            </if>
+            <if test="accessToken != null">
+                and access_token like #{accessToken}
+            </if>
+            <if test="refreshToken != null">
+                and refresh_token like #{refreshToken}
+            </if>
+            <if test="createTime != null">
+                and create_time like #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time like #{updateTime}
+            </if>
+        </where>
+    </select>
+</mapper>

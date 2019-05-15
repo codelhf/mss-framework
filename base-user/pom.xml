@@ -6,7 +6,6 @@
         <groupId>com.mss.framework</groupId>
         <artifactId>mss-framework</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <!--<relativePath/>-->
     </parent>
     <packaging>pom</packaging>
 

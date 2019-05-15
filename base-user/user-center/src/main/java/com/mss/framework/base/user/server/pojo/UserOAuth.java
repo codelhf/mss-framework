@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.dto;
+package com.mss.framework.base.user.server.pojo;
 
 import lombok.*;
 
@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Title: UserOAuthDTO
- * @Description: UserOAuthDTO对象
+ * @Title: UserOAuth
+ * @Description: UserOAuth实体对象
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-05-15 15:24:33
@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserOAuthDTO implements Serializable {
+public class UserOAuth implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //
