@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
-import com.mss.framework.base.user.server.common.RequestHolder;
+import com.mss.framework.base.user.server.web.filter.RequestHolder;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;

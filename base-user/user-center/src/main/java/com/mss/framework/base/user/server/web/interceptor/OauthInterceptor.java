@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.interceptor;
+package com.mss.framework.base.user.server.web.interceptor;
 
 import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.user.server.common.Constants;

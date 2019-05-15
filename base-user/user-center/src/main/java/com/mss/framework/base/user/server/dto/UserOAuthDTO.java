@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Title: UserAuthDTO
+ * @Title: UserOAuthDTO
  * @Description: UserAuth实体类DTO
  * @Company: example
  * @Author: liuhf
@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserAuthDTO implements Serializable {
+public class UserOAuthDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;

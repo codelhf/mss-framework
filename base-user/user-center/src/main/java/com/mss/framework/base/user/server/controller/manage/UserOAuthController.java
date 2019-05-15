@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.UserAuthDTO;
+import com.mss.framework.base.user.server.dto.UserOAuthDTO;
 import com.mss.framework.base.user.server.service.IUserAuthService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/userAuth")
-public class UserAuthController {
+public class UserOAuthController {
 
     @Autowired
     private IUserAuthService iUserAuthService;
@@ -42,27 +42,27 @@ public class UserAuthController {
         @ApiImplicitParam(name = "id", value = "UserAuth主键", dataType = "String", required = true)
     })
     @GetMapping("/{id}")
-    public ServerResponse<UserAuthDTO> select(@PathVariable("id") String id) {
+    public ServerResponse<UserOAuthDTO> select(@PathVariable("id") String id) {
         return iUserAuthService.select(id);
     }
 
     @ApiOperation(value = "保存UserAuth对象")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "userAuthDTO", value = "UserAuthDTO对象", dataType = "UserAuthDTO", required = true)
+        @ApiImplicitParam(name = "userAuthDTO", value = "UserAuthDTO对象", dataType = "UserOAuthDTO", required = true)
     })
     @PostMapping("")
-    public ServerResponse<String> insert(@RequestBody UserAuthDTO userAuthDTO) {
+    public ServerResponse<String> insert(@RequestBody UserOAuthDTO userAuthDTO) {
         return iUserAuthService.insert(userAuthDTO);
     }
 
     @ApiOperation(value = "更新UserAuth对象")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "id", value = "UserAuth主键", dataType = "String", required = true),
-        @ApiImplicitParam(name = "userAuthDTO", value = "UserAuthDTO对象", dataType = "UserAuthDTO", required = true)
+        @ApiImplicitParam(name = "userAuthDTO", value = "UserAuthDTO对象", dataType = "UserOAuthDTO", required = true)
     })
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
-                                           @RequestBody UserAuthDTO userAuthDTO) {
+                                           @RequestBody UserOAuthDTO userAuthDTO) {
         return iUserAuthService.update(id, userAuthDTO);
     }
 

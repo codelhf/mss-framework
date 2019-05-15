@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.common;
+package com.mss.framework.base.user.server.web.filter;
 
 import com.mss.framework.base.user.server.pojo.User;
 

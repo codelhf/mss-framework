@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.interceptor;
+package com.mss.framework.base.user.server.web.interceptor;
 
 import com.mss.framework.base.user.server.dao.SSOClientDetailMapper;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;

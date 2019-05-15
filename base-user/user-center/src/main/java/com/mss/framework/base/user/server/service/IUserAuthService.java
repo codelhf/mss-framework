@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.service;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.UserAuthDTO;
+import com.mss.framework.base.user.server.dto.UserOAuthDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
@@ -37,9 +37,9 @@ public interface IUserAuthService {
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<UserAuthDTO>
+     * @return ServerResponse<UserOAuthDTO>
      */
-	ServerResponse<UserAuthDTO> select(String id);
+	ServerResponse<UserOAuthDTO> select(String id);
 
     /**
      * @Title: insert
@@ -51,7 +51,7 @@ public interface IUserAuthService {
      * @param userAuthDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(UserAuthDTO userAuthDTO);
+	ServerResponse<String> insert(UserOAuthDTO userAuthDTO);
 
     /**
      * @Title: update
@@ -64,7 +64,7 @@ public interface IUserAuthService {
      * @param userAuthDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, UserAuthDTO userAuthDTO);
+	ServerResponse<String> update(String id, UserOAuthDTO userAuthDTO);
 
     /**
      * @Title: delete

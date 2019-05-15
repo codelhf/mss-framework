@@ -48,54 +48,53 @@
     <templates>
         <!--名称不能和api中的字段重复,否则被覆盖无效,并且被依赖模块不能注释-->
         <template name="entity" template="template/Default/vm/dao/Entity.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.entity"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.server.pojo"
                   suffix="" fileType="java" isGenerate="true" override="true"/>
         <template name="entityDTO" template="template/Default/vm/dto/EntityDto.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.dto"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.server.dto"
                   suffix="DTO" fileType="java" isGenerate="true" override="true"/>
         <template name="mapper" template="template/Default/vm/dao/Mapper.vm"
                   directory="./src/main/resources" packageName="mappers"
                   suffix="Mapper" fileType="xml" isGenerate="true" override="true"/>
         <template name="dao" template="template/Default/vm/dao/Dao.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.dao"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.server.dao"
                   suffix="Mapper" fileType="java" isGenerate="true" override="true"/>
         <template name="serviceImpl" template="template/Default/vm/service/ServiceImpl.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.service.impl"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.server.service.manage.impl"
                   suffix="ServiceImpl" fileType="java" isGenerate="true" override="true"/>
         <template name="service" template="template/Default/vm/service/Service.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.service"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.server.service.manage"
                   suffix="Service" fileType="java" isGenerate="true" override="true"/>
         <template name="controller" template="template/Default/vm/service/Controller.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.controller"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.server.controller.manage"
                   suffix="Controller" fileType="java" isGenerate="true" override="true"/>
         <!--common类型的以suffix为文件名-->
         <template name="exceptionResolver" template="template/Default/vm/common/ExceptionResolver.vm"
                   directory="./src/main/java" packageName="com.example.generator.demo.common"
-                  suffix="ExceptionResolver" fileType="java" common="true" isGenerate="true" override="true"/>
+                  suffix="ExceptionResolver" fileType="java" common="true" isGenerate="false" override="true"/>
         <template name="swagger2" template="template/Default/vm/common/Swagger2.vm"
                   directory="./src/main/java" packageName="com.example.generator.demo.common"
-                  suffix="Swagger2" fileType="java" common="true" isGenerate="true" override="true"/>
+                  suffix="Swagger2" fileType="java" common="true" isGenerate="false" override="true"/>
         <template name="responseCode" template="template/Default/vm/common/ResponseCode.vm"
                   directory="./src/main/java" packageName="com.example.generator.demo.common"
-                  suffix="ResponseCode" fileType="java" common="true" isGenerate="true" override="true"/>
+                  suffix="ResponseCode" fileType="java" common="true" isGenerate="false" override="true"/>
         <template name="serverResponse" template="template/Default/vm/common/ServerResponse.vm"
                   directory="./src/main/java" packageName="com.example.generator.demo.common"
-                  suffix="ServerResponse" fileType="java" common="true" isGenerate="true" override="true"/>
+                  suffix="ServerResponse" fileType="java" common="true" isGenerate="false" override="true"/>
     </templates>
 
     <!-- 数据库对应数据表-->
     <tables>
-        <table tableName="lottery_people" domainName="People">
+        <table tableName="user_login" domainName="UserLogin">
         </table>
-        <table tableName="lottery_prize" domainName="Prize">
-            <columnOverride columnName="image" jdbcType="VARCHAR"/>
+        <table tableName="user_oauth" domainName="UserOAuth">
         </table>
     </tables>
 
     <!-- 数据库对应数据视图-->
     <views>
-        <view viewName="lottery_result" domainName="Result">
-        </view>
+        <!--<view viewName="lottery_result" domainName="Result">-->
+        <!--</view>-->
     </views>
 
     <!-- mybatis插件的搭建 -->

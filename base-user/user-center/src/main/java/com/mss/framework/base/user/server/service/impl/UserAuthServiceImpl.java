@@ -7,7 +7,7 @@ import com.google.common.base.Splitter;
 import com.mss.framework.base.core.common.ResponseCode;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.UserAuthMapper;
-import com.mss.framework.base.user.server.dto.UserAuthDTO;
+import com.mss.framework.base.user.server.dto.UserOAuthDTO;
 import com.mss.framework.base.user.server.pojo.UserAuth;
 import com.mss.framework.base.user.server.service.IUserAuthService;
 import org.apache.commons.collections.CollectionUtils;
@@ -55,7 +55,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
             userAuth = JSON.parseObject(JSON.toJSONString(params), UserAuth.class);
         }
         List<UserAuth> userAuthList = userAuthMapper.selectPageList(userAuth);
-        List<UserAuthDTO> userAuthDTOList = new ArrayList<>();
+        List<UserOAuthDTO> userAuthDTOList = new ArrayList<>();
         BeanUtils.copyProperties(userAuthList, userAuthDTOList, List.class);
         PageInfo pageInfo = new PageInfo(userAuthList);
         pageInfo.setList(userAuthDTOList);
@@ -69,10 +69,10 @@ public class UserAuthServiceImpl implements IUserAuthService {
      * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<UserAuthDTO>
+     * @return ServerResponse<UserOAuthDTO>
      */
     @Override
-    public ServerResponse<UserAuthDTO> select(String id) {
+    public ServerResponse<UserOAuthDTO> select(String id) {
         if (StringUtils.isBlank(String.valueOf(id))) {
             return ServerResponse.createByErrorMessage("id不能为空");
         }
@@ -80,7 +80,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
         if (userAuth == null) {
             return ServerResponse.createByErrorMessage("UserAuth不存在");
         }
-        UserAuthDTO userAuthDTO = new UserAuthDTO();
+        UserOAuthDTO userAuthDTO = new UserOAuthDTO();
         BeanUtils.copyProperties(userAuth, userAuthDTO);
         return ServerResponse.createBySuccess(userAuthDTO);
     }
@@ -95,7 +95,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
      * @return ServerResponse<String>
      */
     @Override
-    public ServerResponse<String> insert(UserAuthDTO userAuthDTO) {
+    public ServerResponse<String> insert(UserOAuthDTO userAuthDTO) {
         UserAuth userAuth = new UserAuth();
         BeanUtils.copyProperties(userAuthDTO, userAuth);
         int rowCount = userAuthMapper.insertSelective(userAuth);
@@ -116,7 +116,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
      * @return ServerResponse<String>
      */
     @Override
-    public ServerResponse<String> update(String id, UserAuthDTO userAuthDTO) {
+    public ServerResponse<String> update(String id, UserOAuthDTO userAuthDTO) {
         if (StringUtils.isBlank(String.valueOf(id))) {
             return ServerResponse.createByErrorMessage("id不能为空");
         }

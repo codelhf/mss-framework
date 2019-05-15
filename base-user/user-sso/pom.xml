@@ -3,21 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.1.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.mss.framework</groupId>
+        <artifactId>base-user</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>user-sso</artifactId>
-    <name>base-user-sso</name>
-    <description>Demo project for Spring Boot</description>
+    <artifactId>base-user-sso</artifactId>
+    <version>${parent.version}</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring-cloud.version>Greenwich.M3</spring-cloud.version>
         <!-- 打包时忽略测试代码 -->
         <skipTests>true</skipTests>
         <!-- JUnit单元测试 -->

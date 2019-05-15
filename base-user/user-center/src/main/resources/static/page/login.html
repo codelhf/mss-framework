@@ -11,7 +11,7 @@
     <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body onkeydown="enterlogin(event);">
+<body>
 <div class="container">
     <div class="form row">
         <div class="form-horizontal col-md-offset-3" id="login_form">
@@ -31,24 +31,31 @@
                     <span class="errMsg" id="errMsg" style="display: none">错误提示</span>
                 </div>
                 <div class="form-group col-md-offset-9">
-                    <button type="submit" class="btn btn-success pull-right" name="submit" onclick="userLogin()">登录
-                    </button>
+                    <button class="btn btn-success pull-right" type="submit" name="submit">登录</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    //回车登录
-    function enterlogin(e) {
-        var key = window.event ? e.keyCode : e.which;
-        if (key === 13) {
-            userLogin();
-        }
+    $(function () {
+        bindEvent();
+    });
+    function bindEvent() {
+        //回车登录
+        $(document).on('keyup', 'body', function (e) {
+            var key = window.event ? e.keyCode : e.which;
+            if (key == 13) {
+                login();
+            }
+        });
+        //登录按钮登录
+        $(document).on('click', 'button[name="submit"]', function () {
+            login();
+        });
     }
-
     //用户密码登录
-    function userLogin() {
+    function login() {
         //获取用户名、密码
         var username = $("#username").val();
         var password = $("#password").val();
@@ -73,20 +80,17 @@
                 "username": username,
                 "password": password
             },
-            success: function (data) {
-                if (data.code == "200") {
+            success: function (res) {
+                if (res.code == "200") {
                     $("#errMsg").attr("style", "display:none");
 
-                    if (data.redirect_uri != null){
-                        window.location.href = data.redirect_uri;
+                    if (res.data != null){
+                        window.location.href = res.data;
                     }else{
                         window.location.href = '/user/userIndex';
                     }
-                } else if (data.result != null) {
-                    $("#errMsg").text(data.result);
-                    $("#errMsg").attr("style", "display:block");
                 } else {
-                    $("#errMsg").text(data.msg);
+                    $("#errMsg").text(res.msg);
                     $("#errMsg").attr("style", "display:block");
                 }
             }

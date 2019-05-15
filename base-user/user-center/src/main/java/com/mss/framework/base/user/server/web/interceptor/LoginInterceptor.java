@@ -1,10 +1,11 @@
-package com.mss.framework.base.user.server.interceptor;
+package com.mss.framework.base.user.server.web.interceptor;
 
 import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:11
  */
+@Component
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
