@@ -3,11 +3,11 @@ package com.mss.framework.base.user.server.service;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description: IRedisService
+ * @Description: RedisService
  * @Auther: liuhf
  * @CreateTime: 2019/5/3 21:40
  */
-public interface IRedisService {
+public interface RedisService {
 
     /**
      * @description: 向Redis中存储键值对

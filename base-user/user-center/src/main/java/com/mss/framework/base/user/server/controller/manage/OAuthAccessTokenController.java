@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
-import com.mss.framework.base.user.server.service.manage.IOAuthAccessTokenService;
+import com.mss.framework.base.user.server.service.manage.OAuthAccessTokenService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class OAuthAccessTokenController {
 
     @Autowired
-    private IOAuthAccessTokenService iOAuthAccessTokenService;
+    private OAuthAccessTokenService oAuthAccessTokenService;
 
     @ApiOperation(value = "查询OAuthAccessToken列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class OAuthAccessTokenController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iOAuthAccessTokenService.list(pageNum, pageSize, params);
+        return oAuthAccessTokenService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询OAuthAccessToken对象}")
@@ -43,7 +43,7 @@ public class OAuthAccessTokenController {
     })
     @GetMapping("/{id}")
     public ServerResponse<OAuthAccessTokenDTO> select(@PathVariable("id") String id) {
-        return iOAuthAccessTokenService.select(id);
+        return oAuthAccessTokenService.select(id);
     }
 
     @ApiOperation(value = "保存OAuthAccessToken对象")
@@ -52,7 +52,7 @@ public class OAuthAccessTokenController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody OAuthAccessTokenDTO oAuthAccessTokenDTO) {
-        return iOAuthAccessTokenService.insert(oAuthAccessTokenDTO);
+        return oAuthAccessTokenService.insert(oAuthAccessTokenDTO);
     }
 
     @ApiOperation(value = "更新OAuthAccessToken对象")
@@ -63,7 +63,7 @@ public class OAuthAccessTokenController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody OAuthAccessTokenDTO oAuthAccessTokenDTO) {
-        return iOAuthAccessTokenService.update(id, oAuthAccessTokenDTO);
+        return oAuthAccessTokenService.update(id, oAuthAccessTokenDTO);
     }
 
     @ApiOperation(value = "批量删除OAuthAccessToken对象}")
@@ -72,6 +72,6 @@ public class OAuthAccessTokenController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iOAuthAccessTokenService.delete(ids);
+        return oAuthAccessTokenService.delete(ids);
     }
 }

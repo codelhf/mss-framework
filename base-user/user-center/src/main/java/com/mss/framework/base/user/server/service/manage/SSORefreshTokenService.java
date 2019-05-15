@@ -1,26 +1,26 @@
 package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.OAuthRefreshTokenDTO;
+import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: OAuthRefreshTokenService
- * @Description: OAuthRefreshToken接口层
+ * @Title: SSORefreshTokenService
+ * @Description: SSORefreshToken接口层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-03 19:20:47
+ * @CreateTime: 2019-05-04 10:00:17
  */
-public interface IOAuthRefreshTokenService {
+public interface SSORefreshTokenService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询OAuthRefreshToken列表
+	 * @Description: 查询SSORefreshToken列表
 	 * @Company: example
 	 * @Author: liuhf
-	 * @CreateTime: 2019-05-03 19:20:47
+	 * @CreateTime: 2019-05-04 10:00:17
 	 *
 	 * @param pageNum
 	 * @param pageSize
@@ -31,47 +31,47 @@ public interface IOAuthRefreshTokenService {
 
     /**
      * @Title: select
-     * @Description: 查询OAuthRefreshToken对象
+     * @Description: 查询SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-04 10:00:17
      *
      * @param id
-     * @return ServerResponse<OAuthRefreshTokenDTO>
+     * @return ServerResponse<SSORefreshTokenDTO>
      */
-	ServerResponse<OAuthRefreshTokenDTO> select(String id);
+	ServerResponse<SSORefreshTokenDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存OAuthRefreshToken对象
+     * @Description: 保存SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-04 10:00:17
      *
-     * @param oAuthRefreshTokenDTO
+     * @param sSORefreshTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(OAuthRefreshTokenDTO oAuthRefreshTokenDTO);
+	ServerResponse<String> insert(SSORefreshTokenDTO sSORefreshTokenDTO);
 
     /**
      * @Title: update
-     * @Description: 更新OAuthRefreshToken对象
+     * @Description: 更新SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-04 10:00:17
      *
      * @param id
-     * @param oAuthRefreshTokenDTO
+     * @param sSORefreshTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, OAuthRefreshTokenDTO oAuthRefreshTokenDTO);
+	ServerResponse<String> update(String id, SSORefreshTokenDTO sSORefreshTokenDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除OAuthRefreshToken对象
+     * @Description: 批量删除SSORefreshToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-03 19:20:47
+     * @CreateTime: 2019-05-04 10:00:17
      *
      * @param ids
      * @return ServerResponse<String>

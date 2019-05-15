@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.web.interceptor;
 import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.pojo.User;
-import com.mss.framework.base.user.server.service.IRedisService;
+import com.mss.framework.base.user.server.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private IRedisService iRedisService;
+    private RedisService iRedisService;
 
     /**
      * 检查是否已经登录

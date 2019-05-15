@@ -9,7 +9,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.OAuthClientDetailMapper;
 import com.mss.framework.base.user.server.dto.OAuthClientDetailDTO;
 import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
-import com.mss.framework.base.user.server.service.manage.IOAuthClientDetailService;
+import com.mss.framework.base.user.server.service.manage.OAuthClientDetailService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-03 19:20:47
  */
 @Service
-public class OAuthClientDetailServiceImpl implements IOAuthClientDetailService {
+public class OAuthClientDetailServiceImpl implements OAuthClientDetailService {
 
     @Autowired
     private OAuthClientDetailMapper oAuthClientDetailMapper;

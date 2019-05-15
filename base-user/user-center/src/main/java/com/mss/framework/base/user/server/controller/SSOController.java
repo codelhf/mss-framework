@@ -9,9 +9,9 @@ import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
-import com.mss.framework.base.user.server.service.IRedisService;
-import com.mss.framework.base.user.server.service.manage.ISSOService;
-import com.mss.framework.base.user.server.service.IUserService;
+import com.mss.framework.base.user.server.service.RedisService;
+import com.mss.framework.base.user.server.service.SSOService;
+import com.mss.framework.base.user.server.service.manage.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,12 +37,12 @@ import java.util.Map;
 public class SSOController {
 
     @Autowired
-    private IRedisService iRedisService;
+    private RedisService redisService;
 
     @Autowired
-    private IUserService iUserService;
+    private UserService iUserService;
     @Autowired
-    private ISSOService issoService;
+    private SSOService issoService;
 
     @GetMapping("/token")
     public ModelAndView token(String redirectUri, HttpServletRequest request) {
@@ -52,7 +52,7 @@ public class SSOController {
         SSOClientDetail clientDetail = issoService.selectByRedirectUri(redirectUri);
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
-        User user = iRedisService.get(Constants.SESSION_USER);
+        User user = redisService.get(Constants.SESSION_USER);
         //生成Access Token
         String accessTokenStr = issoService.createAccessToken(user, expiresIn, requestIP, clientDetail);
         //查询已经插入到数据库的Access Token

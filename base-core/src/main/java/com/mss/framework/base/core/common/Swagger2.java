@@ -1,9 +1,10 @@
-package com.mss.framework.base.user.server.common;
+package com.mss.framework.base.core.common;
 
 import io.swagger.models.Contact;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2 //启用Swagger2
-//@EnableWebMvc //springMVC环境使用
+@EnableWebMvc //springMVC环境使用
 public class Swagger2 extends WebMvcConfigurationSupport {
 
     @Value("${swagger.ui.title}")

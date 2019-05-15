@@ -9,7 +9,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.OAuthRefreshTokenMapper;
 import com.mss.framework.base.user.server.dto.OAuthRefreshTokenDTO;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
-import com.mss.framework.base.user.server.service.manage.IOAuthRefreshTokenService;
+import com.mss.framework.base.user.server.service.manage.OAuthRefreshTokenService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-03 19:20:47
  */
 @Service
-public class OAuthRefreshTokenServiceImpl implements IOAuthRefreshTokenService {
+public class OAuthRefreshTokenServiceImpl implements OAuthRefreshTokenService {
 
     @Autowired
     private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;

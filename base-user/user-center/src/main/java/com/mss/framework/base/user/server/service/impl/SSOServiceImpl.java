@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service.manage.impl;
+package com.mss.framework.base.user.server.service.impl;
 
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
@@ -11,7 +11,7 @@ import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
-import com.mss.framework.base.user.server.service.manage.ISSOService;
+import com.mss.framework.base.user.server.service.SSOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import java.util.Date;
  * @CreateTime: 2019/5/4 10:15
  */
 @Service
-public class SSOServiceImpl implements ISSOService {
+public class SSOServiceImpl implements SSOService {
 
     @Autowired
     private SSOAccessTokenMapper ssoAccessTokenMapper;

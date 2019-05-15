@@ -1,10 +1,6 @@
 package com.mss.framework.base.user.server.service.impl;
 
-import com.mss.framework.base.user.server.service.IRedisService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import com.mss.framework.base.user.server.service.RedisService;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @CreateTime: 2019/5/3 21:41
  */
 @Service
-public class RedisServiceImpl implements IRedisService {
+public class RedisServiceImpl implements RedisService {
 
 //    @Autowired
 //    private RedisTemplate<String, Object> redisTemplate;

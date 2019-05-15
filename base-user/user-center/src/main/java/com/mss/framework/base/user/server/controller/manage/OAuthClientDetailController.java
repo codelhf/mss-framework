@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.OAuthClientDetailDTO;
-import com.mss.framework.base.user.server.service.manage.IOAuthClientDetailService;
+import com.mss.framework.base.user.server.service.manage.OAuthClientDetailService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class OAuthClientDetailController {
 
     @Autowired
-    private IOAuthClientDetailService iOAuthClientDetailService;
+    private OAuthClientDetailService oAuthClientDetailService;
 
     @ApiOperation(value = "查询OAuthClientDetail列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class OAuthClientDetailController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iOAuthClientDetailService.list(pageNum, pageSize, params);
+        return oAuthClientDetailService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询OAuthClientDetail对象}")
@@ -43,7 +43,7 @@ public class OAuthClientDetailController {
     })
     @GetMapping("/{id}")
     public ServerResponse<OAuthClientDetailDTO> select(@PathVariable("id") String id) {
-        return iOAuthClientDetailService.select(id);
+        return oAuthClientDetailService.select(id);
     }
 
     @ApiOperation(value = "保存OAuthClientDetail对象")
@@ -52,7 +52,7 @@ public class OAuthClientDetailController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody OAuthClientDetailDTO oAuthClientDetailDTO) {
-        return iOAuthClientDetailService.insert(oAuthClientDetailDTO);
+        return oAuthClientDetailService.insert(oAuthClientDetailDTO);
     }
 
     @ApiOperation(value = "更新OAuthClientDetail对象")
@@ -63,7 +63,7 @@ public class OAuthClientDetailController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody OAuthClientDetailDTO oAuthClientDetailDTO) {
-        return iOAuthClientDetailService.update(id, oAuthClientDetailDTO);
+        return oAuthClientDetailService.update(id, oAuthClientDetailDTO);
     }
 
     @ApiOperation(value = "批量删除OAuthClientDetail对象}")
@@ -72,6 +72,6 @@ public class OAuthClientDetailController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iOAuthClientDetailService.delete(ids);
+        return oAuthClientDetailService.delete(ids);
     }
 }

@@ -9,7 +9,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.OAuthScopeMapper;
 import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
 import com.mss.framework.base.user.server.pojo.OAuthScope;
-import com.mss.framework.base.user.server.service.manage.IOAuthScopeService;
+import com.mss.framework.base.user.server.service.manage.OAuthScopeService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-03 19:20:47
  */
 @Service
-public class OAuthScopeServiceImpl implements IOAuthScopeService {
+public class OAuthScopeServiceImpl implements OAuthScopeService {
 
     @Autowired
     private OAuthScopeMapper oAuthScopeMapper;

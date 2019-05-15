@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
-import com.mss.framework.base.user.server.service.manage.ISSORefreshTokenService;
+import com.mss.framework.base.user.server.service.manage.SSORefreshTokenService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class SSORefreshTokenController {
 
     @Autowired
-    private ISSORefreshTokenService iSSORefreshTokenService;
+    private SSORefreshTokenService ssoRefreshTokenService;
 
     @ApiOperation(value = "查询SSORefreshToken列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class SSORefreshTokenController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iSSORefreshTokenService.list(pageNum, pageSize, params);
+        return ssoRefreshTokenService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询SSORefreshToken对象}")
@@ -43,7 +43,7 @@ public class SSORefreshTokenController {
     })
     @GetMapping("/{id}")
     public ServerResponse<SSORefreshTokenDTO> select(@PathVariable("id") String id) {
-        return iSSORefreshTokenService.select(id);
+        return ssoRefreshTokenService.select(id);
     }
 
     @ApiOperation(value = "保存SSORefreshToken对象")
@@ -52,7 +52,7 @@ public class SSORefreshTokenController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody SSORefreshTokenDTO sSORefreshTokenDTO) {
-        return iSSORefreshTokenService.insert(sSORefreshTokenDTO);
+        return ssoRefreshTokenService.insert(sSORefreshTokenDTO);
     }
 
     @ApiOperation(value = "更新SSORefreshToken对象")
@@ -63,7 +63,7 @@ public class SSORefreshTokenController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody SSORefreshTokenDTO sSORefreshTokenDTO) {
-        return iSSORefreshTokenService.update(id, sSORefreshTokenDTO);
+        return ssoRefreshTokenService.update(id, sSORefreshTokenDTO);
     }
 
     @ApiOperation(value = "批量删除SSORefreshToken对象}")
@@ -72,6 +72,6 @@ public class SSORefreshTokenController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iSSORefreshTokenService.delete(ids);
+        return ssoRefreshTokenService.delete(ids);
     }
 }

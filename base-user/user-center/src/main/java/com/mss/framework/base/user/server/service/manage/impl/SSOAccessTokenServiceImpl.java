@@ -6,7 +6,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.SSOAccessTokenMapper;
 import com.mss.framework.base.user.server.dto.SSOAccessTokenDTO;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
-import com.mss.framework.base.user.server.service.manage.ISSOAccessTokenService;
+import com.mss.framework.base.user.server.service.manage.SSOAccessTokenService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-04 10:00:17
  */
 @Service
-public class SSOAccessTokenServiceImpl implements ISSOAccessTokenService {
+public class SSOAccessTokenServiceImpl implements SSOAccessTokenService {
 
     @Autowired
     private SSOAccessTokenMapper sSOAccessTokenMapper;

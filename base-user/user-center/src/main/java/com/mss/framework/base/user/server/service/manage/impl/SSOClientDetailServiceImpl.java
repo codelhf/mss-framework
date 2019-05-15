@@ -6,7 +6,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.SSOClientDetailMapper;
 import com.mss.framework.base.user.server.dto.SSOClientDetailDTO;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
-import com.mss.framework.base.user.server.service.manage.ISSOClientDetailService;
+import com.mss.framework.base.user.server.service.manage.SSOClientDetailService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-04 10:00:17
  */
 @Service
-public class SSOClientDetailServiceImpl implements ISSOClientDetailService {
+public class SSOClientDetailServiceImpl implements SSOClientDetailService {
 
     @Autowired
     private SSOClientDetailMapper sSOClientDetailMapper;

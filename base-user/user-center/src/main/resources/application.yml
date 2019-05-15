@@ -32,12 +32,13 @@ swagger:
     contact:
       name: liuhf
       email: liuhf@si-tech.com.cn
-      url: "http://blog.didispace.com/"
+      url: http://blog.didispace.com
     #许可人
-    license: "liuhf"
-    licenseUrl: "http://blog.didispace.com/"
+    license: liuhf
+    licenseUrl: http://blog.didispace.com
     #服务条款URL
-    termsOfServiceUrl: "http://blog.didispace.com/"
+    termsOfServiceUrl: http://blog.didispace.com
+    basePackage: com.mss.framework.base.user.server.controller
 
 #MD5加密延值
 passwordSalt: djfi#$%a;ijejie@#%$##vfa;ljfi@#$d;jafoie

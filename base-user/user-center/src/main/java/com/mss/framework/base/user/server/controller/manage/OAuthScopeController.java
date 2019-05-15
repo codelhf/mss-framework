@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.OAuthScopeDTO;
-import com.mss.framework.base.user.server.service.manage.IOAuthScopeService;
+import com.mss.framework.base.user.server.service.manage.OAuthScopeService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class OAuthScopeController {
 
     @Autowired
-    private IOAuthScopeService iOAuthScopeService;
+    private OAuthScopeService oAuthScopeService;
 
     @ApiOperation(value = "查询OAuthScope列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class OAuthScopeController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iOAuthScopeService.list(pageNum, pageSize, params);
+        return oAuthScopeService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询OAuthScope对象}")
@@ -43,7 +43,7 @@ public class OAuthScopeController {
     })
     @GetMapping("/{id}")
     public ServerResponse<OAuthScopeDTO> select(@PathVariable("id") String id) {
-        return iOAuthScopeService.select(id);
+        return oAuthScopeService.select(id);
     }
 
     @ApiOperation(value = "保存OAuthScope对象")
@@ -52,7 +52,7 @@ public class OAuthScopeController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody OAuthScopeDTO oAuthScopeDTO) {
-        return iOAuthScopeService.insert(oAuthScopeDTO);
+        return oAuthScopeService.insert(oAuthScopeDTO);
     }
 
     @ApiOperation(value = "更新OAuthScope对象")
@@ -63,7 +63,7 @@ public class OAuthScopeController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody OAuthScopeDTO oAuthScopeDTO) {
-        return iOAuthScopeService.update(id, oAuthScopeDTO);
+        return oAuthScopeService.update(id, oAuthScopeDTO);
     }
 
     @ApiOperation(value = "批量删除OAuthScope对象}")
@@ -72,6 +72,6 @@ public class OAuthScopeController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iOAuthScopeService.delete(ids);
+        return oAuthScopeService.delete(ids);
     }
 }

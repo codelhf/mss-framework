@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.SSOAccessTokenDTO;
-import com.mss.framework.base.user.server.service.manage.ISSOAccessTokenService;
+import com.mss.framework.base.user.server.service.manage.SSOAccessTokenService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class SSOAccessTokenController {
 
     @Autowired
-    private ISSOAccessTokenService iSSOAccessTokenService;
+    private SSOAccessTokenService ssoAccessTokenService;
 
     @ApiOperation(value = "查询SSOAccessToken列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class SSOAccessTokenController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iSSOAccessTokenService.list(pageNum, pageSize, params);
+        return ssoAccessTokenService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询SSOAccessToken对象}")
@@ -43,7 +43,7 @@ public class SSOAccessTokenController {
     })
     @GetMapping("/{id}")
     public ServerResponse<SSOAccessTokenDTO> select(@PathVariable("id") String id) {
-        return iSSOAccessTokenService.select(id);
+        return ssoAccessTokenService.select(id);
     }
 
     @ApiOperation(value = "保存SSOAccessToken对象")
@@ -52,7 +52,7 @@ public class SSOAccessTokenController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody SSOAccessTokenDTO sSOAccessTokenDTO) {
-        return iSSOAccessTokenService.insert(sSOAccessTokenDTO);
+        return ssoAccessTokenService.insert(sSOAccessTokenDTO);
     }
 
     @ApiOperation(value = "更新SSOAccessToken对象")
@@ -63,7 +63,7 @@ public class SSOAccessTokenController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody SSOAccessTokenDTO sSOAccessTokenDTO) {
-        return iSSOAccessTokenService.update(id, sSOAccessTokenDTO);
+        return ssoAccessTokenService.update(id, sSOAccessTokenDTO);
     }
 
     @ApiOperation(value = "批量删除SSOAccessToken对象}")
@@ -72,6 +72,6 @@ public class SSOAccessTokenController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iSSOAccessTokenService.delete(ids);
+        return ssoAccessTokenService.delete(ids);
     }
 }

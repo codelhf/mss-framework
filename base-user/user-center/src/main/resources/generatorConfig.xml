@@ -70,16 +70,16 @@
                   suffix="Controller" fileType="java" isGenerate="true" override="true"/>
         <!--common类型的以suffix为文件名-->
         <template name="exceptionResolver" template="template/Default/vm/common/ExceptionResolver.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.common"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
                   suffix="ExceptionResolver" fileType="java" common="true" isGenerate="false" override="true"/>
         <template name="swagger2" template="template/Default/vm/common/Swagger2.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.common"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
                   suffix="Swagger2" fileType="java" common="true" isGenerate="false" override="true"/>
         <template name="responseCode" template="template/Default/vm/common/ResponseCode.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.common"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
                   suffix="ResponseCode" fileType="java" common="true" isGenerate="false" override="true"/>
         <template name="serverResponse" template="template/Default/vm/common/ServerResponse.vm"
-                  directory="./src/main/java" packageName="com.example.generator.demo.common"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
                   suffix="ServerResponse" fileType="java" common="true" isGenerate="false" override="true"/>
     </templates>
 

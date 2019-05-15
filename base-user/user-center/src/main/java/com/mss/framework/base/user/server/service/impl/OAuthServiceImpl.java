@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service.manage.impl;
+package com.mss.framework.base.user.server.service.impl;
 
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
@@ -7,8 +7,8 @@ import com.mss.framework.base.user.server.web.filter.RequestHolder;
 import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
-import com.mss.framework.base.user.server.service.IOAuthService;
-import com.mss.framework.base.user.server.service.IRedisService;
+import com.mss.framework.base.user.server.service.OAuthService;
+import com.mss.framework.base.user.server.service.RedisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +21,10 @@ import java.util.Date;
  * @CreateTime: 2019/5/3 20:26
  */
 @Service
-public class OAuthServiceImpl implements IOAuthService {
+public class OAuthServiceImpl implements OAuthService {
 
     @Autowired
-    private IRedisService iRedisService;
+    private RedisService redisService;
 
     @Autowired
     private OAuthAccessTokenMapper oAuthAccessTokenMapper;
@@ -128,9 +128,9 @@ public class OAuthServiceImpl implements IOAuthService {
         String encryptedStr = EncryptUtil.sha1Hex(str);
 
         //3.1 保存本次请求的授权范围
-        iRedisService.setWithExpire(encryptedStr + ":scope", scopeStr, (ExpireEnum.AUTHORIZATION_CODE.getTime()), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
+        redisService.setWithExpire(encryptedStr + ":scope", scopeStr, (ExpireEnum.AUTHORIZATION_CODE.getTime()), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
         //3.2 保存本次请求所属的用户信息
-        iRedisService.setWithExpire(encryptedStr + ":user", user, (ExpireEnum.AUTHORIZATION_CODE.getTime()), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
+        redisService.setWithExpire(encryptedStr + ":user", user, (ExpireEnum.AUTHORIZATION_CODE.getTime()), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
 
         //4. 返回Authorization Code
         return encryptedStr;

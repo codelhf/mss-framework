@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service.manage;
+package com.mss.framework.base.user.server.service;
 
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
@@ -10,7 +10,7 @@ import com.mss.framework.base.user.server.pojo.User;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 9:54
  */
-public interface ISSOService {
+public interface SSOService {
 
     /**
      * @description: 根据ID查询接入客户端

@@ -1,26 +1,26 @@
 package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.SSOAccessTokenDTO;
+import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: SSOAccessTokenService
- * @Description: SSOAccessToken接口层
+ * @Title: OAuthAccessTokenService
+ * @Description: OAuthAccessToken接口层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-04 10:00:17
+ * @CreateTime: 2019-05-03 19:20:47
  */
-public interface ISSOAccessTokenService {
+public interface OAuthAccessTokenService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询SSOAccessToken列表
+	 * @Description: 查询OAuthAccessToken列表
 	 * @Company: example
 	 * @Author: liuhf
-	 * @CreateTime: 2019-05-04 10:00:17
+	 * @CreateTime: 2019-05-03 19:20:47
 	 *
 	 * @param pageNum
 	 * @param pageSize
@@ -31,47 +31,47 @@ public interface ISSOAccessTokenService {
 
     /**
      * @Title: select
-     * @Description: 查询SSOAccessToken对象
+     * @Description: 查询OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<SSOAccessTokenDTO>
+     * @return ServerResponse<OAuthAccessTokenDTO>
      */
-	ServerResponse<SSOAccessTokenDTO> select(String id);
+	ServerResponse<OAuthAccessTokenDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存SSOAccessToken对象
+     * @Description: 保存OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
-     * @param sSOAccessTokenDTO
+     * @param oAuthAccessTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(SSOAccessTokenDTO sSOAccessTokenDTO);
+	ServerResponse<String> insert(OAuthAccessTokenDTO oAuthAccessTokenDTO);
 
     /**
      * @Title: update
-     * @Description: 更新SSOAccessToken对象
+     * @Description: 更新OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @param sSOAccessTokenDTO
+     * @param oAuthAccessTokenDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, SSOAccessTokenDTO sSOAccessTokenDTO);
+	ServerResponse<String> update(String id, OAuthAccessTokenDTO oAuthAccessTokenDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除SSOAccessToken对象
+     * @Description: 批量删除OAuthAccessToken对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
      * @param ids
      * @return ServerResponse<String>

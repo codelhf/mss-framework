@@ -6,7 +6,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.SSORefreshTokenMapper;
 import com.mss.framework.base.user.server.dto.SSORefreshTokenDTO;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
-import com.mss.framework.base.user.server.service.manage.ISSORefreshTokenService;
+import com.mss.framework.base.user.server.service.manage.SSORefreshTokenService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-04 10:00:17
  */
 @Service
-public class SSORefreshTokenServiceImpl implements ISSORefreshTokenService {
+public class SSORefreshTokenServiceImpl implements SSORefreshTokenService {
 
     @Autowired
     private SSORefreshTokenMapper sSORefreshTokenMapper;

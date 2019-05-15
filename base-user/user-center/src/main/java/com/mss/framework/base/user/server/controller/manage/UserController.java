@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.UserDTO;
-import com.mss.framework.base.user.server.service.IUserService;
+import com.mss.framework.base.user.server.service.manage.UserService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    private IUserService iUserService;
+    private UserService userService;
 
     @ApiOperation(value = "查询User列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class UserController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iUserService.list(pageNum, pageSize, params);
+        return userService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询User对象}")
@@ -43,7 +43,7 @@ public class UserController {
     })
     @GetMapping("/{id}")
     public ServerResponse<UserDTO> select(@PathVariable("id") String id) {
-        return iUserService.select(id);
+        return userService.select(id);
     }
 
     @ApiOperation(value = "保存User对象")
@@ -52,7 +52,7 @@ public class UserController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody UserDTO userDTO) {
-        return iUserService.insert(userDTO);
+        return userService.insert(userDTO);
     }
 
     @ApiOperation(value = "更新User对象")
@@ -63,7 +63,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody UserDTO userDTO) {
-        return iUserService.update(id, userDTO);
+        return userService.update(id, userDTO);
     }
 
     @ApiOperation(value = "批量删除User对象}")
@@ -72,6 +72,6 @@ public class UserController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iUserService.delete(ids);
+        return userService.delete(ids);
     }
 }

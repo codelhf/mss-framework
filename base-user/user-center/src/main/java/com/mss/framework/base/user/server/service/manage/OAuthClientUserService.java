@@ -1,26 +1,26 @@
 package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.SSOClientDetailDTO;
+import com.mss.framework.base.user.server.dto.OAuthClientUserDTO;
 import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 /**
- * @Title: SSOClientDetailService
- * @Description: SSOClientDetail接口层
+ * @Title: OAuthClientUserService
+ * @Description: OAuthClientUser接口层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-04 10:00:17
+ * @CreateTime: 2019-05-03 19:20:47
  */
-public interface ISSOClientDetailService {
+public interface OAuthClientUserService {
 
 	/**
 	 * @Title: list
-	 * @Description: 查询SSOClientDetail列表
+	 * @Description: 查询OAuthClientUser列表
 	 * @Company: example
 	 * @Author: liuhf
-	 * @CreateTime: 2019-05-04 10:00:17
+	 * @CreateTime: 2019-05-03 19:20:47
 	 *
 	 * @param pageNum
 	 * @param pageSize
@@ -31,47 +31,47 @@ public interface ISSOClientDetailService {
 
     /**
      * @Title: select
-     * @Description: 查询SSOClientDetail对象
+     * @Description: 查询OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @return ServerResponse<SSOClientDetailDTO>
+     * @return ServerResponse<OAuthClientUserDTO>
      */
-	ServerResponse<SSOClientDetailDTO> select(String id);
+	ServerResponse<OAuthClientUserDTO> select(String id);
 
     /**
      * @Title: insert
-     * @Description: 保存SSOClientDetail对象
+     * @Description: 保存OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
-     * @param sSOClientDetailDTO
+     * @param oAuthClientUserDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> insert(SSOClientDetailDTO sSOClientDetailDTO);
+	ServerResponse<String> insert(OAuthClientUserDTO oAuthClientUserDTO);
 
     /**
      * @Title: update
-     * @Description: 更新SSOClientDetail对象
+     * @Description: 更新OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
      * @param id
-     * @param sSOClientDetailDTO
+     * @param oAuthClientUserDTO
      * @return ServerResponse<String>
      */
-	ServerResponse<String> update(String id, SSOClientDetailDTO sSOClientDetailDTO);
+	ServerResponse<String> update(String id, OAuthClientUserDTO oAuthClientUserDTO);
 
     /**
      * @Title: delete
-     * @Description: 批量删除SSOClientDetail对象
+     * @Description: 批量删除OAuthClientUser对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-04 10:00:17
+     * @CreateTime: 2019-05-03 19:20:47
      *
      * @param ids
      * @return ServerResponse<String>

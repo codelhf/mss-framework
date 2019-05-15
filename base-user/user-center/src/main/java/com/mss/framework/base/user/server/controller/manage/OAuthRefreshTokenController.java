@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.OAuthRefreshTokenDTO;
-import com.mss.framework.base.user.server.service.manage.IOAuthRefreshTokenService;
+import com.mss.framework.base.user.server.service.manage.OAuthRefreshTokenService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class OAuthRefreshTokenController {
 
     @Autowired
-    private IOAuthRefreshTokenService iOAuthRefreshTokenService;
+    private OAuthRefreshTokenService oAuthRefreshTokenService;
 
     @ApiOperation(value = "查询OAuthRefreshToken列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class OAuthRefreshTokenController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iOAuthRefreshTokenService.list(pageNum, pageSize, params);
+        return oAuthRefreshTokenService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询OAuthRefreshToken对象}")
@@ -43,7 +43,7 @@ public class OAuthRefreshTokenController {
     })
     @GetMapping("/{id}")
     public ServerResponse<OAuthRefreshTokenDTO> select(@PathVariable("id") String id) {
-        return iOAuthRefreshTokenService.select(id);
+        return oAuthRefreshTokenService.select(id);
     }
 
     @ApiOperation(value = "保存OAuthRefreshToken对象")
@@ -52,7 +52,7 @@ public class OAuthRefreshTokenController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody OAuthRefreshTokenDTO oAuthRefreshTokenDTO) {
-        return iOAuthRefreshTokenService.insert(oAuthRefreshTokenDTO);
+        return oAuthRefreshTokenService.insert(oAuthRefreshTokenDTO);
     }
 
     @ApiOperation(value = "更新OAuthRefreshToken对象")
@@ -63,7 +63,7 @@ public class OAuthRefreshTokenController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody OAuthRefreshTokenDTO oAuthRefreshTokenDTO) {
-        return iOAuthRefreshTokenService.update(id, oAuthRefreshTokenDTO);
+        return oAuthRefreshTokenService.update(id, oAuthRefreshTokenDTO);
     }
 
     @ApiOperation(value = "批量删除OAuthRefreshToken对象}")
@@ -72,6 +72,6 @@ public class OAuthRefreshTokenController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iOAuthRefreshTokenService.delete(ids);
+        return oAuthRefreshTokenService.delete(ids);
     }
 }

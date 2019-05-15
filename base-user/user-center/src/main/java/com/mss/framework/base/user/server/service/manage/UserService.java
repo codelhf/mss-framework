@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.service.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.UserDTO;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @Author: liuhf
  * @CreateTime: 2019-05-03 19:20:47
  */
-public interface IUserService {
+public interface UserService {
 
 	/**
 	 * @Title: list

@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller.manage;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.SSOClientDetailDTO;
-import com.mss.framework.base.user.server.service.manage.ISSOClientDetailService;
+import com.mss.framework.base.user.server.service.manage.SSOClientDetailService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class SSOClientDetailController {
 
     @Autowired
-    private ISSOClientDetailService iSSOClientDetailService;
+    private SSOClientDetailService ssoClientDetailService;
 
     @ApiOperation(value = "查询SSOClientDetail列表")
     @ApiImplicitParams({
@@ -34,7 +34,7 @@ public class SSOClientDetailController {
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam("params") Map<String, String> params) {
-        return iSSOClientDetailService.list(pageNum, pageSize, params);
+        return ssoClientDetailService.list(pageNum, pageSize, params);
     }
 
     @ApiOperation(value = "查询SSOClientDetail对象}")
@@ -43,7 +43,7 @@ public class SSOClientDetailController {
     })
     @GetMapping("/{id}")
     public ServerResponse<SSOClientDetailDTO> select(@PathVariable("id") String id) {
-        return iSSOClientDetailService.select(id);
+        return ssoClientDetailService.select(id);
     }
 
     @ApiOperation(value = "保存SSOClientDetail对象")
@@ -52,7 +52,7 @@ public class SSOClientDetailController {
     })
     @PostMapping("")
     public ServerResponse<String> insert(@RequestBody SSOClientDetailDTO sSOClientDetailDTO) {
-        return iSSOClientDetailService.insert(sSOClientDetailDTO);
+        return ssoClientDetailService.insert(sSOClientDetailDTO);
     }
 
     @ApiOperation(value = "更新SSOClientDetail对象")
@@ -63,7 +63,7 @@ public class SSOClientDetailController {
     @PutMapping("/{id}")
     public ServerResponse<String> update(@PathVariable("id") String id,
                                            @RequestBody SSOClientDetailDTO sSOClientDetailDTO) {
-        return iSSOClientDetailService.update(id, sSOClientDetailDTO);
+        return ssoClientDetailService.update(id, sSOClientDetailDTO);
     }
 
     @ApiOperation(value = "批量删除SSOClientDetail对象}")
@@ -72,6 +72,6 @@ public class SSOClientDetailController {
     })
     @DeleteMapping("/{ids}")
     public ServerResponse<String> delete(@PathVariable("ids") String ids) {
-        return iSSOClientDetailService.delete(ids);
+        return ssoClientDetailService.delete(ids);
     }
 }

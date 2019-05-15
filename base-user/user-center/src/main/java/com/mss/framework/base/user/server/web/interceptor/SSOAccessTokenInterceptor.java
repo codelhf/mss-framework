@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.web.interceptor;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
-import com.mss.framework.base.user.server.service.manage.ISSOService;
+import com.mss.framework.base.user.server.service.SSOService;
 import com.mss.framework.base.user.server.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class SSOAccessTokenInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private ISSOService issoService;
+    private SSOService issoService;
 
     /**
      * 检查Access Token是否已经失效

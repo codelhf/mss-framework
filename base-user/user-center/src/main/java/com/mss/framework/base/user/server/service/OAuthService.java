@@ -10,7 +10,7 @@ import com.mss.framework.base.user.server.pojo.User;
  * @Auther: liuhf
  * @CreateTime: 2019/5/3 20:25
  */
-public interface IOAuthService {
+public interface OAuthService {
 
     /**
      * @description: 通过id查询客户端信息

@@ -1,21 +1,40 @@
-package com.mss.framework.base.user.server.web.filter;
+package com.mss.framework.base.user.server.web;
 
+import com.mss.framework.base.user.server.web.filter.LoginFilter;
+import com.mss.framework.base.user.server.web.interceptor.LoginInterceptor;
+import com.mss.framework.base.user.server.web.interceptor.OauthInterceptor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @Description:
- * @Author: liuhf
- * @createtime: 2019/5/14 11:11
+ * @Description: Webmvc相关配置
+ * @Auther: liuhf
+ * @CreateTime: 2019/5/3 22:48
  */
 @Configuration
-@EnableWebMvc
-public class FilterConfig implements WebMvcConfigurer {
+//@EnableWebMvc
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    /**
+     * 添加拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/user/**","/oauth2.0/authorizePage","/oauth2.0/authorize","/sso/token");
+        registry.addInterceptor(new OauthInterceptor())
+                .addPathPatterns("/oauth2.0/authorize");
+//        registry.addInterceptor(accessTokenInterceptor()).addPathPatterns("/api/**");
+//        registry.addInterceptor(ssoAccessDomainInterceptor()).addPathPatterns("/sso/token");
+//        registry.addInterceptor(ssoAccessTokenInterceptor()).addPathPatterns("/sso/verify");
+    }
+
 
     @Bean
     @Order(1)//order的数值越小 则优先级越高

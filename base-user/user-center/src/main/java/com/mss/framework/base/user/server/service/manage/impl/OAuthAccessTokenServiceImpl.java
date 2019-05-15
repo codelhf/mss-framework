@@ -9,7 +9,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dao.OAuthAccessTokenMapper;
 import com.mss.framework.base.user.server.dto.OAuthAccessTokenDTO;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
-import com.mss.framework.base.user.server.service.manage.IOAuthAccessTokenService;
+import com.mss.framework.base.user.server.service.manage.OAuthAccessTokenService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @CreateTime: 2019-05-03 19:20:47
  */
 @Service
-public class OAuthAccessTokenServiceImpl implements IOAuthAccessTokenService {
+public class OAuthAccessTokenServiceImpl implements OAuthAccessTokenService {
 
     @Autowired
     private OAuthAccessTokenMapper oAuthAccessTokenMapper;

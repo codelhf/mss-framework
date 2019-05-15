@@ -2,6 +2,7 @@ package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
+import com.mss.framework.base.user.server.service.RedisService;
 import com.mss.framework.base.user.server.web.filter.RequestHolder;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
@@ -10,9 +11,8 @@ import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
 import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
-import com.mss.framework.base.user.server.service.IOAuthService;
-import com.mss.framework.base.user.server.service.IRedisService;
-import com.mss.framework.base.user.server.service.IUserService;
+import com.mss.framework.base.user.server.service.OAuthService;
+import com.mss.framework.base.user.server.service.manage.UserService;
 import com.mss.framework.base.user.server.util.JsonUtil;
 import com.mss.framework.base.user.server.util.OAuthUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -38,12 +38,12 @@ import java.util.Map;
 public class OauthController {
 
     @Autowired
-    private IRedisService iRedisService;
+    private RedisService redisService;
 
     @Autowired
-    private IOAuthService ioAuthService;
+    private OAuthService ioAuthService;
     @Autowired
-    private IUserService iUserService;
+    private UserService iUserService;
 
     /**
      * @param [clientDetail]
@@ -177,9 +177,9 @@ public class OauthController {
             return OAuthUtil.errorResponse(ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
         //从Redis获取对应的用户信息
-        User user = iRedisService.get(code + ":user");
+        User user = redisService.get(code + ":user");
         //从Redis获取允许访问的用户权限范围
-        String scope = iRedisService.get(code + ":scope");
+        String scope = redisService.get(code + ":scope");
 
         //如果能够通过Authorization Code获取到对应的用户信息，则说明该Authorization Code有效
         if (StringUtils.isBlank(scope) || user == null) {
