@@ -1,6 +1,5 @@
 package com.mss.framework.base.user.server.web;
 
-import com.mss.framework.base.user.server.web.filter.LoginFilter;
 import com.mss.framework.base.user.server.web.interceptor.LoginInterceptor;
 import com.mss.framework.base.user.server.web.interceptor.OauthInterceptor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -35,18 +34,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(ssoAccessTokenInterceptor()).addPathPatterns("/sso/verify");
     }
 
-
-    @Bean
-    @Order(1)//order的数值越小 则优先级越高
-    public FilterRegistrationBean LoginFilter() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(new LoginFilter());
-        filterRegistrationBean.addUrlPatterns("/*");
-        return filterRegistrationBean;
-    }
-
-    @Bean
-    @Order(2)//HttpPutFormContentFilter接口Put请求无法获取请求体的内容
+    @Bean//order的数值越小 则优先级越高
+    @Order(1)//HttpPutFormContentFilter接口Put请求无法获取请求体的内容
     public FilterRegistrationBean SessionExpireFilter() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new HttpPutFormContentFilter());

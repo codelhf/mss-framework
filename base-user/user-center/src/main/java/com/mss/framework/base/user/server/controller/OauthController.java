@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.controller;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.service.RedisService;
-import com.mss.framework.base.user.server.web.filter.RequestHolder;
+import com.mss.framework.base.user.server.web.RequestHolder;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;
@@ -13,7 +13,7 @@ import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.service.manage.UserService;
-import com.mss.framework.base.user.server.util.JsonUtil;
+import com.mss.framework.base.user.server.util.JsonUtil2;
 import com.mss.framework.base.user.server.util.OAuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,10 +214,10 @@ public class OauthController {
     public String getInfo(@PathVariable("access_token") String accessToken) {
         OAuthAccessToken oAuthAccessToken = ioAuthService.selectByAccessToken(accessToken);
         if (oAuthAccessToken == null) {
-            return JsonUtil.toJson(OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT));
+            return JsonUtil2.toJson(OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT));
         }
         User user = iUserService.selectUserInfoByScope(oAuthAccessToken.getUserId(), oAuthAccessToken.getScope());
-        return JsonUtil.toJson(user);
+        return JsonUtil2.toJson(user);
     }
 
     /**

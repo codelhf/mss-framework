@@ -4,7 +4,7 @@ import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.service.SSOService;
-import com.mss.framework.base.user.server.util.JsonUtil;
+import com.mss.framework.base.user.server.util.JsonUtil2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -63,7 +63,7 @@ public class SSOAccessTokenInterceptor extends HandlerInterceptorAdapter {
         result.put("error", errorCodeEnum.getCode());
         result.put("error_description",errorCodeEnum.getDesc());
 
-        response.getWriter().write(JsonUtil.toJson(result));
+        response.getWriter().write(JsonUtil2.toJson(result));
         return false;
     }
 }

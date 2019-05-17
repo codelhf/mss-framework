@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.service.impl;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
 import com.mss.framework.base.core.util.IDUtil;
-import com.mss.framework.base.user.server.web.filter.RequestHolder;
+import com.mss.framework.base.user.server.web.RequestHolder;
 import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;

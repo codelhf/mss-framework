@@ -1,16 +1,16 @@
 package com.mss.framework.base.core.common;
 
-import io.swagger.models.Contact;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -24,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2 //启用Swagger2
-@EnableWebMvc //springMVC环境使用
+@Profile(value = {"dev","test"})//启用环境
 public class Swagger2 extends WebMvcConfigurationSupport {
 
     @Value("${swagger.ui.title}")
@@ -69,21 +69,13 @@ public class Swagger2 extends WebMvcConfigurationSupport {
                 .version(version)
                 .description(description)
                 //联系人
-                .contact(contactInfo())
+                .contact(new Contact(contactName, contactEmail, contactUrl))
                 //许可人
                 .license(license)
                 .licenseUrl(licenseUrl)
                 //服务条款URL
                 .termsOfServiceUrl(termsOfServiceUrl)
                 .build();
-    }
-
-    private String contactInfo() {
-        return new Contact()
-                .name(contactName)
-                .email(contactEmail)
-                .url(contactUrl)
-                .toString();
     }
 
     /**
