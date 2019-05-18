@@ -6,8 +6,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,7 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/user/**","/oauth2.0/authorizePage","/oauth2.0/authorize","/sso/token");
+                .addPathPatterns("*/user/**","*/oauth2.0/authorizePage","*/oauth2.0/authorize","*/sso/token");
         registry.addInterceptor(new OauthInterceptor())
                 .addPathPatterns("/oauth2.0/authorize");
 //        registry.addInterceptor(accessTokenInterceptor()).addPathPatterns("/api/**");
@@ -34,9 +34,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(ssoAccessTokenInterceptor()).addPathPatterns("/sso/verify");
     }
 
+    @Bean
+    @Order(1)
+    public FilterRegistrationBean CharacterEncodingFilter() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(new CharacterEncodingFilter("utf-8", true));
+        filterRegistrationBean.addUrlPatterns("/*");
+        return filterRegistrationBean;
+    }
+
     @Bean//order的数值越小 则优先级越高
-    @Order(1)//HttpPutFormContentFilter接口Put请求无法获取请求体的内容
-    public FilterRegistrationBean SessionExpireFilter() {
+    @Order(2)//HttpPutFormContentFilter接口Put请求无法获取请求体的内容
+    public FilterRegistrationBean HttpPutFormContentFilter() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new HttpPutFormContentFilter());
         filterRegistrationBean.addUrlPatterns("/*");

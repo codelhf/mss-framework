@@ -17,10 +17,22 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
 
-    @Value("${cookie.domain}")
-    private static final String COOKIE_DOMAIN = "localhost";
     @Value("${cookie.name}")
     private static final String COOKIE_NAME = "login_token";
+    @Value("${cookie.domain}")
+    private static final String COOKIE_DOMAIN = "localhost";
+
+    public static void writeLoginToken(HttpServletResponse response, String token){
+        Cookie cookie = new Cookie(COOKIE_NAME, token);
+        cookie.setDomain(COOKIE_DOMAIN);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        //单位是秒
+        //maxAge不设置的话，cookie不会写入硬盘，而是写在内存，只在当前页面有效
+        cookie.setMaxAge(60*60*24*365);//如果是-1代表永久
+        log.info("write cookieName:{} cookieValue:{}", cookie.getName(), cookie.getValue());
+        response.addCookie(cookie);
+    }
 
     public static String readLoginToken(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
@@ -35,19 +47,6 @@ public class CookieUtil {
         }
         return null;
     }
-
-    public static void writeLoginToken(HttpServletResponse response, String token){
-        Cookie cookie = new Cookie(COOKIE_NAME, token);
-        cookie.setDomain(COOKIE_DOMAIN);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        //单位是秒
-        //maxAge不设置的话，cookie不会写入硬盘，而是写在内存，只在当前页面有效
-        cookie.setMaxAge(60*60*24*365);//如果是-1代表永久
-        log.info("write cookieName:{} cookieValue:{}", cookie.getName(), cookie.getValue());
-        response.addCookie(cookie);
-    }
-
 
     public static void deleteLoginToken(HttpServletRequest request, HttpServletResponse response){
         Cookie[] cookies = request.getCookies();

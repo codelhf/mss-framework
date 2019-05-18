@@ -1,10 +1,15 @@
 package com.mss.framework.base.user.server.web.interceptor;
 
+import com.mss.framework.base.core.common.ResponseCode;
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.RedisService;
+import com.mss.framework.base.user.server.util.JsonUtil;
 import com.mss.framework.base.user.server.web.RequestHolder;
+import com.mss.framework.base.user.server.web.token.TokenUser;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @Description: 定义一些页面需要做登录检查
@@ -21,36 +27,47 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private RedisService iRedisService;
-
     /**
      * 检查是否已经登录
      */
-    @Override
+    @Override//在请求处理之前进行调用(Controller方法调用之前)
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //获取session中存储的token
-        User user = iRedisService.get(Constants.SESSION_USER);
-
-        if(user != null){
-            RequestHolder.add(user);
+        TokenUser tokenUser = TokenUtil.getTokenUser(request);
+        if(tokenUser != null){
+            RequestHolder.add(tokenUser);
             RequestHolder.add(request);
             return true;
         }
         //如果token不存在，则跳转到登录页面
-        response.sendRedirect(request.getContextPath() + "/login?redirectUri=" + SpringContextUtil.getRequestUrl(request));
-
+        noLogin(response);
         return false;
     }
 
-    @Override
+    @Override//请求处理之后进行调用，但是在视图被渲染之前(Controller)方法调用之后
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
         RequestHolder.remove();
     }
 
-    @Override
+    @Override//在整个请求结束之后被调用，也就是在DispatcherServlet
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
         RequestHolder.remove();
+    }
+
+    private void noLogin(HttpServletResponse response) throws IOException {
+        String message = JsonUtil.objToStr(ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc()));
+        permissionMessage(response, message);
+    }
+
+    private void noPermission(HttpServletResponse response, String message) throws IOException {
+        message = JsonUtil.objToStr(ServerResponse.createByErrorMessage(message));
+        permissionMessage(response, message);
+    }
+
+    private void permissionMessage(HttpServletResponse response, String message) throws IOException {
+        response.reset();//这里要添加reset，否则报异常 getWriter() has already been called for this response.
+        response.setCharacterEncoding("utf-8");//这里要设置编码，否则会乱码
+        response.setHeader("Content-Type", "application/json;UTF-8");//这里要设置返回值的类型，因为全部是json接口。
+        response.getWriter().print(message);
     }
 }

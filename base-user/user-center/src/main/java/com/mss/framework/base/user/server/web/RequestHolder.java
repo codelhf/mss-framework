@@ -1,16 +1,16 @@
 package com.mss.framework.base.user.server.web;
 
-import com.mss.framework.base.user.server.pojo.User;
+import com.mss.framework.base.user.server.web.token.TokenUser;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestHolder {
 
-    private static final ThreadLocal<User> userHolder = new ThreadLocal<>();
+    private static final ThreadLocal<TokenUser> userHolder = new ThreadLocal<>();
 
     private static final ThreadLocal<HttpServletRequest> requestHolder = new ThreadLocal<>();
 
-    public static void add(User user){
+    public static void add(TokenUser user){
         userHolder.set(user);
     }
 
@@ -18,7 +18,7 @@ public class RequestHolder {
         requestHolder.set(request);
     }
 
-    public static User getCurrentUser(){
+    public static TokenUser getCurrentUser(){
         return userHolder.get();
     }
 

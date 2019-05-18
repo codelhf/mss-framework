@@ -22,6 +22,7 @@ import java.util.Map;
  */
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
+
     private static ConfigurableApplicationContext applicationContext;
 
     @Override

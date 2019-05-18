@@ -1,10 +1,8 @@
 package com.mss.framework.base.user.server.web.token;
 
-import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mss.framework.base.core.util.IDUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,21 +37,23 @@ public class JWTUtil {
      * @param secret   用户的密码
      * @return 加密的token
      */
-    public static String sign(String username, String secret, Long expiresMillis) {
+    public static String sign(String userInfo, Long expiresMillis) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
             Long currentTime = System.currentTimeMillis();
-            if (expiresMillis !=null && expiresMillis > 0) {
+            if (expiresMillis != null && expiresMillis > 0) {
                 EXPIRE_TIME = expiresMillis;
             }
+            //过期时间
             Date expiresTime = new Date(currentTime + EXPIRE_TIME);
-            // 附带username信息
+            //加密方式
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            //生成秘钥
             return JWT.create()
                     .withHeader(new HashMap<>())
                     .withAudience()
                     .withIssuer(issuer)
                     .withIssuedAt(new Date())
-                    .withSubject(JSON.toJSONString(username))
+                    .withSubject(userInfo)
                     .withExpiresAt(expiresTime)
                     .withNotBefore(new Date())
                     .withJWTId(IDUtil.UUIDStr())
@@ -68,38 +68,20 @@ public class JWTUtil {
      *
      * @param token  密钥
      * @param secret 用户的密码
-     * @return 是否正确
+     * @return DecodedJWT 验证后的令牌
      */
-    public static DecodedJWT verify(String token, String secret) {
+    public static String verify(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(issuer)
                     .build();
-            return verifier.verify(token);
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                return null;
+            }
+            return decodedJWT.getSubject();
         } catch (Exception exception) {
-            return null;
-        }
-    }
-
-    public static TokenUser getTokenUser(String token) {
-        DecodedJWT jwt = verify(token, secret);
-        if (jwt == null) {
-            return null;
-        }
-        return JSON.parseObject(jwt.getToken(), TokenUser.class);
-    }
-
-    /**
-     * 获得token中的信息无需secret解密也能获得
-     *
-     * @return token中包含的用户名
-     */
-    public static String getUsername(String token) {
-        try {
-            DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("username").asString();
-        } catch (JWTDecodeException e) {
             return null;
         }
     }
