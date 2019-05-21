@@ -17,14 +17,12 @@ import javax.servlet.http.HttpServletResponse;
  * @Auther: liuhf
  * @CreateTime: 2019/5/16 13:56
  */
-@Configuration
 @Slf4j
 public class SessionUtil {
 
-    @Autowired
     private static RedisUtil redisUtil;
     // 过期时间5分钟
-    private static long EXPIRE_TIME = 5 * 60 * 1000;
+    public static long EXPIRE_TIME = 5 * 60 * 1000;
 
     public static boolean putTokenUser(HttpServletResponse response,
                                        TokenUser tokenUser, Long expiresMillis) {
@@ -39,12 +37,17 @@ public class SessionUtil {
         }
         String loginToken = IDUtil.UUIDStr();
         String jsonUser = JSON.toJSONString(tokenUser);
-        CookieUtil.writeLoginToken(response, loginToken);
+        CookieUtil cookieUtil = new CookieUtil();
+        cookieUtil.writeLoginToken(response, loginToken);
         return redisUtil.setExpire(loginToken, jsonUser, EXPIRE_TIME);
     }
 
     public static TokenUser getTokenUser(HttpServletRequest request) {
-        String loginToken = CookieUtil.readLoginToken(request);
+        if (redisUtil == null) {
+            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
+        }
+        CookieUtil cookieUtil = new CookieUtil();
+        String loginToken = cookieUtil.readLoginToken(request);
         if (StringUtils.isBlank(loginToken)) {
             return null;
         }
@@ -56,11 +59,15 @@ public class SessionUtil {
     }
 
     public static boolean deleteTokenUser(HttpServletRequest request, HttpServletResponse response) {
-        String loginToken = CookieUtil.readLoginToken(request);
+        if (redisUtil == null) {
+            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
+        }
+        CookieUtil cookieUtil = new CookieUtil();
+        String loginToken = cookieUtil.readLoginToken(request);
         if (StringUtils.isBlank(loginToken)) {
             return true;
         }
-        CookieUtil.deleteLoginToken(request, response);
+        cookieUtil.deleteLoginToken(request, response);
         String jsonUser = (String) redisUtil.get(loginToken);
         if (StringUtils.isBlank(jsonUser)) {
             return true;

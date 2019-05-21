@@ -2,7 +2,7 @@ package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
-import com.mss.framework.base.user.server.service.RedisService;
+import com.mss.framework.base.user.server.redis.RedisService;
 import com.mss.framework.base.user.server.web.RequestHolder;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
@@ -15,6 +15,7 @@ import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.service.manage.UserService;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import com.mss.framework.base.user.server.util.OAuthUtil;
+import com.mss.framework.base.user.server.web.token.TokenUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -132,7 +133,10 @@ public class OauthController {
         //state，用于防止CSRF攻击（非必填）
         String state = request.getParameter("state");
         //生成Authorization Code
-        String authorizationCode = ioAuthService.createAuthorizationCode(clientId, scope, RequestHolder.getCurrentUser());
+        TokenUser tokenUser = RequestHolder.getCurrentUser();
+        User user = new User();
+        user.setId(tokenUser.getId());
+        String authorizationCode = ioAuthService.createAuthorizationCode(clientId, scope, user);
         String params = "?code=" + authorizationCode;
         if (StringUtils.isNoneBlank(state)) {
             params = params + "&state=" + state;

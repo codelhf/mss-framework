@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.web.code;
+package com.mss.framework.base.user.server.web.validate.code.image;
 
 import java.awt.*;
 import java.io.ByteArrayInputStream;

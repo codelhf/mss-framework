@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 public class CookieUtil {
 
     @Value("${cookie.name}")
-    private static final String COOKIE_NAME = "login_token";
+    private final String COOKIE_NAME = "login_token";
     @Value("${cookie.domain}")
-    private static final String COOKIE_DOMAIN = "localhost";
+    private final String COOKIE_DOMAIN = "localhost";
 
-    public static void writeLoginToken(HttpServletResponse response, String token){
+    public void writeLoginToken(HttpServletResponse response, String token){
         Cookie cookie = new Cookie(COOKIE_NAME, token);
         cookie.setDomain(COOKIE_DOMAIN);
         cookie.setPath("/");
@@ -34,7 +34,7 @@ public class CookieUtil {
         response.addCookie(cookie);
     }
 
-    public static String readLoginToken(HttpServletRequest request){
+    public String readLoginToken(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         if (cookies != null){
             for (Cookie cookie : cookies){
@@ -48,7 +48,7 @@ public class CookieUtil {
         return null;
     }
 
-    public static void deleteLoginToken(HttpServletRequest request, HttpServletResponse response){
+    public void deleteLoginToken(HttpServletRequest request, HttpServletResponse response){
         Cookie[] cookies = request.getCookies();
         if (cookies != null){
             for (Cookie cookie : cookies){

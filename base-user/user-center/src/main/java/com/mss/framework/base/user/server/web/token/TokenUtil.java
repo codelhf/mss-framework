@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @Description: TODO
+ * @Description: token工具类
  * @Auther: liuhf
  * @CreateTime: 2019/5/16 11:49
  */
-@Configuration
 @Slf4j
 public class TokenUtil {
 
@@ -23,7 +22,7 @@ public class TokenUtil {
     // 用户信息，用于前端展示
     private static final String LOGIN_USER = "X-LOGIN-USER";
     // 过期时间5分钟
-    private static long EXPIRE_TIME = 5 * 60 * 1000;
+    public static long EXPIRE_TIME = 5 * 60 * 1000;
 
     public static boolean putTokenUser(HttpServletResponse response,
                                        TokenUser tokenUser, Long expiresMillis) {
@@ -34,7 +33,8 @@ public class TokenUtil {
             EXPIRE_TIME = expiresMillis;
         }
         String jsonUser = JSON.toJSONString(tokenUser);
-        String authToken = JWTUtil.sign(jsonUser, EXPIRE_TIME);
+        JWTUtil jwtUtil = new JWTUtil();
+        String authToken = jwtUtil.sign(jsonUser, EXPIRE_TIME);
         response.setHeader(AUTH_TOKEN, authToken);
         response.setHeader(LOGIN_USER, jsonUser);
         return true;
@@ -45,7 +45,8 @@ public class TokenUtil {
         if (StringUtils.isBlank(authToken)) {
             return null;
         }
-        String jsonUser = JWTUtil.verify(authToken);
+        JWTUtil jwtUtil = new JWTUtil();
+        String jsonUser = jwtUtil.verify(authToken);
         if (StringUtils.isBlank(jsonUser)) {
             return null;
         }

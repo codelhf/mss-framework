@@ -1,13 +1,20 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.user.server.pojo.User;
+import com.mss.framework.base.user.server.redis.RedisUtil;
 import com.mss.framework.base.user.server.service.LoginService;
+import com.mss.framework.base.user.server.web.token.SessionUtil;
+import com.mss.framework.base.user.server.web.token.TokenUser;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -21,22 +28,26 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
-//    @Autowired
-//    private RedisUtil redisUtil;
 
     @PostMapping("/login")
-    public ServerResponse login(HttpSession session, String username, String md5Password) {
-        ServerResponse response = loginService.login(username, md5Password);
-        if (response.isSuccess()) {
+    public ServerResponse login(HttpServletResponse response, String username, String md5Password) {
+        ServerResponse serverResponse = loginService.login(username, md5Password);
+        if (serverResponse.isSuccess()) {
             //存入session
-            session.setAttribute(session.getId(), response.getData());
+            User user = (User) serverResponse.getData();
+            TokenUser tokenUser = new TokenUser();
+            tokenUser.setId(user.getId());
+            tokenUser.setUsername(username);
+            tokenUser.setPhone(user.getPhone());
+            tokenUser.setEmail(user.getEmail());
+            TokenUtil.putTokenUser(response, tokenUser, null);
         }
-        return response;
+        return serverResponse;
     }
 
     @GetMapping("/logout")
-    public ServerResponse logout(HttpSession session) {
-        session.removeAttribute(session.getId());
+    public ServerResponse logout(HttpServletRequest request, HttpServletResponse response) {
+        TokenUtil.deleteTokenUser(request, response);
         return ServerResponse.createBySuccess();
     }
 }

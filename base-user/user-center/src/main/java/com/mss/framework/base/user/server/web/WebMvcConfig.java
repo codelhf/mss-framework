@@ -26,6 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
+                .excludePathPatterns("*/user/v1.0/login")//排除登录接口
                 .addPathPatterns("*/user/**","*/oauth2.0/authorizePage","*/oauth2.0/authorize","*/sso/token");
         registry.addInterceptor(new OauthInterceptor())
                 .addPathPatterns("/oauth2.0/authorize");

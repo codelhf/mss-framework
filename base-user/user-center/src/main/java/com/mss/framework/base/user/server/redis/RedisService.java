@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.service;
+package com.mss.framework.base.user.server.redis;
 
 import java.util.concurrent.TimeUnit;
 

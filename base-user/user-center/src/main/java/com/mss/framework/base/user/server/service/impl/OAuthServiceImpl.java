@@ -8,7 +8,8 @@ import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
 import com.mss.framework.base.user.server.service.OAuthService;
-import com.mss.framework.base.user.server.service.RedisService;
+import com.mss.framework.base.user.server.redis.RedisService;
+import com.mss.framework.base.user.server.web.token.TokenUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,7 @@ public class OAuthServiceImpl implements OAuthService {
         //生成32位随机的clientSecret
         String clientSecret = EncryptUtil.getRandomStr1(32);
 
-        User user = RequestHolder.getCurrentUser();
+        TokenUser user = RequestHolder.getCurrentUser();
         Date current = new Date();
         clientDetail.setId(IDUtil.UUIDStr());
         clientDetail.setClientId(clientId);

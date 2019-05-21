@@ -9,7 +9,7 @@ import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
-import com.mss.framework.base.user.server.service.RedisService;
+import com.mss.framework.base.user.server.redis.RedisService;
 import com.mss.framework.base.user.server.service.SSOService;
 import com.mss.framework.base.user.server.service.manage.UserService;
 import lombok.extern.slf4j.Slf4j;
