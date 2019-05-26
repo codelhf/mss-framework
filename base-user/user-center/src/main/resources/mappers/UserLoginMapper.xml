@@ -192,4 +192,43 @@
             </if>
         </where>
     </select>
+
+    <select id="selectByUsername" parameterType="string" resultType="int">
+        select count(1)
+        from user_login
+        where username = #{username}
+    </select>
+
+    <select id="selectByEmail" parameterType="string" resultType="int">
+        select count(1)
+        from user_login
+        where email = #{email}
+    </select>
+
+    <select id="selectByPhone" parameterType="string" resultType="int">
+        select count(1)
+        from user_login
+        where phone = #{phone}
+    </select>
+
+    <select id="loginByUsername" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from user_login
+        where username = #{username}
+        and password = #{password}
+    </select>
+
+    <select id="loginByEmail" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from user_login
+        where email = #{email}
+        and password = #{password}
+    </select>
+
+    <select id="loginByPhone" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from user_login
+        where phone = #{phone}
+        and password = #{password}
+    </select>
 </mapper>

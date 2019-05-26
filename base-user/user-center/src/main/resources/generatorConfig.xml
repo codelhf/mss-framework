@@ -85,8 +85,8 @@
 
     <!-- 数据库对应数据表-->
     <tables>
-        <table tableName="user_login" domainName="UserLogin">
-        </table>
+        <!--<table tableName="user_login" domainName="UserLogin">-->
+        <!--</table>-->
         <table tableName="user_oauth" domainName="UserOAuth">
         </table>
     </tables>

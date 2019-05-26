@@ -29,14 +29,19 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         TokenUser tokenUser = TokenUtil.getTokenUser(request);
-        if(tokenUser != null){
-            RequestHolder.add(tokenUser);
-            RequestHolder.add(request);
-            return true;
+        if(tokenUser == null){
+            //如果token不存在，则跳转到登录页面
+            noLogin(response);
+            return false;
         }
-        //如果token不存在，则跳转到登录页面
-        noLogin(response);
-        return false;
+        RequestHolder.add(tokenUser);
+        RequestHolder.add(request);
+        String scope = tokenUser.getUsername();
+        if (!"admin".equals(scope)) {
+            noPermission(response, "没有权限");
+            return false;
+        }
+        return true;
     }
 
     @Override//请求处理之后进行调用，但是在视图被渲染之前(Controller)方法调用之后

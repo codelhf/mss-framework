@@ -10,5 +10,9 @@ import com.mss.framework.base.user.server.pojo.User;
  */
 public interface LoginService {
 
-    ServerResponse<User> login(String username, String md5Password);
+    ServerResponse<String> checkAccount(String account, String loginType);
+
+    ServerResponse<User> login(String account, String md5Password, String vCode, String loginType);
+
+    ServerResponse<String> register(String account, String md5Password, String loginType);
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * @Description: UserOAuth持久层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-15 15:24:33
+ * @CreateTime: 2019-05-26 21:51:42
  */
 @Mapper
 public interface UserOAuthMapper  {

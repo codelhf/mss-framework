@@ -42,9 +42,9 @@ public class OauthController {
     private RedisService redisService;
 
     @Autowired
-    private OAuthService ioAuthService;
+    private OAuthService oAuthService;
     @Autowired
-    private UserService iUserService;
+    private UserService userService;
 
     /**
      * @param [clientDetail]
@@ -55,7 +55,7 @@ public class OauthController {
      */
     @PostMapping("/clientRegister")
     public Map<String, Object> clientRegister(@RequestBody OAuthClientDetail clientDetail) {
-        OAuthClientDetail oAuthClientDetail = ioAuthService.register(clientDetail);
+        OAuthClientDetail oAuthClientDetail = oAuthService.register(clientDetail);
         if (oAuthClientDetail == null) {
             return OAuthUtil.errorMessage("注册失败");
         }
@@ -83,7 +83,7 @@ public class OauthController {
             request.getSession().setAttribute(Constants.SESSION_AUTH_REDIRECT_URL, redirectUri);
         }
         //查询请求授权的客户端信息
-        OAuthClientDetail clientDetail = ioAuthService.selectByClientId(clientId);
+        OAuthClientDetail clientDetail = oAuthService.selectByClientId(clientId);
         //将第三方客户端跳转到授权页
         String params = "clientId=" + clientId + "&clientName=" + clientDetail.getClientName() + "&scope=" + scope;
         response.sendRedirect("/page/authorize.html?" + params);
@@ -104,7 +104,7 @@ public class OauthController {
             return OAuthUtil.errorMessage("clientId或scope不能为空");
         }
         //1. 向数据库中保存授权信息
-        boolean success = ioAuthService.saveOAuthClientUser(RequestHolder.getCurrentUser().getId(), clientId, scope);
+        boolean success = oAuthService.saveOAuthClientUser(RequestHolder.getCurrentUser().getId(), clientId, scope);
         //2. 返回给页面的数据
         if (!success) {
             return OAuthUtil.errorMessage("授权失败");
@@ -136,7 +136,7 @@ public class OauthController {
         TokenUser tokenUser = RequestHolder.getCurrentUser();
         User user = new User();
         user.setId(tokenUser.getId());
-        String authorizationCode = ioAuthService.createAuthorizationCode(clientId, scope, user);
+        String authorizationCode = oAuthService.createAuthorizationCode(clientId, scope, user);
         String params = "?code=" + authorizationCode;
         if (StringUtils.isNoneBlank(state)) {
             params = params + "&state=" + state;
@@ -170,7 +170,7 @@ public class OauthController {
         if (!GrantTypeEnum.AUTHORIZATION_CODE.getType().equals(grantType)) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.UNSUPPORTED_GRANT_TYPE);
         }
-        OAuthClientDetail savedClientDetails = ioAuthService.selectByClientId(clientIdStr);
+        OAuthClientDetail savedClientDetails = oAuthService.selectByClientId(clientIdStr);
         //校验请求的客户端秘钥和已保存的秘钥是否匹配
         if (!(savedClientDetails != null && savedClientDetails.getClientSecret().equals(clientSecret))) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_CLIENT);
@@ -193,11 +193,11 @@ public class OauthController {
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
 
         //生成Access Token
-        String accessTokenStr = ioAuthService.createAccessToken(user, savedClientDetails, grantType, scope, expiresIn);
+        String accessTokenStr = oAuthService.createAccessToken(user, savedClientDetails, grantType, scope, expiresIn);
         //查询已经插入到数据库的Access Token
-        OAuthAccessToken authAccessToken = ioAuthService.selectByAccessToken(accessTokenStr);
+        OAuthAccessToken authAccessToken = oAuthService.selectByAccessToken(accessTokenStr);
         //生成Refresh Token
-        String refreshTokenStr = ioAuthService.createRefreshToken(user, authAccessToken);
+        String refreshTokenStr = oAuthService.createRefreshToken(user, authAccessToken);
         Map<String, Object> result = new HashMap<>(8);
         //返回数据
         result.put("access_token", authAccessToken.getAccessToken());
@@ -216,11 +216,11 @@ public class OauthController {
      */
     @GetMapping(value = "/getUserInfo/{access_token}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getInfo(@PathVariable("access_token") String accessToken) {
-        OAuthAccessToken oAuthAccessToken = ioAuthService.selectByAccessToken(accessToken);
+        OAuthAccessToken oAuthAccessToken = oAuthService.selectByAccessToken(accessToken);
         if (oAuthAccessToken == null) {
             return JsonUtil2.toJson(OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT));
         }
-        User user = iUserService.selectUserInfoByScope(oAuthAccessToken.getUserId(), oAuthAccessToken.getScope());
+        User user = userService.selectUserInfoByScope(oAuthAccessToken.getUserId(), oAuthAccessToken.getScope());
         return JsonUtil2.toJson(user);
     }
 
@@ -235,7 +235,7 @@ public class OauthController {
     public Map<String, Object> refreshToken(HttpServletRequest request) {
         //获取Refresh Token
         String refreshTokenStr = request.getParameter("refresh_token");
-        OAuthRefreshToken authRefreshToken = ioAuthService.selectByRefreshToken(refreshTokenStr);
+        OAuthRefreshToken authRefreshToken = oAuthService.selectByRefreshToken(refreshTokenStr);
 
         if (authRefreshToken == null) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
@@ -251,16 +251,16 @@ public class OauthController {
             return OAuthUtil.errorResponse(ErrorCodeEnum.EXPIRED_TOKEN);
         }
         //获取存储的Access Token
-        OAuthAccessToken authAccessToken = ioAuthService.selectByAccessId(authRefreshToken.getTokenId());
+        OAuthAccessToken authAccessToken = oAuthService.selectByAccessId(authRefreshToken.getTokenId());
         //获取对应的客户端信息
-        OAuthClientDetail savedClientDetails = ioAuthService.selectById(authAccessToken.getClientId());
+        OAuthClientDetail savedClientDetails = oAuthService.selectById(authAccessToken.getClientId());
         //获取对应的用户信息
-        User user = iUserService.selectByUserId(authAccessToken.getUserId());
+        User user = userService.selectByUserId(authAccessToken.getUserId());
 
         //新的过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
-        String newAccessTokenStr = ioAuthService.createAccessToken(user, savedClientDetails, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
+        String newAccessTokenStr = oAuthService.createAccessToken(user, savedClientDetails, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
         Map<String, Object> result = new HashMap<>(8);
         //返回数据
         result.put("access_token", newAccessTokenStr);

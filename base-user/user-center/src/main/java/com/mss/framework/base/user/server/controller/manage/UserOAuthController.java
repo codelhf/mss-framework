@@ -16,7 +16,7 @@ import java.util.Map;
  * @Description: UserOAuth控制层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-15 15:24:33
+ * @CreateTime: 2019-05-26 21:51:42
  */
 @RestController
 @RequestMapping(value = "/mm/userOAuth")
@@ -33,8 +33,8 @@ public class UserOAuthController {
     })
     @GetMapping("")
     public ServerResponse<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
-                                         @RequestParam("pageSize") Integer pageSize,
-                                         @RequestParam("params") Map<String, String> params) {
+                                            @RequestParam("pageSize") Integer pageSize,
+                                            @RequestParam("params") Map<String, String> params) {
         return userOAuthService.list(pageNum, pageSize, params);
     }
 

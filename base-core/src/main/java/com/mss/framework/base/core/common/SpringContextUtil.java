@@ -16,9 +16,11 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 /**
- * @Description: TODO
+ * @Title: SpringContextUtil
+ * @Description: spring工具类
+ * @Company: example
  * @Auther: liuhf
- * @CreateTime: 2019/5/3 16:39
+ * @CreateTime: 2019-05-04 10:00:17
  */
 @Component
 public class SpringContextUtil implements ApplicationContextAware {

@@ -10,7 +10,7 @@ import java.util.Date;
  * @Description: UserOAuthDTO对象
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-15 15:24:33
+ * @CreateTime: 2019-05-26 21:51:42
  */
 @Getter
 @Setter
@@ -30,10 +30,13 @@ public class UserOAuthDTO implements Serializable {
     private int loginType;
 
     //
-    private String identify;
+    private String passport;
 
     //
-    private String credential;
+    private String accessToken;
+
+    //
+    private String refreshToken;
 
     //
     private Date createTime;

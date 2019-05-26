@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  * @Author: liuhf
  * @CreateTime: 2019-05-04 10:00:17
  */
-@Slf4j
 @Component
+@Slf4j
 public class ExceptionResolver implements HandlerExceptionResolver {
 
     @Override

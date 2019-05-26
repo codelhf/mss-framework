@@ -40,25 +40,25 @@ public class SSOController {
     private RedisService redisService;
 
     @Autowired
-    private UserService iUserService;
+    private UserService userService;
     @Autowired
-    private SSOService issoService;
+    private SSOService ssoService;
 
     @GetMapping("/token")
     public ModelAndView token(String redirectUri, HttpServletRequest request) {
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询接入客户端
-        SSOClientDetail clientDetail = issoService.selectByRedirectUri(redirectUri);
+        SSOClientDetail clientDetail = ssoService.selectByRedirectUri(redirectUri);
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
         User user = redisService.get(Constants.SESSION_USER);
         //生成Access Token
-        String accessTokenStr = issoService.createAccessToken(user, expiresIn, requestIP, clientDetail);
+        String accessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIP, clientDetail);
         //查询已经插入到数据库的Access Token
-        SSOAccessToken accessToken = issoService.selectByAccessToken(accessTokenStr);
+        SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //生成Refresh Token
-        String refreshTokenStr = issoService.createRefreshToken(user, accessToken);
+        String refreshTokenStr = ssoService.createRefreshToken(user, accessToken);
 
         log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】"
                 , user.getNickname(), clientDetail.getClientName(), accessTokenStr, refreshTokenStr));
@@ -73,10 +73,10 @@ public class SSOController {
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询Access Token
-        SSOAccessToken accessToken = issoService.selectByAccessToken(accessTokenStr);
+        SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //查询Refresh Token
-        SSORefreshToken refreshToken = issoService.selectByTokenId(accessToken.getId());
-        User user = iUserService.selectByUserId(accessToken.getUserId());
+        SSORefreshToken refreshToken = ssoService.selectByTokenId(accessToken.getId());
+        User user = userService.selectByUserId(accessToken.getUserId());
         //组装返回信息
         result.put("access_token", accessToken.getAccessToken());
         result.put("refresh_token", refreshToken.getRefreshToken());
@@ -91,7 +91,7 @@ public class SSOController {
         Map<String, Object> result = new HashMap<>(8);
         //获取用户IP
         String requestIp = SpringContextUtil.getRequestIp(request);
-        SSORefreshToken refreshToken = issoService.selectByRefreshToken(refreshTokenStr);
+        SSORefreshToken refreshToken = ssoService.selectByRefreshToken(refreshTokenStr);
         if (refreshToken == null) {
             this.generateErrorResponse(result, ErrorCodeEnum.INVALID_GRANT);
             return result;
@@ -108,16 +108,16 @@ public class SSOController {
             return result;
         }
         //获取存储的Access Token
-        SSOAccessToken ssoAccessToken = issoService.selectByAccessId(refreshToken.getTokenId());
+        SSOAccessToken ssoAccessToken = ssoService.selectByAccessId(refreshToken.getTokenId());
         //查询接入客户端
-        SSOClientDetail ssoClientDetails = issoService.selectById(ssoAccessToken.getClientId());
+        SSOClientDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getClientId());
         //获取对应的用户信息
-        User user = iUserService.selectByUserId(ssoAccessToken.getUserId());
+        User user = userService.selectByUserId(ssoAccessToken.getUserId());
 
         //新的过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
-        String newAccessTokenStr = issoService.createAccessToken(user, expiresIn, requestIp, ssoClientDetails);
+        String newAccessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIp, ssoClientDetails);
 
         log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】"
                 , user.getNickname(), requestIp, ssoAccessToken.getAccessToken(), newAccessTokenStr));

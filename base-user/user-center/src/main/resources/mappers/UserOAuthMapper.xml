@@ -5,13 +5,14 @@
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="login_type" jdbcType="INTEGER" property="loginType"/>
-        <result column="identify" jdbcType="VARCHAR" property="identify"/>
-        <result column="credential" jdbcType="VARCHAR" property="credential"/>
+        <result column="passport" jdbcType="VARCHAR" property="passport"/>
+        <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
+        <result column="refresh_token" jdbcType="VARCHAR" property="refreshToken"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,user_id,login_type,identify,credential,create_time,update_time
+        id,user_id,login_type,passport,access_token,refresh_token,create_time,update_time,
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -24,9 +25,9 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.UserOAuth">
         insert into user_oauth
-        (id, user_id, login_type, identify, credential, create_time, update_time)
+        (id, user_id, login_type, passport, access_token, refresh_token, create_time, update_time, )
         values
-        (#{id, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{loginType, jdbcType=INTEGER}, #{identify, jdbcType=VARCHAR}, #{credential, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
+        (#{id, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{loginType, jdbcType=INTEGER}, #{passport, jdbcType=VARCHAR}, #{accessToken, jdbcType=VARCHAR}, #{refreshToken, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP}, )
     </insert>
     <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.UserOAuth">
         insert into user_oauth
@@ -40,11 +41,14 @@
             <if test="loginType != null">
                 login_type,
             </if>
-            <if test="identify != null">
-                identify,
+            <if test="passport != null">
+                passport,
             </if>
-            <if test="credential != null">
-                credential,
+            <if test="accessToken != null">
+                access_token,
+            </if>
+            <if test="refreshToken != null">
+                refresh_token,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -63,11 +67,14 @@
             <if test="loginType != null">
                 #{loginType, jdbcType=INTEGER},
             </if>
-            <if test="identify != null">
-                #{identify, jdbcType=VARCHAR},
+            <if test="passport != null">
+                #{passport, jdbcType=VARCHAR},
             </if>
-            <if test="credential != null">
-                #{credential, jdbcType=VARCHAR},
+            <if test="accessToken != null">
+                #{accessToken, jdbcType=VARCHAR},
+            </if>
+            <if test="refreshToken != null">
+                #{refreshToken, jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
                 #{createTime, jdbcType=TIMESTAMP},
@@ -89,11 +96,14 @@
             <if test="loginType != null">
                 login_type = #{loginType, jdbcType=INTEGER},
             </if>
-            <if test="identify != null">
-                identify = #{identify, jdbcType=VARCHAR},
+            <if test="passport != null">
+                passport = #{passport, jdbcType=VARCHAR},
             </if>
-            <if test="credential != null">
-                credential = #{credential, jdbcType=VARCHAR},
+            <if test="accessToken != null">
+                access_token = #{accessToken, jdbcType=VARCHAR},
+            </if>
+            <if test="refreshToken != null">
+                refresh_token = #{refreshToken, jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime, jdbcType=TIMESTAMP},
@@ -110,10 +120,11 @@
             id = #{id, jdbcType=VARCHAR},
             user_id = #{userId, jdbcType=VARCHAR},
             login_type = #{loginType, jdbcType=INTEGER},
-            identify = #{identify, jdbcType=VARCHAR},
-            credential = #{credential, jdbcType=VARCHAR},
+            passport = #{passport, jdbcType=VARCHAR},
+            access_token = #{accessToken, jdbcType=VARCHAR},
+            refresh_token = #{refreshToken, jdbcType=VARCHAR},
             create_time = #{createTime, jdbcType=TIMESTAMP},
-            update_time = #{updateTime, jdbcType=TIMESTAMP}
+            update_time = #{updateTime, jdbcType=TIMESTAMP},
         where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">
@@ -136,11 +147,14 @@
             <if test="loginType != null">
                 and login_type like #{loginType}
             </if>
-            <if test="identify != null">
-                and identify like #{identify}
+            <if test="passport != null">
+                and passport like #{passport}
             </if>
-            <if test="credential != null">
-                and credential like #{credential}
+            <if test="accessToken != null">
+                and access_token like #{accessToken}
+            </if>
+            <if test="refreshToken != null">
+                and refresh_token like #{refreshToken}
             </if>
             <if test="createTime != null">
                 and create_time like #{createTime}

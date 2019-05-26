@@ -25,7 +25,7 @@ import java.util.Map;
 * @Description: UserOAuth业务层
 * @Company: example
 * @Author: liuhf
-* @CreateTime: 2019-05-15 15:24:33
+* @CreateTime: 2019-05-26 21:51:42
 */
 @Service
 public class UserOAuthServiceImpl implements UserOAuthService {
@@ -38,7 +38,7 @@ public class UserOAuthServiceImpl implements UserOAuthService {
      * @Description: 查询UserOAuth列表
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-15 15:24:33
+     * @CreateTime: 2019-05-26 21:51:42
      *
      * @param pageNum
      * @param pageSize
@@ -66,7 +66,7 @@ public class UserOAuthServiceImpl implements UserOAuthService {
      * @Description: 查询UserOAuth对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-15 15:24:33
+     * @CreateTime: 2019-05-26 21:51:42
      *
      * @param id
      * @return ServerResponse<UserOAuthDTO>
@@ -89,7 +89,7 @@ public class UserOAuthServiceImpl implements UserOAuthService {
      * @Description: 保存UserOAuth对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-15 15:24:33
+     * @CreateTime: 2019-05-26 21:51:42
      *
      * @param userOAuthDTO
      * @return ServerResponse<String>
@@ -109,7 +109,7 @@ public class UserOAuthServiceImpl implements UserOAuthService {
      * @Description: 更新UserOAuth对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-15 15:24:33
+     * @CreateTime: 2019-05-26 21:51:42
      *
      * @param id
      * @param userOAuthDTO
@@ -134,7 +134,7 @@ public class UserOAuthServiceImpl implements UserOAuthService {
      * @Description: 批量删除UserOAuth对象
      * @Company: example
      * @Author: liuhf
-     * @CreateTime: 2019-05-15 15:24:33
+     * @CreateTime: 2019-05-26 21:51:42
      *
      * @param ids
      * @return ServerResponse<String>

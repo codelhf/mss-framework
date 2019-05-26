@@ -3,8 +3,6 @@ package com.mss.framework.base.user.server.web.token;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,22 +20,31 @@ public class TokenUtil {
     // 用户信息，用于前端展示
     private static final String LOGIN_USER = "X-LOGIN-USER";
     // 过期时间5分钟
-    public static long EXPIRE_TIME = 5 * 60 * 1000;
+    public static long EXPIRE_TIME = 5 * 60 * 1000L;
+    // refreshToken过期时间
+    public static long REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L;
 
-    public static boolean putTokenUser(HttpServletResponse response,
-                                       TokenUser tokenUser, Long expiresMillis) {
+    public static String accessToken(HttpServletResponse response,
+                                     TokenUser tokenUser, Long expiresMillis) {
         if (tokenUser == null) {
-            return false;
+            return null;
         }
-        if (expiresMillis != null && expiresMillis > 0) {
-            EXPIRE_TIME = expiresMillis;
+        if (expiresMillis == null || expiresMillis < 0) {
+            expiresMillis = EXPIRE_TIME;
         }
         String jsonUser = JSON.toJSONString(tokenUser);
         JWTUtil jwtUtil = new JWTUtil();
-        String authToken = jwtUtil.sign(jsonUser, EXPIRE_TIME);
-        response.setHeader(AUTH_TOKEN, authToken);
+        String authToken = jwtUtil.sign(jsonUser, expiresMillis);
         response.setHeader(LOGIN_USER, jsonUser);
-        return true;
+        return authToken;
+    }
+    
+    public static String refreshToken(Long expiresMillis) {
+        if (expiresMillis == null || expiresMillis < 0) {
+            expiresMillis = EXPIRE_TIME;
+        }
+        JWTUtil jwtUtil = new JWTUtil();
+        return jwtUtil.sign(null, expiresMillis);
     }
 
     public static TokenUser getTokenUser(HttpServletRequest request) {
@@ -55,11 +62,10 @@ public class TokenUtil {
 
     //伪删除,客户端仍然可以提交未过期token
     public static boolean deleteTokenUser(HttpServletRequest request, HttpServletResponse response) {
-        String authToken = request.getHeader(AUTH_TOKEN);
-        if (StringUtils.isBlank(authToken)) {
+        String loginUser = request.getHeader(LOGIN_USER);
+        if (StringUtils.isBlank(loginUser)) {
             return true;
         }
-        response.setHeader(AUTH_TOKEN, null);
         response.setHeader(LOGIN_USER, null);
         return true;
     }

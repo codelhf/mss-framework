@@ -31,4 +31,17 @@ public interface UserLoginMapper  {
     int deleteByIdList(@Param("idList") List<String> idList);
     
     List<UserLogin> selectPageList(UserLogin example);
+
+    int selectByUsername(String username);
+
+    int selectByEmail(String email);
+
+    int selectByPhone(String phone);
+
+    UserLogin loginByUsername(@Param("username") String username, @Param("password") String password);
+
+    UserLogin loginByEmail(@Param("email") String email, @Param("password") String password);
+
+    UserLogin loginByPhone(@Param("phone") String phone, @Param("password") String password);
+
 }
