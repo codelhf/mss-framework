@@ -1,18 +1,15 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.core.token.TokenUser;
+import com.mss.framework.base.core.token.TokenUtil;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.LoginService;
-import com.mss.framework.base.user.server.web.token.TokenUser;
-import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +31,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ServerResponse login(HttpServletResponse response, String account, String md5Password, String vCode, String loginType) {
+    public ServerResponse login(String account, String md5Password, String vCode, String loginType) {
         ServerResponse serverResponse = loginService.login(account, md5Password, vCode, loginType);
         if (!serverResponse.isSuccess()) {
             return serverResponse;
@@ -46,21 +43,15 @@ public class LoginController {
         tokenUser.setUsername(account);
         tokenUser.setPhone(user.getPhone());
         tokenUser.setEmail(user.getEmail());
-        String accessToken = TokenUtil.accessToken(response, tokenUser, TokenUtil.EXPIRE_TIME);
-        String refreshToken = TokenUtil.refreshToken(TokenUtil.REFRESH_TOKEN_EXPIRE_TIME);
+        String accessToken = TokenUtil.accessToken(tokenUser, TokenUtil.EXPIRE_TIME);
+        String refreshToken = TokenUtil.refreshToken(tokenUser.getId(), TokenUtil.REFRESH_TOKEN_EXPIRE_TIME);
 
         Map<String, Object> result = new HashMap<>(4);
-        result.put("accessToken", accessToken);
-        result.put("refreshToken", refreshToken);
-        result.put("expiresIn", 1000);
-        result.put("scope", "all");
+        result.put("access_token", accessToken);
+        result.put("refresh_token", refreshToken);
+        result.put("expires_in", 1000);
+        result.put("user_info", user);
         return ServerResponse.createBySuccess(result);
-    }
-
-    @GetMapping("/logout")
-    public ServerResponse logout(HttpServletRequest request, HttpServletResponse response) {
-        TokenUtil.deleteTokenUser(request, response);
-        return ServerResponse.createBySuccess();
     }
 
     @PostMapping("/register")

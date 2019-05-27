@@ -13,7 +13,7 @@ public class WeiXinAttributesDefinition extends OAuthAttributesDefinition {
 	public static final String ID = "id"; 							//数据库业务id
 	public static final String OPEN_ID = "openid";					//openid。
 	public static final String NICK_NAME = "nickname";				//用户在昵称。
-	public static final String SEX = "sex";							//性别。 1
+	public static final String SEX = "gender";							//性别。 1
 	public static final String PROVINCE = "province";				//省
 	public static final String CITY = "city";						//市
 	public static final String HEADIMGURL = "headimgurl";			//大小为40×40像素的QQ头像URL。
@@ -31,7 +31,7 @@ public class WeiXinAttributesDefinition extends OAuthAttributesDefinition {
 //	{
 //	    "openid": "oD5YLsz-b3HG9w5-QJsZBGElgSXU",
 //	    "nickname": "鍛ㄥ悍",
-//	    "sex": 1,
+//	    "gender": 1,
 //	    "language": "zh_CN",
 //	    "city": "Ankang",
 //	    "province": "Shaanxi",

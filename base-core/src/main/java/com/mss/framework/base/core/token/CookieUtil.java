@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.web.token;
+package com.mss.framework.base.core.token;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

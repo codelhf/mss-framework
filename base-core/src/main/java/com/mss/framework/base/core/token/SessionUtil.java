@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.web.token;
+package com.mss.framework.base.core.token;
 
 import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.core.common.SpringContextUtil;

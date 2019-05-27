@@ -27,14 +27,14 @@ public class AuthorizationResponse {
     private String refresh_token;
 
     /**
-     * Access Token最终的访问范围
-     */
-    private String scope;
-
-    /**
      * Access Token的有效期，以秒为单位（30天的有效期）
      */
     private Long expires_in;
+
+    /**
+     * Access Token最终的访问范围
+     */
+    private String scope;
 
     /**
      * 基于http调用Open API时所需要的Session Key，其有效期与Access Token一致

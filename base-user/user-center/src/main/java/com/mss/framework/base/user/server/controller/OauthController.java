@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.controller;
 
+import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.redis.RedisService;
@@ -15,7 +16,6 @@ import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.service.manage.UserService;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import com.mss.framework.base.user.server.util.OAuthUtil;
-import com.mss.framework.base.user.server.web.token.TokenUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -7,13 +7,13 @@
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
         <result column="phone" jdbcType="INTEGER" property="phone"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
         <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, nickname, avatar, phone, email, sex, birthday, create_time, update_time
+        id, nickname, avatar, phone, email, gender, birthday, create_time, update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -26,7 +26,7 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.User">
         insert into user
-        (id, nickname, avatar, phone, email, sex, birthday, create_time, update_time)
+        (id, nickname, avatar, phone, email, gender, birthday, create_time, update_time)
         values
         (#{id, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{avatar, jdbcType=VARCHAR}, #{phone, jdbcType=INTEGER}, #{email, jdbcType=VARCHAR}, #{sex, jdbcType=INTEGER}, #{birthday, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
     </insert>
@@ -48,8 +48,8 @@
             <if test="email != null">
                 email,
             </if>
-            <if test="sex != null">
-                sex,
+            <if test="gender != null">
+                gender,
             </if>
             <if test="birthday != null">
                 birthday,
@@ -77,8 +77,8 @@
             <if test="email != null">
                 #{email, jdbcType=VARCHAR},
             </if>
-            <if test="sex != null">
-                #{sex, jdbcType=INTEGER},
+            <if test="gender != null">
+                #{gender, jdbcType=INTEGER},
             </if>
             <if test="birthday != null">
                 #{birthday, jdbcType=VARCHAR},
@@ -106,8 +106,8 @@
             <if test="email != null">
                 email = #{email, jdbcType=VARCHAR},
             </if>
-            <if test="sex != null">
-                sex = #{sex, jdbcType=INTEGER},
+            <if test="gender != null">
+                gender = #{gender, jdbcType=INTEGER},
             </if>
             <if test="birthday != null">
                 birthday = #{birthday, jdbcType=VARCHAR},
@@ -128,7 +128,7 @@
             avatar = #{avatar, jdbcType=VARCHAR},
             phone = #{phone, jdbcType=INTEGER},
             email = #{email, jdbcType=VARCHAR},
-            sex = #{sex, jdbcType=INTEGER},
+            gender = #{gender, jdbcType=INTEGER},
             birthday = #{birthday, jdbcType=VARCHAR},
             create_time = #{createTime, jdbcType=TIMESTAMP},
             update_time = #{updateTime, jdbcType=TIMESTAMP}
@@ -160,8 +160,8 @@
             <if test="email != null">
                 and email like #{email}
             </if>
-            <if test="sex != null">
-                and sex like #{sex}
+            <if test="gender != null">
+                and gender like #{gender}
             </if>
             <if test="birthday != null">
                 and birthday like #{birthday}

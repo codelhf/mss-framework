@@ -9,7 +9,7 @@ import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
 import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.redis.RedisService;
-import com.mss.framework.base.user.server.web.token.TokenUser;
+import com.mss.framework.base.core.token.TokenUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

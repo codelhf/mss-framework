@@ -2,10 +2,10 @@ package com.mss.framework.base.user.server.web.interceptor;
 
 import com.mss.framework.base.core.common.ResponseCode;
 import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.core.token.TokenUser;
+import com.mss.framework.base.core.token.TokenUtil;
 import com.mss.framework.base.user.server.util.JsonUtil;
 import com.mss.framework.base.user.server.web.RequestHolder;
-import com.mss.framework.base.user.server.web.token.TokenUser;
-import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

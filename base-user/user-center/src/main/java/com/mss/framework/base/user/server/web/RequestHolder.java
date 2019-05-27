@@ -1,6 +1,6 @@
 package com.mss.framework.base.user.server.web;
 
-import com.mss.framework.base.user.server.web.token.TokenUser;
+import com.mss.framework.base.core.token.TokenUser;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,4 +1,4 @@
-package com.mss.framework.base.user.server.web.token;
+package com.mss.framework.base.core.token;
 
 import lombok.Getter;
 import lombok.Setter;

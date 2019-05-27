@@ -48,5 +48,23 @@ public class OAuthUtil {
         return result;
     }
 
+    public static Map<String, Object> OAuthData(String accessToken, String refreshToken,
+                                                Integer expiresIn, String scope) {
+        Map<String, Object> result = new HashMap<>(4);
+        result.put("access_token", accessToken);
+        result.put("refresh_token", refreshToken);
+        result.put("expires_in", expiresIn);
+        result.put("scope", scope);
+        return result;
+    }
 
+    public static Map<String, Object> SSOData(String accessToken, String refreshToken,
+                                              Integer expiresIn, String jsonUser) {
+        Map<String, Object> result = new HashMap<>(4);
+        result.put("access_token", accessToken);
+        result.put("refresh_token", refreshToken);
+        result.put("expires_in", expiresIn);
+        result.put("user_info", jsonUser);
+        return result;
+    }
 }

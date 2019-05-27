@@ -21,7 +21,7 @@ public class User {
 
     private String email;
 
-    private Integer sex;
+    private Integer gender;
 
     private String birthday;
 
