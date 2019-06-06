@@ -7,7 +7,7 @@ package com.mss.framework.base.user.server.web.validate.code;
  */
 public class VCodeConstants {
 
-    public static final String VCODE_PRIFFIX = "vCode-";//验证码存储前缀
+    public static final String VCODE_PREFIX = "vCode-";//验证码存储前缀
 
     public static final Integer IMAGE_CODE_COUNT = 6;//图片验证码数量
 

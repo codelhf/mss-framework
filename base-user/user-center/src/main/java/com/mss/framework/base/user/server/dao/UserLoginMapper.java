@@ -32,11 +32,11 @@ public interface UserLoginMapper  {
     
     List<UserLogin> selectPageList(UserLogin example);
 
-    int selectByUsername(String username);
+    UserLogin selectByUsername(String username);
 
-    int selectByEmail(String email);
+    UserLogin selectByEmail(String email);
 
-    int selectByPhone(String phone);
+    UserLogin selectByPhone(String phone);
 
     UserLogin loginByUsername(@Param("username") String username, @Param("password") String password);
 

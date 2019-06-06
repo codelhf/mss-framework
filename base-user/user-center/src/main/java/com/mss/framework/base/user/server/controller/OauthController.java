@@ -214,8 +214,8 @@ public class OauthController {
      * @author liuhf
      * @createtime 2019/5/4 9:31
      */
-    @GetMapping(value = "/getUserInfo/{access_token}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getInfo(@PathVariable("access_token") String accessToken) {
+    @GetMapping(value = "/getUserInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String getInfo(@RequestParam("access_token") String accessToken) {
         OAuthAccessToken oAuthAccessToken = oAuthService.selectByAccessToken(accessToken);
         if (oAuthAccessToken == null) {
             return JsonUtil2.toJson(OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT));

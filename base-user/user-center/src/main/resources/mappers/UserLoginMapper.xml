@@ -193,20 +193,20 @@
         </where>
     </select>
 
-    <select id="selectByUsername" parameterType="string" resultType="int">
-        select count(1)
+    <select id="selectByUsername" parameterType="string" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
         from user_login
         where username = #{username}
     </select>
 
-    <select id="selectByEmail" parameterType="string" resultType="int">
-        select count(1)
+    <select id="selectByEmail" parameterType="string" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
         from user_login
         where email = #{email}
     </select>
 
-    <select id="selectByPhone" parameterType="string" resultType="int">
-        select count(1)
+    <select id="selectByPhone" parameterType="string" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
         from user_login
         where phone = #{phone}
     </select>

@@ -27,6 +27,6 @@ public abstract class ValidateCode {
     }
 
     public String getCodeKey() {
-        return VCodeConstants.VCODE_PRIFFIX + codeKey;
+        return VCodeConstants.VCODE_PREFIX + codeKey;
     }
 }

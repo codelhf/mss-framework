@@ -60,8 +60,7 @@ public class SSOController {
         //生成Refresh Token
         String refreshTokenStr = ssoService.createRefreshToken(user, accessToken);
 
-        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】"
-                , user.getNickname(), clientDetail.getClientName(), accessTokenStr, refreshTokenStr));
+        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), clientDetail.getClientName(), accessTokenStr, refreshTokenStr));
         String params = "?code=" + accessTokenStr;
         return new ModelAndView("redirect:" + redirectUri + params);
     }
