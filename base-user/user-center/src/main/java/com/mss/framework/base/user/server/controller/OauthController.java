@@ -4,7 +4,7 @@ import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.redis.RedisService;
-import com.mss.framework.base.user.server.web.RequestHolder;
+import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;
@@ -104,7 +104,7 @@ public class OauthController {
             return OAuthUtil.errorMessage("clientId或scope不能为空");
         }
         //1. 向数据库中保存授权信息
-        boolean success = oAuthService.saveOAuthClientUser(RequestHolder.getCurrentUser().getId(), clientId, scope);
+        boolean success = oAuthService.saveOAuthClientUser(UserUtil.getCurrentUser().getId(), clientId, scope);
         //2. 返回给页面的数据
         if (!success) {
             return OAuthUtil.errorMessage("授权失败");
@@ -133,7 +133,7 @@ public class OauthController {
         //state，用于防止CSRF攻击（非必填）
         String state = request.getParameter("state");
         //生成Authorization Code
-        TokenUser tokenUser = RequestHolder.getCurrentUser();
+        TokenUser tokenUser = UserUtil.getCurrentUser();
         User user = new User();
         user.setId(tokenUser.getId());
         String authorizationCode = oAuthService.createAuthorizationCode(clientId, scope, user);

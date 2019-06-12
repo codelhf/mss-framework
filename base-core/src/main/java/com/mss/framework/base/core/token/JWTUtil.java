@@ -18,19 +18,17 @@ import java.util.HashMap;
  */
 @Slf4j
 public class JWTUtil {
-    // 加密方式
-    private static final String secret = "HS256";
-    // 签发者
-    private static final String issuer = "123456";
 
     /**
-     * 生成签名,默认5min后过期
+     * 生成签名
      *
      * @param userInfo 用户名
+     * @param secret 加密方式
+     * @param issuer 签发者
      * @param expiresMillis   用户的密码
      * @return 加密的token
      */
-    public static String sign(String userInfo, Long expiresMillis) {
+    public static String sign(String userInfo, String secret, String issuer, Long expiresMillis) {
         try {
             //过期时间
             Date expiresTime = new Date(System.currentTimeMillis() + expiresMillis);
@@ -56,9 +54,11 @@ public class JWTUtil {
      * 校验token是否正确
      *
      * @param token  密钥
+     * @param secret 加密方式
+     * @param issuer 签发者
      * @return DecodedJWT 验证后的令牌
      */
-    public static String verify(String token) {
+    public static String verify(String token, String secret, String issuer) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm)

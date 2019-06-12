@@ -5,7 +5,7 @@ import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.TokenUtil;
 import com.mss.framework.base.user.server.util.JsonUtil;
-import com.mss.framework.base.user.server.web.RequestHolder;
+import com.mss.framework.base.core.token.UserUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +22,8 @@ import java.io.IOException;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
+    private static final String ADMIN = "admin";//管理员
+
     /**
      * 检查是否已经登录
      */
@@ -34,10 +36,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             noLogin(response);
             return false;
         }
-        RequestHolder.add(tokenUser);
-        RequestHolder.add(request);
+        UserUtil.add(tokenUser);
+        UserUtil.add(request);
         String scope = tokenUser.getUsername();
-        if (!"admin".equals(scope)) {
+        if (!ADMIN.equals(scope)) {
             noPermission(response, "没有权限");
             return false;
         }
@@ -46,12 +48,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override//请求处理之后进行调用，但是在视图被渲染之前(Controller)方法调用之后
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        RequestHolder.remove();
+        UserUtil.remove();
     }
 
     @Override//在整个请求结束之后被调用，也就是在DispatcherServlet
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        RequestHolder.remove();
+        UserUtil.remove();
     }
 
     private void noLogin(HttpServletResponse response) throws IOException {

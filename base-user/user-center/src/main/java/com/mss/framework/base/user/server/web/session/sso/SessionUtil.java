@@ -1,7 +1,8 @@
-//package com.mss.framework.base.core.token;
+//package com.mss.framework.base.user.server.web.session.sso;
 //
 //import com.alibaba.fastjson.JSON;
 //import com.mss.framework.base.core.common.SpringContextUtil;
+//import com.mss.framework.base.core.token.TokenUser;
 //import com.mss.framework.base.core.util.IDUtil;
 //import com.mss.framework.base.user.server.redis.RedisUtil;
 //import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,7 @@
 //    // 过期时间5分钟
 //    public static long EXPIRE_TIME = 5 * 60 * 1000;
 //
-//    public static boolean putTokenUser(HttpServletResponse response,
-//                                       TokenUser tokenUser, Long expiresMillis) {
+//    public static boolean putTokenUser(HttpServletResponse response, TokenUser tokenUser, Long expiresMillis) {
 //        if (redisUtil == null) {
 //            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
 //        }
@@ -35,8 +35,7 @@
 //        }
 //        String loginToken = IDUtil.UUIDStr();
 //        String jsonUser = JSON.toJSONString(tokenUser);
-//        CookieUtil cookieUtil = new CookieUtil();
-//        cookieUtil.writeLoginToken(response, loginToken);
+//        CookieUtil.writeLoginToken(response, loginToken);
 //        return redisUtil.setExpire(loginToken, jsonUser, EXPIRE_TIME);
 //    }
 //
@@ -44,8 +43,7 @@
 //        if (redisUtil == null) {
 //            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
 //        }
-//        CookieUtil cookieUtil = new CookieUtil();
-//        String loginToken = cookieUtil.readLoginToken(request);
+//        String loginToken = CookieUtil.readLoginToken(request);
 //        if (StringUtils.isBlank(loginToken)) {
 //            return null;
 //        }
@@ -60,12 +58,11 @@
 //        if (redisUtil == null) {
 //            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
 //        }
-//        CookieUtil cookieUtil = new CookieUtil();
-//        String loginToken = cookieUtil.readLoginToken(request);
+//        String loginToken = CookieUtil.readLoginToken(request);
 //        if (StringUtils.isBlank(loginToken)) {
 //            return true;
 //        }
-//        cookieUtil.deleteLoginToken(request, response);
+//        CookieUtil.deleteLoginToken(request, response);
 //        String jsonUser = (String) redisUtil.get(loginToken);
 //        if (StringUtils.isBlank(jsonUser)) {
 //            return true;

@@ -35,22 +35,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(ssoAccessTokenInterceptor()).addPathPatterns("/sso/verify");
     }
 
-    @Bean
-    @Order(1)
-    public FilterRegistrationBean CharacterEncodingFilter() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(new CharacterEncodingFilter("utf-8", true));
-        filterRegistrationBean.addUrlPatterns("/*");
-        return filterRegistrationBean;
-    }
-
-    @Bean//order的数值越小 则优先级越高
-    @Order(2)//HttpPutFormContentFilter接口Put请求无法获取请求体的内容
-    public FilterRegistrationBean HttpPutFormContentFilter() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(new HttpPutFormContentFilter());
-        filterRegistrationBean.addUrlPatterns("/*");
-        return filterRegistrationBean;
-    }
-
 }

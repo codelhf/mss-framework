@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 public class TokenUtil {
-
+    // 加密方式
+    private static final String secret = "HS256";
+    // 签发者
+    private static final String issuer = "adminIssuer";
     // jwt令牌
     private static final String AUTH_TOKEN = "X-AUTH-TOKEN";
     // 过期时间5分钟
@@ -29,14 +32,14 @@ public class TokenUtil {
             expiresMillis = EXPIRE_TIME;
         }
         String jsonUser = JSON.toJSONString(tokenUser);
-        return JWTUtil.sign(jsonUser, expiresMillis);
+        return JWTUtil.sign(jsonUser, secret, issuer, expiresMillis);
     }
     
     public static String refreshToken(String userId, Long expiresMillis) {
         if (expiresMillis == null || expiresMillis < 0) {
             expiresMillis = EXPIRE_TIME;
         }
-        return JWTUtil.sign(userId, expiresMillis);
+        return JWTUtil.sign(userId, secret, issuer, expiresMillis);
     }
 
     public static TokenUser getTokenUser(HttpServletRequest request) {
@@ -44,7 +47,7 @@ public class TokenUtil {
         if (StringUtils.isBlank(authToken)) {
             return null;
         }
-        String jsonUser = JWTUtil.verify(authToken);
+        String jsonUser = JWTUtil.verify(authToken, secret, issuer);
         if (StringUtils.isBlank(jsonUser)) {
             return null;
         }
@@ -55,6 +58,6 @@ public class TokenUtil {
         if (StringUtils.isBlank(refreshToken)) {
             return null;
         }
-        return JWTUtil.verify(refreshToken);
+        return JWTUtil.verify(refreshToken, secret, issuer);
     }
 }

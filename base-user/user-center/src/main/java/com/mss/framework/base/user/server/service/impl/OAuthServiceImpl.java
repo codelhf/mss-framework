@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.service.impl;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
 import com.mss.framework.base.core.util.IDUtil;
-import com.mss.framework.base.user.server.web.RequestHolder;
+import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
@@ -83,7 +83,7 @@ public class OAuthServiceImpl implements OAuthService {
         //生成32位随机的clientSecret
         String clientSecret = EncryptUtil.getRandomStr1(32);
 
-        TokenUser user = RequestHolder.getCurrentUser();
+        TokenUser user = UserUtil.getCurrentUser();
         Date current = new Date();
         clientDetail.setId(IDUtil.UUIDStr());
         clientDetail.setClientId(clientId);

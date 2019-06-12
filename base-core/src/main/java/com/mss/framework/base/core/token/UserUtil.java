@@ -1,10 +1,8 @@
-package com.mss.framework.base.user.server.web;
-
-import com.mss.framework.base.core.token.TokenUser;
+package com.mss.framework.base.core.token;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class RequestHolder {
+public class UserUtil {
 
     private static final ThreadLocal<TokenUser> userHolder = new ThreadLocal<>();
 
