@@ -2,7 +2,6 @@ package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.dto.UserDTO;
-import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.manage.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

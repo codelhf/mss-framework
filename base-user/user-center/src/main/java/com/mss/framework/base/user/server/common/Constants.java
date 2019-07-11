@@ -21,13 +21,4 @@ public class Constants {
      * 授权页面的回调地址在session中存储的变量名
      */
     public static final String SESSION_AUTH_REDIRECT_URL = "SESSION_AUTH_REDIRECT_URL";
-
-    public interface LoginType {
-        String USERNAME = "username";
-        String USERNAME_PARTTERN = "^\\s\\S";
-        String PHONE = "phone";
-        String PHONE_PARTTERN = "^1\\d+(0-9)$";
-        String EMAIL = "email";
-        String EMAIL_PARTTERN = "";
-    }
 }

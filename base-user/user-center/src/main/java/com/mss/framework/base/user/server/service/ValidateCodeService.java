@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
  */
 public interface ValidateCodeService {
 
-    ServerResponse vCodeImage(HttpSession session);
+    ServerResponse<String> vCodeImage(HttpSession session);
 
-    ServerResponse vCodeSms(String phone);
+    ServerResponse<String> vCodeSms(String phone);
 
-    ServerResponse vCodeEmail(String email);
+    ServerResponse<String> vCodeEmail(String email);
 }

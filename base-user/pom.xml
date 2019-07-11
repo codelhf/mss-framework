@@ -21,7 +21,6 @@
         <module>user-center</module>
         <module>user-oauth</module>
         <module>user-social</module>
-        <module>user-sso</module>
         <module>user-web</module>
     </modules>
 

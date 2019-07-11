@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ public class ValidateCodeServerImpl implements ValidateCodeService {
     private RedisUtil redisUtil;
 
     @Override
-    public ServerResponse vCodeImage(HttpSession session) {
+    public ServerResponse<String> vCodeImage(HttpSession session) {
         ImageCode vCode = new ImageCode(session.getId(), VCodeConstants.IMAGE_CODE_COUNT);
         try {
             String code = vCode.getCode();
@@ -44,7 +45,7 @@ public class ValidateCodeServerImpl implements ValidateCodeService {
     }
 
     @Override
-    public ServerResponse vCodeSms(String phone) {
+    public ServerResponse<String> vCodeSms(String phone) {
         SmsCode vCode = new SmsCode(phone, VCodeConstants.SMS_CODE_COUNT);
         String code = vCode.getCode();
         if (code == null) {
@@ -58,7 +59,7 @@ public class ValidateCodeServerImpl implements ValidateCodeService {
     }
 
     @Override
-    public ServerResponse vCodeEmail(String email) {
+    public ServerResponse<String> vCodeEmail(String email) {
         EmailCode vCode = new EmailCode(email, VCodeConstants.EMAIL_CODE_COUNT);
         String code = vCode.getCode();
         if (code == null) {

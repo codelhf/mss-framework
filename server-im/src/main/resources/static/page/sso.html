@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSO登录测试</title>
+</head>
+<body>
+<button id="test-alert">获取用户ID</button>
+<script src="../js/jquery.min.js"></script>
+<script src="http://localhost:8080/js/sso.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(document).on('click', '#test-alert', function () {
+            alert(getUserId());
+        })
+    })
+</script>
+</body>
+</html>

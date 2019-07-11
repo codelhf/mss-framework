@@ -1,28 +1,28 @@
-//package com.mss.framework.base.user.server.redis;
-//
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.data.redis.connection.RedisClusterConfiguration;
-//import org.springframework.data.redis.connection.RedisConnectionFactory;
-//import org.springframework.data.redis.connection.RedisNode;
-//import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-//import org.springframework.data.redis.core.RedisTemplate;
-//import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-//import org.springframework.data.redis.serializer.StringRedisSerializer;
-//import redis.clients.jedis.JedisPoolConfig;
-//
-//import java.util.HashSet;
-//import java.util.Set;
-//
-///**
-// * @Description: TODO
-// * @Auther: liuhf
-// * @CreateTime: 2019/5/16 10:29
-// */
-//@Configuration
-//public class RedisConfig {
-//
+package com.mss.framework.base.user.server.redis;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisNode;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * @Description: TODO
+ * @Auther: liuhf
+ * @CreateTime: 2019/5/16 10:29
+ */
+@Configuration
+public class RedisConfig {
+
 //    @Value("${redis.maxIdle}")
 //    private Integer maxIdle;
 //
@@ -154,22 +154,22 @@
 //        redisTemplate.setEnableTransactionSupport(true);
 //        redisTemplate.setConnectionFactory(factory);
 //    }
-//
-//    /**
-//     * 注入封装RedisTemplate
-//     *
-//     * @return RedisUtil
-//     * @throws
-//     * @Title: redisUtil
-//     * @autor lpl
-//     * @date 2017年12月21日
-//     */
-//    @Bean(name = "redisUtil")
-//    public RedisUtil redisUtil(RedisTemplate<String, Object> redisTemplate) {
-//        RedisUtil redisUtil = new RedisUtil();
-//        redisUtil.setRedisTemplate(redisTemplate);
-//        return redisUtil;
-//    }
-//
-//
-//}
+
+    /**
+     * 注入封装RedisTemplate
+     *
+     * @return RedisUtil
+     * @throws
+     * @Title: redisUtil
+     * @autor lpl
+     * @date 2017年12月21日
+     */
+    @Bean(name = "redisUtil")
+    public RedisUtil redisUtil() {
+        RedisUtil redisUtil = new RedisUtil();
+        //redisUtil.setRedisTemplate(redisTemplate);
+        return redisUtil;
+    }
+
+
+}
