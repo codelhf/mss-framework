@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>base-user-oauth</artifactId>
+    <artifactId>user-oauth</artifactId>
     <version>${parent.version}</version>
 
     <properties>
