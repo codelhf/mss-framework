@@ -11,7 +11,7 @@ import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.redis.RedisService;
 import com.mss.framework.base.user.server.service.SSOService;
-import com.mss.framework.base.user.server.service.manage.UserService;
+import com.mss.framework.base.user.server.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,7 +99,7 @@ public class SSOController {
         //过期日期
         LocalDateTime expiresDateTime = DateUtil.ofEpochSecond(savedExpiresAt, null);
         //当前日期
-        LocalDateTime nowDateTime = DateUtil.now();
+        LocalDateTime nowDateTime = DateUtil.currentTime();
 
         //如果Refresh Token已经失效，则需要重新生成
         if (expiresDateTime.isBefore(nowDateTime)) {

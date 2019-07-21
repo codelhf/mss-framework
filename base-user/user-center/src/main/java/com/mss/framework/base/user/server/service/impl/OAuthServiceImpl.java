@@ -30,13 +30,13 @@ public class OAuthServiceImpl implements OAuthService {
     @Autowired
     private OAuthAccessTokenMapper oAuthAccessTokenMapper;
     @Autowired
-    private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;
-    @Autowired
-    private OAuthScopeMapper oAuthScopeMapper;
-    @Autowired
     private OAuthClientDetailMapper oAuthClientDetailMapper;
     @Autowired
     private OAuthClientUserMapper oAuthClientUserMapper;
+    @Autowired
+    private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;
+    @Autowired
+    private OAuthScopeMapper oAuthScopeMapper;
 
     @Override
     public OAuthClientDetail selectById(String id) {

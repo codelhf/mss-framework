@@ -1,10 +1,10 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.token.TokenUser;
+import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.redis.RedisService;
-import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;
@@ -13,7 +13,7 @@ import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.OAuthService;
-import com.mss.framework.base.user.server.service.manage.UserService;
+import com.mss.framework.base.user.server.service.UserService;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import com.mss.framework.base.user.server.util.OAuthUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -244,7 +244,7 @@ public class OauthController {
         //过期日期
         LocalDateTime expiresDateTime = DateUtil.ofEpochSecond(savedExpiresAt, null);
         //当前日期
-        LocalDateTime nowDateTime = DateUtil.now();
+        LocalDateTime nowDateTime = DateUtil.currentTime();
 
         //如果Refresh Token已经失效，则需要重新生成
         if (expiresDateTime.isBefore(nowDateTime)) {

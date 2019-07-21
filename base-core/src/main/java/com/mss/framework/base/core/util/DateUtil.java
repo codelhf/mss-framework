@@ -13,8 +13,8 @@ import java.util.Locale;
  */
 public class DateUtil {
 
-    private static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * @description: 返回当前的LocalDateTime
@@ -24,63 +24,8 @@ public class DateUtil {
      * @param []
      * @return java.time.LocalDateTime
      */
-    public static LocalDateTime now() {
+    public static LocalDateTime currentTime() {
         return LocalDateTime.now();
-    }
-
-    /**
-     * @description: 返回当前时间字符串（格式化表达式：yyyy-MM-dd HH:mm:ss）
-     * @author liuhf
-     * @createtime 2019/5/27 17:25
-     *
-     * @param []
-     * @return java.lang.String
-     */
-    public static String nowStr() {
-        return toDateTimeStr(now(), DEFAULT_DATE_TIME_FORMAT);
-    }
-
-    /**
-     * @description: 返回当前时间字符串
-     * @author liuhf
-     * @createtime 2019/5/27 17:33
-     *
-     * @param [pattern]
-     * @return java.lang.String
-     */
-    public static String nowStr(String pattern) {
-        return toDateTimeStr(now(), pattern);
-    }
-
-
-    /**
-     * @description: 返回当前精确到秒的时间戳
-     * @author liuhf
-     * @createtime 2019/5/27 17:27
-     *
-     * @param [zoneOffset]
-     * @return java.lang.Long
-     */
-    public static Long nowLong(ZoneOffset zoneOffset) {
-        LocalDateTime dateTime = LocalDateTime.now();
-
-        if (zoneOffset == null) {
-            return dateTime.toEpochSecond(ZoneOffset.ofHours(8));
-        } else {
-            return dateTime.toEpochSecond(zoneOffset);
-        }
-    }
-
-    /**
-     * @description: 返回当前精确到毫秒的时间戳
-     * @author liuhf
-     * @createtime 2019/5/27 17:28
-     *
-     * @param []
-     * @return java.lang.Long
-     */
-    public static Long currentTimeMillis() {
-        return System.currentTimeMillis();
     }
 
     /**
@@ -97,30 +42,6 @@ public class DateUtil {
         } else {
             return LocalDateTime.ofEpochSecond(second, 0, zoneOffset);
         }
-    }
-
-    /**
-     * @description: 格式化LocalDateTime（格式化表达式：yyyy-MM-dd HH:mm:ss）
-     * @author liuhf
-     * @createtime 2019/5/27 17:29
-     *
-     * @param [dateTime]
-     * @return java.lang.String
-     */
-    public static String toDateTimeStr(LocalDateTime dateTime) {
-        return toDateTimeStr(dateTime, DEFAULT_DATE_TIME_FORMAT);
-    }
-
-    /**
-     * @description: 格式化LocalDateTime
-     * @author liuhf
-     * @createtime 2019/5/27 17:29
-     *
-     * @param [dateTime, pattern]
-     * @return java.lang.String
-     */
-    public static String toDateTimeStr(LocalDateTime dateTime, String pattern) {
-        return dateTime.format(DateTimeFormatter.ofPattern(pattern, Locale.SIMPLIFIED_CHINESE));
     }
 
     /**
@@ -148,6 +69,18 @@ public class DateUtil {
     }
 
     /**
+     * @description: 返回几天之后的时间
+     * @author liuhf
+     * @createtime 2019/5/27 19:14
+     *
+     * @param [days]
+     * @return java.time.LocalDateTime
+     */
+    public static LocalDateTime nextDays(Long days) {
+        return currentTime().plusDays(days);
+    }
+
+    /**
      * @description: 返回当前日期的LocalDate
      * @author liuhf
      * @createtime 2019/5/27 17:33
@@ -158,6 +91,80 @@ public class DateUtil {
     public static LocalDate currentDate() {
         return LocalDate.now();
     }
+
+
+    /**
+     * @description: 将日期字符串转化为LocalDate
+     * @author liuhf
+     * @createtime 2019/5/27 19:13
+     *
+     * @param [dateStr]
+     * @return java.time.LocalDate
+     */
+    public static LocalDate toDate(String dateStr) {
+        return toDate(dateStr, DEFAULT_DATE_FORMAT);
+    }
+
+    /**
+     * @description: 将日期字符串转化为LocalDate
+     * @author liuhf
+     * @createtime 2019/5/27 19:14
+     *
+     * @param [dateStr, pattern]
+     * @return java.time.LocalDate
+     */
+    public static LocalDate toDate(String dateStr, String pattern) {
+        return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(pattern, Locale.SIMPLIFIED_CHINESE));
+    }
+
+    /**
+     * @description: 返回当前时间字符串（格式化表达式：yyyy-MM-dd HH:mm:ss）
+     * @author liuhf
+     * @createtime 2019/5/27 17:25
+     *
+     * @param []
+     * @return java.lang.String
+     */
+    public static String currentTimeStr() {
+        return toDateTimeStr(currentTime(), DEFAULT_DATE_TIME_FORMAT);
+    }
+
+    /**
+     * @description: 返回当前时间字符串
+     * @author liuhf
+     * @createtime 2019/5/27 17:33
+     *
+     * @param [pattern]
+     * @return java.lang.String
+     */
+    public static String currentTimeStr(String pattern) {
+        return toDateTimeStr(currentTime(), pattern);
+    }
+
+    /**
+     * @description: 格式化LocalDateTime（格式化表达式：yyyy-MM-dd HH:mm:ss）
+     * @author liuhf
+     * @createtime 2019/5/27 17:29
+     *
+     * @param [dateTime]
+     * @return java.lang.String
+     */
+    public static String toDateTimeStr(LocalDateTime dateTime) {
+        return toDateTimeStr(dateTime, DEFAULT_DATE_TIME_FORMAT);
+    }
+
+    /**
+     * @description: 格式化LocalDateTime
+     * @author liuhf
+     * @createtime 2019/5/27 17:29
+     *
+     * @param [dateTime, pattern]
+     * @return java.lang.String
+     */
+    public static String toDateTimeStr(LocalDateTime dateTime, String pattern) {
+        return dateTime.format(DateTimeFormatter.ofPattern(pattern, Locale.SIMPLIFIED_CHINESE));
+    }
+
 
     /**
      * @description: 返回当前日期字符串（格式化表达式：yyyy-MM-dd）
@@ -196,41 +203,34 @@ public class DateUtil {
     }
 
     /**
-     * @description: 将日期字符串转化为LocalDate
+     * @description: 返回当前精确到毫秒的时间戳
      * @author liuhf
-     * @createtime 2019/5/27 19:13
+     * @createtime 2019/5/27 17:28
      *
-     * @param [dateStr]
-     * @return java.time.LocalDate
+     * @param []
+     * @return java.lang.Long
      */
-    public static LocalDate toDate(String dateStr) {
-        return toDate(dateStr, DEFAULT_DATE_FORMAT);
+    public static Long currentTimeMillis() {
+        return System.currentTimeMillis();
     }
 
     /**
-     * @description: 将日期字符串转化为LocalDate
+     * @description: 返回当前精确到秒的时间戳
      * @author liuhf
-     * @createtime 2019/5/27 19:14
+     * @createtime 2019/5/27 17:27
      *
-     * @param [dateStr, pattern]
-     * @return java.time.LocalDate
+     * @param [zoneOffset]
+     * @return java.lang.Long
      */
-    public static LocalDate toDate(String dateStr, String pattern) {
-        return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(pattern, Locale.SIMPLIFIED_CHINESE));
-    }
+    public static Long toEpochSecond(ZoneOffset zoneOffset) {
+        LocalDateTime dateTime = LocalDateTime.now();
 
-    /**
-     * @description: 返回几天之后的时间
-     * @author liuhf
-     * @createtime 2019/5/27 19:14
-     *
-     * @param [days]
-     * @return java.time.LocalDateTime
-     */
-    public static LocalDateTime nextDays(Long days) {
-        return now().plusDays(days);
+        if (zoneOffset == null) {
+            return dateTime.toEpochSecond(ZoneOffset.ofHours(8));
+        } else {
+            return dateTime.toEpochSecond(zoneOffset);
+        }
     }
-
 
     /**
      * @description: 返回几天之后的时间（精确到秒的时间戳）

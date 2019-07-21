@@ -1,8 +1,8 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.server.dto.UserDTO;
-import com.mss.framework.base.user.server.service.manage.UserService;
+import com.mss.framework.base.user.server.pojo.User;
+import com.mss.framework.base.user.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUserInfo")
-    public ServerResponse<String> updateUserInfo(@RequestBody UserDTO userDTO) {
+    public ServerResponse<String> updateUserInfo(@RequestBody User user) {
         return null;
     }
 }

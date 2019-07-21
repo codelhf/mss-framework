@@ -41,7 +41,7 @@ public class SSOAccessTokenInterceptor extends HandlerInterceptorAdapter {
                 //过期日期
                 LocalDateTime expiresDateTime = DateUtil.ofEpochSecond(savedExpiresAt, null);
                 //当前日期
-                LocalDateTime nowDateTime = DateUtil.now();
+                LocalDateTime nowDateTime = DateUtil.currentTime();
 
                 //如果Access Token已经失效，则返回错误提示
                 return expiresDateTime.isAfter(nowDateTime) || this.generateErrorResponse(response, ErrorCodeEnum.EXPIRED_TOKEN);
