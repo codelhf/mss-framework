@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.service;
 
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
-import com.mss.framework.base.user.server.pojo.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSOAppDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 
@@ -18,9 +18,9 @@ public interface SSOService {
      * @createtime 2019/5/4 10:44
      *
      * @param [id]
-     * @return SSOClientDetail
+     * @return SSOAppDetail
      */
-    SSOClientDetail selectById(String id);
+    SSOAppDetail selectById(String id);
 
     /**
      * @description: 根据URL查询记录
@@ -28,9 +28,9 @@ public interface SSOService {
      * @createtime 2019/5/4 10:43
      *
      * @param [redirectUri]
-     * @return SSOClientDetail
+     * @return SSOAppDetail
      */
-    SSOClientDetail selectByRedirectUri(String redirectUri);
+    SSOAppDetail selectByRedirectUri(String redirectUri);
 
     /**
      * @description: 通过主键ID查询记录
@@ -80,7 +80,7 @@ public interface SSOService {
      * @param [user, expireIn, requestIP, ssoClientDetail]
      * @return java.lang.String
      */
-    String createAccessToken(User user, Long expireIn, String requestIP, SSOClientDetail ssoClientDetail);
+    String createAccessToken(User user, Long expireIn, String requestIP, SSOAppDetail ssoClientDetail);
 
     /**
      * @description: 生成Refresh Token

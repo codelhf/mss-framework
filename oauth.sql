@@ -121,7 +121,7 @@ DROP TABLE IF EXISTS `oauth_approvals`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_approvals` (
   `userId` varchar(255) DEFAULT NULL,
-  `clientId` varchar(255) DEFAULT NULL,
+  `appId` varchar(255) DEFAULT NULL,
   `scope` varchar(255) DEFAULT NULL,
   `status` varchar(10) DEFAULT NULL,
   `expiresAt` datetime DEFAULT NULL,

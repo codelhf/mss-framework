@@ -19,9 +19,7 @@
 
     <modules>
         <module>user-admin</module>
-        <module>user-admin-web</module>
         <module>user-center</module>
-        <module>user-center-web</module>
         <module>user-oauth</module>
         <module>user-social</module>
     </modules>

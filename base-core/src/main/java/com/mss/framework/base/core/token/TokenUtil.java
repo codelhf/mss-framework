@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Description: token工具类
@@ -59,5 +60,18 @@ public class TokenUtil {
             return null;
         }
         return JWTUtil.verify(refreshToken, secret, issuer);
+    }
+
+    public static String sign(TokenUser tokenUser, Long expiresIn, TimeUnit timeUnit) {
+        if (tokenUser == null) {
+            return null;
+        }
+        if (expiresIn == null || expiresIn < 0) {
+            expiresIn = EXPIRE_TIME;
+        }
+        if (timeUnit != null) {
+            return null;
+        }
+        return null;
     }
 }

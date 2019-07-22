@@ -26,9 +26,9 @@ public class OAuthAccessToken {
     private String userName;
 
     /**
-     * 接入的客户端ID
+     * 接入的appID
      */
-    private String clientId;
+    private String appId;
 
     /**
      * 过期时间戳

@@ -1,8 +1,8 @@
 package com.mss.framework.base.user.server.web.interceptor;
 
-import com.mss.framework.base.user.server.dao.SSOClientDetailMapper;
+import com.mss.framework.base.user.server.dao.SSOAppDetailMapper;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
-import com.mss.framework.base.user.server.pojo.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSOAppDetail;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class SSOAccessDomainInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private SSOClientDetailMapper ssoClientDetailMapper;
+    private SSOAppDetailMapper ssoClientDetailMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -29,7 +29,7 @@ public class SSOAccessDomainInterceptor extends HandlerInterceptorAdapter {
 
         if(StringUtils.isNoneBlank(redirectUri)){
             //查询数据库中的回调地址的白名单
-            SSOClientDetail ssoClientDetails = ssoClientDetailMapper.selectByRedirectUrl(redirectUri);
+            SSOAppDetail ssoClientDetails = ssoClientDetailMapper.selectByRedirectUrl(redirectUri);
 
             if(ssoClientDetails != null){
                 return true;

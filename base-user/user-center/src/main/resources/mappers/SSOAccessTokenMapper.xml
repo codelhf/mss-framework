@@ -6,8 +6,8 @@
         <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="ip" jdbcType="VARCHAR" property="ip"/>
-        <result column="client_id" jdbcType="VARCHAR" property="clientId"/>
+        <result column="user_ip" jdbcType="VARCHAR" property="userIp"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
         <result column="channel" jdbcType="VARCHAR" property="channel"/>
         <result column="expires_in" jdbcType="BIGINT" property="expiresIn"/>
         <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
@@ -16,7 +16,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, access_token, user_id, user_name, ip, client_id, channel, expires_in, create_user, update_user, create_time, update_time
+        id, access_token, user_id, user_name, user_ip, app_id, channel, expires_in, create_user, update_user, create_time, update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -29,9 +29,9 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.SSOAccessToken">
         insert into sso_access_token
-        (id, access_token, user_id, user_name, ip, client_id, channel, expires_in, create_user, update_user, create_time, update_time)
+        (id, access_token, user_id, user_name, user_ip, app_id, channel, expires_in, create_user, update_user, create_time, update_time)
         values
-        (#{id, jdbcType=VARCHAR}, #{accessToken, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{ip, jdbcType=VARCHAR}, #{clientId, jdbcType=VARCHAR}, #{channel, jdbcType=VARCHAR}, #{expiresIn, jdbcType=BIGINT}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
+        (#{id, jdbcType=VARCHAR}, #{accessToken, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{userIp, jdbcType=VARCHAR}, #{appId, jdbcType=VARCHAR}, #{channel, jdbcType=VARCHAR}, #{expiresIn, jdbcType=BIGINT}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.SSOAccessToken">
         insert into sso_access_token
@@ -48,11 +48,11 @@
             <if test="userName != null">
                 user_name,
             </if>
-            <if test="ip != null">
-                ip,
+            <if test="userIp != null">
+                user_ip,
             </if>
-            <if test="clientId != null">
-                client_id,
+            <if test="appId != null">
+                app_id,
             </if>
             <if test="channel != null">
                 channel,
@@ -86,11 +86,11 @@
             <if test="userName != null">
                 #{userName, jdbcType=VARCHAR},
             </if>
-            <if test="ip != null">
-                #{ip, jdbcType=VARCHAR},
+            <if test="userIp != null">
+                #{userIp, jdbcType=VARCHAR},
             </if>
-            <if test="clientId != null">
-                #{clientId, jdbcType=VARCHAR},
+            <if test="appId != null">
+                #{appId, jdbcType=VARCHAR},
             </if>
             <if test="channel != null">
                 #{channel, jdbcType=VARCHAR},
@@ -124,11 +124,11 @@
             <if test="userName != null">
                 user_name = #{userName, jdbcType=VARCHAR},
             </if>
-            <if test="ip != null">
-                ip = #{ip, jdbcType=VARCHAR},
+            <if test="userIp != null">
+                user_ip = #{userIp, jdbcType=VARCHAR},
             </if>
-            <if test="clientId != null">
-                client_id = #{clientId, jdbcType=VARCHAR},
+            <if test="appId != null">
+                app_id = #{appId, jdbcType=VARCHAR},
             </if>
             <if test="channel != null">
                 channel = #{channel, jdbcType=VARCHAR},
@@ -157,8 +157,8 @@
             access_token = #{accessToken, jdbcType=VARCHAR},
             user_id = #{userId, jdbcType=VARCHAR},
             user_name = #{userName, jdbcType=VARCHAR},
-            ip = #{ip, jdbcType=VARCHAR},
-            client_id = #{clientId, jdbcType=VARCHAR},
+            user_ip = #{userIp, jdbcType=VARCHAR},
+            app_id = #{appId, jdbcType=VARCHAR},
             channel = #{channel, jdbcType=VARCHAR},
             expires_in = #{expiresIn, jdbcType=BIGINT},
             create_user = #{createUser, jdbcType=VARCHAR},
@@ -190,11 +190,11 @@
             <if test="userName != null">
                 and user_name like #{userName}
             </if>
-            <if test="ip != null">
-                and ip like #{ip}
+            <if test="userIp != null">
+                and user_ip like #{userIp}
             </if>
-            <if test="clientId != null">
-                and client_id like #{clientId}
+            <if test="appId != null">
+                and app_id like #{appId}
             </if>
             <if test="channel != null">
                 and channel like #{channel}
@@ -221,10 +221,10 @@
         from sso_access_token
         where access_token = #{accessToken}
     </select>
-    <select id="selectByUserIdClientId" parameterType="map" resultMap="BaseResultMap">
+    <select id="selectByUserIdAppId" parameterType="map" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from sso_access_token
         where user_id = #{userId}
-        and client_id = #{clientId}
+        and app_id = #{appId}
     </select>
 </mapper>

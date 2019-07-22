@@ -34,5 +34,5 @@ public interface OAuthAccessTokenMapper  {
 
     OAuthAccessToken selectByAccessToken(@Param("accessToken") String accessToken);
 
-    OAuthAccessToken selectByUserIdClientIdScope(@Param("userId") String userId, @Param("clientId") String clientId, @Param("scope") String scope);
+    OAuthAccessToken selectByUserIdAppIdScope(@Param("userId") String userId, @Param("appId") String appId, @Param("scope") String scope);
 }

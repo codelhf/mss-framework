@@ -4,11 +4,11 @@ import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
 import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.server.dao.SSOAccessTokenMapper;
-import com.mss.framework.base.user.server.dao.SSOClientDetailMapper;
+import com.mss.framework.base.user.server.dao.SSOAppDetailMapper;
 import com.mss.framework.base.user.server.dao.SSORefreshTokenMapper;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
-import com.mss.framework.base.user.server.pojo.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSOAppDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.SSOService;
@@ -30,16 +30,16 @@ public class SSOServiceImpl implements SSOService {
     @Autowired
     private SSORefreshTokenMapper ssoRefreshTokenMapper;
     @Autowired
-    private SSOClientDetailMapper ssoClientDetailMapper;
+    private SSOAppDetailMapper ssoAppDetailMapper;
 
     @Override
-    public SSOClientDetail selectById(String id) {
-        return ssoClientDetailMapper.selectByPrimaryKey(id);
+    public SSOAppDetail selectById(String id) {
+        return ssoAppDetailMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public SSOClientDetail selectByRedirectUri(String redirectUri) {
-        return ssoClientDetailMapper.selectByRedirectUrl(redirectUri);
+    public SSOAppDetail selectByRedirectUri(String redirectUri) {
+        return ssoAppDetailMapper.selectByRedirectUrl(redirectUri);
     }
 
     @Override
@@ -63,15 +63,15 @@ public class SSOServiceImpl implements SSOService {
     }
 
     @Override
-    public String createAccessToken(User user, Long expireIn, String requestIP, SSOClientDetail ssoClientDetail) {
+    public String createAccessToken(User user, Long expireIn, String requestIP, SSOAppDetail ssoClientDetail) {
         //过期的时间戳
         Long expireTime = DateUtil.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
         //1. 拼装待加密字符串（username + 渠道CODE + 当前精确到毫秒的时间戳）
-        String str = user.getNickname() + ssoClientDetail.getClientName() + String.valueOf(DateUtil.currentTimeMillis());
+        String str = user.getNickname() + ssoClientDetail.getAppName() + String.valueOf(DateUtil.currentTimeMillis());
         //2. SHA1加密
         String accessTokenStr = "11." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
         //3. 保存Access Token
-        SSOAccessToken accessToken = ssoAccessTokenMapper.selectByUserIdClientId(user.getId(), ssoClientDetail.getId());
+        SSOAccessToken accessToken = ssoAccessTokenMapper.selectByUserIdAppId(user.getId(), ssoClientDetail.getId());
         Date current = new Date();
         //如果存在匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (accessToken == null) {
@@ -80,9 +80,9 @@ public class SSOServiceImpl implements SSOService {
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setUserId(user.getId());
             accessToken.setUserName(user.getNickname());
-            accessToken.setIp(requestIP);
-            accessToken.setClientId(ssoClientDetail.getId());
-            accessToken.setChannel(ssoClientDetail.getClientName());
+            accessToken.setUserIp(requestIP);
+            accessToken.setAppId(ssoClientDetail.getId());
+            accessToken.setChannel(ssoClientDetail.getAppName());
             accessToken.setExpiresIn(expireIn);
             accessToken.setCreateUser(user.getId());
             accessToken.setUpdateUser(user.getId());

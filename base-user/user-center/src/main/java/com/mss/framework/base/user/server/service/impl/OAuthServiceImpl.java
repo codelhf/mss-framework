@@ -1,14 +1,15 @@
 package com.mss.framework.base.user.server.service.impl;
 
+import com.mss.framework.base.core.token.TokenUtil;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
 import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.core.token.UserUtil;
+import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
 import com.mss.framework.base.user.server.service.OAuthService;
-import com.mss.framework.base.user.server.redis.RedisService;
 import com.mss.framework.base.core.token.TokenUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,140 +26,92 @@ import java.util.Date;
 public class OAuthServiceImpl implements OAuthService {
 
     @Autowired
-    private RedisService redisService;
-
-    @Autowired
     private OAuthAccessTokenMapper oAuthAccessTokenMapper;
     @Autowired
-    private OAuthClientDetailMapper oAuthClientDetailMapper;
+    private OAuthAppDetailMapper oAuthAppDetailMapper;
     @Autowired
-    private OAuthClientUserMapper oAuthClientUserMapper;
+    private OAuthAppUserMapper oAuthAppUserMapper;
     @Autowired
     private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;
     @Autowired
     private OAuthScopeMapper oAuthScopeMapper;
 
     @Override
-    public OAuthClientDetail selectById(String id) {
-        return oAuthClientDetailMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public OAuthClientDetail selectByClientId(String clientId) {
-        return oAuthClientDetailMapper.selectByClientId(clientId);
-    }
-
-    @Override
-    public OAuthAccessToken selectByAccessToken(String accessToken) {
-        return oAuthAccessTokenMapper.selectByAccessToken(accessToken);
-    }
-
-    @Override
-    public OAuthAccessToken selectByAccessId(String id) {
-        return oAuthAccessTokenMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public OAuthRefreshToken selectByRefreshToken(String refreshToken) {
-        return oAuthRefreshTokenMapper.selectByRefreshToken(refreshToken);
-    }
-
-    @Override
-    public OAuthClientDetail register(OAuthClientDetail clientDetail) {
+    public OAuthAppDetail register(OAuthAppDetail oAuthAppDetail) {
         //客户端的名称和回调地址不能为空
-        if (StringUtils.isAnyBlank(clientDetail.getClientName(), clientDetail.getRedirectUri())) {
+        if (StringUtils.isAnyBlank(oAuthAppDetail.getAppName(), oAuthAppDetail.getRedirectUri())) {
             return null;
         }
-        //生成24位随机的clientId
-        String clientId = null;
-        OAuthClientDetail detail;
-        //生成的clientId必须是唯一的
-        for (int i = 0; i < 10; i++) {
-            clientId = EncryptUtil.getRandomStr1(24);
-            detail = oAuthClientDetailMapper.selectByClientId(clientId);
-            if (detail == null) {
-                break;
-            }
-        }
-        //生成32位随机的clientSecret
-        String clientSecret = EncryptUtil.getRandomStr1(32);
-
         TokenUser user = UserUtil.getCurrentUser();
-        Date current = new Date();
-        clientDetail.setId(IDUtil.UUIDStr());
-        clientDetail.setClientId(clientId);
-        clientDetail.setClientSecret(clientSecret);
+        Date currentTime = new Date();
+        oAuthAppDetail.setId(IDUtil.UUIDStr());
+        oAuthAppDetail.setAppId(IDUtil.UUIDStr());
+        oAuthAppDetail.setAppSecret(IDUtil.UUIDStr());
         //此用户为开发者
-        clientDetail.setCreateUser(user.getId());
-        clientDetail.setUpdateUser(user.getId());
-        clientDetail.setCreateTime(current);
-        clientDetail.setUpdateTime(current);
-        clientDetail.setStatus(1);
-        int rowCount = oAuthClientDetailMapper.insertSelective(clientDetail);
-        return rowCount == 1 ? clientDetail : null;
+        oAuthAppDetail.setCreateUser(user.getId());
+        oAuthAppDetail.setUpdateUser(user.getId());
+        oAuthAppDetail.setCreateTime(currentTime);
+        oAuthAppDetail.setUpdateTime(currentTime);
+        oAuthAppDetail.setStatus(Constants.StatusEnum.ACTIVATED.getCode());
+        int rowCount = oAuthAppDetailMapper.insertSelective(oAuthAppDetail);
+        return rowCount == 1 ? oAuthAppDetail : null;
     }
 
     @Override
-    public boolean saveOAuthClientUser(String userId, String clientIdStr, String scopeName) {
-        OAuthClientDetail clientDetail = oAuthClientDetailMapper.selectByClientId(clientIdStr);
-        OAuthScope oAuthScope = oAuthScopeMapper.selectByScopeName(scopeName);
-
+    public boolean saveOAuthAppUser(String userId, String appId, String scopeId) {
+        OAuthAppDetail clientDetail = oAuthAppDetailMapper.selectByAppId(appId);
+        //在授权页面用户自己选择权限类型
+        OAuthScope oAuthScope = oAuthScopeMapper.selectByPrimaryKey(scopeId);
         if (clientDetail == null || oAuthScope == null) {
             return false;
         }
-        OAuthClientUser clientUser = oAuthClientUserMapper.selectByExample(userId, clientDetail.getId(), oAuthScope.getId());
+        OAuthAppUser oAuthAppUser = oAuthAppUserMapper.selectByExample(userId, clientDetail.getId(), oAuthScope.getId());
         //如果数据库中不存在记录，则插入
-        if (clientUser == null) {
-            clientUser = new OAuthClientUser();
-            clientUser.setId(IDUtil.UUIDStr());
-            clientUser.setUserId(userId);
-            clientUser.setClientId(clientDetail.getId());
-            clientUser.setScopeId(oAuthScope.getId());
-            int rowCount = oAuthClientUserMapper.insertSelective(clientUser);
+        if (oAuthAppUser == null) {
+            oAuthAppUser = new OAuthAppUser();
+            oAuthAppUser.setId(IDUtil.UUIDStr());
+            oAuthAppUser.setUserId(userId);
+            oAuthAppUser.setAppId(clientDetail.getId());
+            oAuthAppUser.setScopeId(oAuthScope.getId());
+            int rowCount = oAuthAppUserMapper.insertSelective(oAuthAppUser);
             return rowCount != 0;
         }
         return true;
     }
 
     @Override
-    public String createAuthorizationCode(String clientIdStr, String scopeStr, User user) {
-        //1. 拼装待加密字符串（clientId + scope + 当前精确到毫秒的时间戳）
-        String str = clientIdStr + scopeStr + String.valueOf(DateUtil.currentTimeMillis());
+    public String createAuthorizationCode(String appId, String scope, TokenUser tokenUser) {
+        tokenUser.setAppId(appId);
+        tokenUser.setScope(scope);
+        //生成Authorization Code
+        String authorizationCode = TokenUtil.accessToken(tokenUser, null);
 
-        //2. SHA1加密
-        String encryptedStr = EncryptUtil.sha1Hex(str);
-
-        //3.1 保存本次请求的授权范围
-        redisService.setWithExpire(encryptedStr + ":scope", scopeStr, (ExpireEnum.AUTHORIZATION_CODE.getTime()), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
-        //3.2 保存本次请求所属的用户信息
-        redisService.setWithExpire(encryptedStr + ":user", user, (ExpireEnum.AUTHORIZATION_CODE.getTime()), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
-
-        //4. 返回Authorization Code
-        return encryptedStr;
+        //3. 返回Authorization Code
+        return authorizationCode;
     }
 
     @Override
-    public String createAccessToken(User user, OAuthClientDetail oAuthClientDetail, String grantType, String scope, Long expireIn) {
+    public String createAccessToken(User user, OAuthAppDetail oAuthAppDetail, String grantType, String scope, Long expireIn) {
         //过期时间戳
         Long expireTime = DateUtil.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
 
-        //1. 拼装待加密字符串（username + clientId + 当前精确到毫秒的时间戳）
-        String str = user.getNickname() + oAuthClientDetail.getClientId() + String.valueOf(DateUtil.currentTimeMillis());
+        //1. 拼装待加密字符串（username + appId + 当前精确到毫秒的时间戳）
+        String str = user.getNickname() + oAuthAppDetail.getAppId() + String.valueOf(DateUtil.currentTimeMillis());
 
         //2. SHA1加密
         String accessTokenStr = "1." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
 
         //3. 保存Access Token
-        OAuthAccessToken accessToken = oAuthAccessTokenMapper.selectByUserIdClientIdScope(user.getId(), oAuthClientDetail.getClientId(), scope);
+        OAuthAccessToken accessToken = oAuthAccessTokenMapper.selectByUserIdAppIdScope(user.getId(), oAuthAppDetail.getAppId(), scope);
         Date current = new Date();
-        //如果存在userId + clientId + scope匹配的记录，则更新原记录，否则向数据库中插入新记录
+        //如果存在userId + appId + scope匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (accessToken == null) {
             accessToken = new OAuthAccessToken();
             accessToken.setId(IDUtil.UUIDStr());
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setUserId(user.getId());
             accessToken.setUserName(user.getNickname());
-            accessToken.setClientId(oAuthClientDetail.getId());
+            accessToken.setAppId(oAuthAppDetail.getId());
             accessToken.setScope(scope);
             accessToken.setExpiresIn(expireTime);
             accessToken.setGrantType(grantType);
@@ -214,5 +167,30 @@ public class OAuthServiceImpl implements OAuthService {
             oAuthRefreshTokenMapper.updateByPrimaryKeySelective(refreshToken);
         }
         return refreshTokenStr;
+    }
+
+    @Override
+    public OAuthAppDetail selectById(String id) {
+        return oAuthAppDetailMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public OAuthAppDetail selectByAppId(String appId) {
+        return oAuthAppDetailMapper.selectByAppId(appId);
+    }
+
+    @Override
+    public OAuthAccessToken selectByAccessToken(String accessToken) {
+        return oAuthAccessTokenMapper.selectByAccessToken(accessToken);
+    }
+
+    @Override
+    public OAuthAccessToken selectByAccessId(String id) {
+        return oAuthAccessTokenMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public OAuthRefreshToken selectByRefreshToken(String refreshToken) {
+        return oAuthRefreshTokenMapper.selectByRefreshToken(refreshToken);
     }
 }

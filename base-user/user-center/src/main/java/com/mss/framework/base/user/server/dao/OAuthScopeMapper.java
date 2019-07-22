@@ -32,5 +32,5 @@ public interface OAuthScopeMapper  {
     
     List<OAuthScope> selectPageList(OAuthScope example);
 
-    OAuthScope selectByScopeName(@Param("scopeName") String scopeName);
+    OAuthScope selectByScope(@Param("scope") String scope);
 }

@@ -17,15 +17,23 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SSORefreshToken implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class SSORefreshToken {
 
     private String id;
-    
+
+    /**
+     * Access Token
+     */
     private String tokenId;
-    
+
+    /**
+     * Refresh Token
+     */
     private String refreshToken;
-    
+
+    /**
+     * 过期时间戳
+     */
     private long expiresIn;
     
     private String createUser;
@@ -35,6 +43,5 @@ public class SSORefreshToken implements Serializable {
     private Date createTime;
     
     private Date updateTime;
-    
-    
+
 }

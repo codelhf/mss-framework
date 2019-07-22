@@ -34,5 +34,5 @@ public interface SSOAccessTokenMapper  {
 
     SSOAccessToken selectByAccessToken(String accessToken);
 
-    SSOAccessToken selectByUserIdClientId(@Param("userId") String userId, @Param("clientId") String clientId);
+    SSOAccessToken selectByUserIdAppId(@Param("userId") String userId, @Param("appId") String appId);
 }

@@ -188,7 +188,7 @@ public final class UsernamePasswordAndClientToken  implements HostAuthentication
 
 	@Override
 	public String toString() {
-		return "UsernamePasswordAndClientToken [clientName=" + clientName + ", credentials=" + credentials
+		return "UsernamePasswordAndClientToken [appName=" + clientName + ", credentials=" + credentials
 				+ ", context=" + context + ", userId=" + userId + ", username=" + username + ", password="
 				+ Arrays.toString(password) + ", rememberMe=" + rememberMe + ", host=" + host + ", tokenType="
 				+ tokenType + "]";

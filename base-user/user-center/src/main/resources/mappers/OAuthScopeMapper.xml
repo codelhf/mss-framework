@@ -3,11 +3,11 @@
 <mapper namespace="com.mss.framework.base.user.server.dao.OAuthScopeMapper">
     <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthScope">
         <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="scope_name" jdbcType="VARCHAR" property="scopeName"/>
+        <result column="scope" jdbcType="VARCHAR" property="scope"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, scope_name, description
+        id, scope, description
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -20,9 +20,9 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         insert into oauth_scope
-        (id, scope_name, description)
+        (id, scope, description)
         values
-        (#{id, jdbcType=VARCHAR}, #{scopeName, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR})
+        (#{id, jdbcType=VARCHAR}, #{scope, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         insert into oauth_scope
@@ -30,8 +30,8 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="scopeName != null">
-                scope_name,
+            <if test="scope != null">
+                scope,
             </if>
             <if test="description != null">
                 description,
@@ -41,8 +41,8 @@
             <if test="id != null">
                 #{id, jdbcType=VARCHAR},
             </if>
-            <if test="scopeName != null">
-                #{scopeName, jdbcType=VARCHAR},
+            <if test="scope != null">
+                #{scope, jdbcType=VARCHAR},
             </if>
             <if test="description != null">
                 #{description, jdbcType=VARCHAR},
@@ -52,8 +52,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         update oauth_scope
         <set>
-            <if test="scopeName != null">
-                scope_name = #{scopeName, jdbcType=VARCHAR},
+            <if test="scope != null">
+                scope = #{scope, jdbcType=VARCHAR},
             </if>
             <if test="description != null">
                 description = #{description, jdbcType=VARCHAR},
@@ -64,7 +64,7 @@
     <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         update oauth_scope
         set
-            scope_name = #{scopeName, jdbcType=VARCHAR},
+            scope = #{scope, jdbcType=VARCHAR},
             description = #{description, jdbcType=VARCHAR}
         where id = #{id}
     </update>
@@ -82,17 +82,17 @@
             <if test="id != null">
                 and id like #{id}
             </if>
-            <if test="scopeName != null">
-                and scope_name like #{scopeName}
+            <if test="scope != null">
+                and scope like #{scope}
             </if>
             <if test="description != null">
                 and description like #{description}
             </if>
         </where>
     </select>
-    <select id="selectByScopeName" parameterType="string" resultMap="BaseResultMap">
+    <select id="selectByScope" parameterType="string" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from oauth_scope
-        where scope_name = #{scopeName}
+        where scope = #{scope}
     </select>
 </mapper>

@@ -19,4 +19,8 @@ public class TokenUser {
     private String phone;
 
     private String email;
+
+    private String appId;
+
+    private String scope;
 }

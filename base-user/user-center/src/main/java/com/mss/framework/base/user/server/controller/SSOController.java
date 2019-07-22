@@ -6,7 +6,7 @@ import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
-import com.mss.framework.base.user.server.pojo.SSOClientDetail;
+import com.mss.framework.base.user.server.pojo.SSOAppDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.redis.RedisService;
@@ -49,7 +49,7 @@ public class SSOController {
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询接入客户端
-        SSOClientDetail clientDetail = ssoService.selectByRedirectUri(redirectUri);
+        SSOAppDetail clientDetail = ssoService.selectByRedirectUri(redirectUri);
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
         User user = redisService.get(Constants.SESSION_USER);
@@ -60,7 +60,7 @@ public class SSOController {
         //生成Refresh Token
         String refreshTokenStr = ssoService.createRefreshToken(user, accessToken);
 
-        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), clientDetail.getClientName(), accessTokenStr, refreshTokenStr));
+        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), clientDetail.getAppName(), accessTokenStr, refreshTokenStr));
         String params = "?code=" + accessTokenStr;
         return new ModelAndView("redirect:" + redirectUri + params);
     }
@@ -109,7 +109,7 @@ public class SSOController {
         //获取存储的Access Token
         SSOAccessToken ssoAccessToken = ssoService.selectByAccessId(refreshToken.getTokenId());
         //查询接入客户端
-        SSOClientDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getClientId());
+        SSOAppDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getAppId());
         //获取对应的用户信息
         User user = userService.selectByUserId(ssoAccessToken.getUserId());
 

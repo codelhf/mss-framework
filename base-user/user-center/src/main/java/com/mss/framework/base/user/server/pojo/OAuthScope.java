@@ -13,7 +13,10 @@ public class OAuthScope {
     /**
      * 可被访问的用户的权限范围，比如：basic、super
      */
-    private String scopeName;
+    private String scope;
 
+    /**
+     * 描述信息
+     */
     private String description;
 }

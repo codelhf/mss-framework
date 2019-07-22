@@ -13,7 +13,7 @@ public class OAuthRefreshToken {
 
     private String id;
     /**
-     * 关联的表auth_access_token对应的Access Token记录
+     * Access Token
      */
     private String tokenId;
     /**
