@@ -40,27 +40,27 @@ public class SSOController {
     private RedisService redisService;
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private SSOService ssoService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/token")
     public ModelAndView token(String redirectUri, HttpServletRequest request) {
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询接入客户端
-        SSOAppDetail clientDetail = ssoService.selectByRedirectUri(redirectUri);
+        SSOAppDetail ssoAppDetail = ssoService.selectByRedirectUri(redirectUri);
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
         User user = redisService.get(Constants.SESSION_USER);
         //生成Access Token
-        String accessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIP, clientDetail);
+        String accessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIP, ssoAppDetail);
         //查询已经插入到数据库的Access Token
         SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //生成Refresh Token
         String refreshTokenStr = ssoService.createRefreshToken(user, accessToken);
 
-        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), clientDetail.getAppName(), accessTokenStr, refreshTokenStr));
+        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), ssoAppDetail.getAppName(), accessTokenStr, refreshTokenStr));
         String params = "?code=" + accessTokenStr;
         return new ModelAndView("redirect:" + redirectUri + params);
     }

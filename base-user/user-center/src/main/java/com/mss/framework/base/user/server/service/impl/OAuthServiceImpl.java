@@ -91,39 +91,39 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public String createAccessToken(User user, OAuthAppDetail oAuthAppDetail, String grantType, String scope, Long expireIn) {
+    public String createAccessToken(TokenUser tokenUser, OAuthAppDetail oAuthAppDetail, String grantType, String scope, Long expireIn) {
         //过期时间戳
         Long expireTime = DateUtil.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
 
         //1. 拼装待加密字符串（username + appId + 当前精确到毫秒的时间戳）
-        String str = user.getNickname() + oAuthAppDetail.getAppId() + String.valueOf(DateUtil.currentTimeMillis());
+        String str = tokenUser.getUsername() + oAuthAppDetail.getAppId() + String.valueOf(DateUtil.currentTimeMillis());
 
         //2. SHA1加密
         String accessTokenStr = "1." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
 
         //3. 保存Access Token
-        OAuthAccessToken accessToken = oAuthAccessTokenMapper.selectByUserIdAppIdScope(user.getId(), oAuthAppDetail.getAppId(), scope);
+        OAuthAccessToken accessToken = oAuthAccessTokenMapper.selectByUserIdAppIdScope(tokenUser.getId(), oAuthAppDetail.getAppId(), scope);
         Date current = new Date();
         //如果存在userId + appId + scope匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (accessToken == null) {
             accessToken = new OAuthAccessToken();
             accessToken.setId(IDUtil.UUIDStr());
             accessToken.setAccessToken(accessTokenStr);
-            accessToken.setUserId(user.getId());
-            accessToken.setUserName(user.getNickname());
+            accessToken.setUserId(tokenUser.getId());
+            accessToken.setUserName(tokenUser.getUsername());
             accessToken.setAppId(oAuthAppDetail.getId());
             accessToken.setScope(scope);
             accessToken.setExpiresIn(expireTime);
             accessToken.setGrantType(grantType);
-            accessToken.setCreateUser(user.getId());
-            accessToken.setUpdateUser(user.getId());
+            accessToken.setCreateUser(tokenUser.getId());
+            accessToken.setUpdateUser(tokenUser.getId());
             accessToken.setCreateTime(current);
             accessToken.setUpdateTime(current);
             oAuthAccessTokenMapper.insert(accessToken);
         } else {
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setExpiresIn(expireTime);
-            accessToken.setUpdateUser(user.getId());
+            accessToken.setUpdateUser(tokenUser.getId());
             accessToken.setUpdateTime(current);
             oAuthAccessTokenMapper.updateByPrimaryKeySelective(accessToken);
         }
@@ -131,14 +131,14 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public String createRefreshToken(User user, OAuthAccessToken oAuthAccessToken) {
+    public String createRefreshToken(TokenUser tokenUser, OAuthAccessToken oAuthAccessToken) {
         //过期时间
         Long expireIn = DateUtil.dayToSecond(ExpireEnum.REFRESH_TOKEN.getTime());
         //过期时间戳
         Long expireTime = DateUtil.nextDaysSecond(ExpireEnum.REFRESH_TOKEN.getTime(), null);
 
         //1. 拼装待加密字符串（username + accessToken + 当前精确到毫秒的时间戳）
-        String str = user.getNickname() + oAuthAccessToken.getAccessToken() + String.valueOf(DateUtil.currentTimeMillis());
+        String str = tokenUser.getUsername() + oAuthAccessToken.getAccessToken() + String.valueOf(DateUtil.currentTimeMillis());
 
         //2. SHA1加密
         String refreshTokenStr = "2." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
@@ -154,15 +154,15 @@ public class OAuthServiceImpl implements OAuthService {
             refreshToken.setTokenId(oAuthAccessToken.getId());
             refreshToken.setRefreshToken(refreshTokenStr);
             refreshToken.setExpiresIn(expireTime);
-            refreshToken.setCreateUser(user.getId());
-            refreshToken.setUpdateUser(user.getId());
+            refreshToken.setCreateUser(tokenUser.getId());
+            refreshToken.setUpdateUser(tokenUser.getId());
             refreshToken.setCreateTime(current);
             refreshToken.setUpdateTime(current);
             oAuthRefreshTokenMapper.insert(refreshToken);
         } else {
             refreshToken.setRefreshToken(refreshTokenStr);
             refreshToken.setExpiresIn(expireTime);
-            refreshToken.setUpdateUser(user.getId());
+            refreshToken.setUpdateUser(tokenUser.getId());
             refreshToken.setUpdateTime(current);
             oAuthRefreshTokenMapper.updateByPrimaryKeySelective(refreshToken);
         }

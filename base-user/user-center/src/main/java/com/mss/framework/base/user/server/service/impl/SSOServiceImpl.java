@@ -72,7 +72,7 @@ public class SSOServiceImpl implements SSOService {
         String accessTokenStr = "11." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
         //3. 保存Access Token
         SSOAccessToken accessToken = ssoAccessTokenMapper.selectByUserIdAppId(user.getId(), ssoClientDetail.getId());
-        Date current = new Date();
+        Date currentTime = new Date();
         //如果存在匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (accessToken == null) {
             accessToken = new SSOAccessToken();
@@ -86,14 +86,14 @@ public class SSOServiceImpl implements SSOService {
             accessToken.setExpiresIn(expireIn);
             accessToken.setCreateUser(user.getId());
             accessToken.setUpdateUser(user.getId());
-            accessToken.setCreateTime(current);
-            accessToken.setUpdateTime(current);
+            accessToken.setCreateTime(currentTime);
+            accessToken.setUpdateTime(currentTime);
             ssoAccessTokenMapper.insertSelective(accessToken);
         } else {
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setExpiresIn(expireIn);
             accessToken.setUpdateUser(user.getId());
-            accessToken.setUpdateTime(current);
+            accessToken.setUpdateTime(currentTime);
             ssoAccessTokenMapper.updateByPrimaryKeySelective(accessToken);
         }
         return accessTokenStr;
@@ -101,7 +101,7 @@ public class SSOServiceImpl implements SSOService {
 
     @Override
     public String createRefreshToken(User user, SSOAccessToken ssoAccessToken) {
-//过期时间
+        //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.REFRESH_TOKEN.getTime());
         //过期的时间戳
         Long expiresAt = DateUtil.nextDaysSecond(ExpireEnum.REFRESH_TOKEN.getTime(), null);

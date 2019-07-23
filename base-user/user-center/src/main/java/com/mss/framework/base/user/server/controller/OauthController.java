@@ -5,12 +5,11 @@ import com.mss.framework.base.core.token.TokenUtil;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
-import com.mss.framework.base.user.server.pojo.OAuthAppDetail;
-import com.mss.framework.base.user.server.redis.RedisService;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
+import com.mss.framework.base.user.server.pojo.OAuthAppDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.OAuthService;
@@ -38,9 +37,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/oauth2.0")
 public class OauthController {
-
-    @Autowired
-    private RedisService redisService;
 
     @Autowired
     private OAuthService oAuthService;
@@ -179,27 +175,26 @@ public class OauthController {
         if (!oAuthAppDetail.getRedirectUri().equals(redirectUri)) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
-        TokenUser tokenUser = TokenUtil
-
+        TokenUser tokenUser = TokenUtil.verify(code);
         //如果能够通过Authorization Code获取到对应的用户信息，则说明该Authorization Code有效
-        if (StringUtils.isBlank(scope) || user == null) {
+        if (tokenUser == null || tokenUser.getScope() == null) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
         }
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
 
         //生成Access Token
-        String accessToken = oAuthService.createAccessToken(user, oAuthAppDetail, grantType, scope, expiresIn);
+        String accessToken = oAuthService.createAccessToken(tokenUser, oAuthAppDetail, grantType, tokenUser.getScope(), expiresIn);
         //查询已经插入到数据库的Access Token
         OAuthAccessToken authAccessToken = oAuthService.selectByAccessToken(accessToken);
         //生成Refresh Token
-        String refreshToken = oAuthService.createRefreshToken(user, authAccessToken);
+        String refreshToken = oAuthService.createRefreshToken(tokenUser, authAccessToken);
         Map<String, Object> result = new HashMap<>(8);
         //返回数据
         result.put("access_token", authAccessToken.getAccessToken());
         result.put("refresh_token", refreshToken);
         result.put("expires_in", expiresIn);
-        result.put("scope", scope);
+        result.put("scope", tokenUser.getScope());
         return result;
     }
 
@@ -252,11 +247,13 @@ public class OauthController {
         OAuthAppDetail savedClientDetail = oAuthService.selectById(authAccessToken.getAppId());
         //获取对应的用户信息
         User user = userService.selectByUserId(authAccessToken.getUserId());
-
+        TokenUser tokenUser = new TokenUser();
+        tokenUser.setId(user.getId());
+        tokenUser.setUsername(user.getNickname());
         //新的过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
-        String newAccessTokenStr = oAuthService.createAccessToken(user, savedClientDetail, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
+        String newAccessTokenStr = oAuthService.createAccessToken(tokenUser, savedClientDetail, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
         Map<String, Object> result = new HashMap<>(8);
         //返回数据
         result.put("access_token", newAccessTokenStr);

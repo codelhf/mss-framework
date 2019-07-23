@@ -68,10 +68,17 @@ public class TokenUtil {
         }
         if (expiresIn == null || expiresIn < 0) {
             expiresIn = EXPIRE_TIME;
+        } else {
+            expiresIn = timeUnit.toMillis(expiresIn);
         }
-        if (timeUnit != null) {
+        return JWTUtil.sign(JSON.toJSONString(tokenUser), secret, issuer, expiresIn);
+    }
+
+    public static TokenUser verify(String tokenStr) {
+        String jsonUser = JWTUtil.verify(tokenStr, secret, issuer);
+        if (StringUtils.isBlank(jsonUser)) {
             return null;
         }
-        return null;
+        return JSON.parseObject(jsonUser, TokenUser.class);
     }
 }

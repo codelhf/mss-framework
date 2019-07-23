@@ -4,7 +4,6 @@ import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
 import com.mss.framework.base.user.server.pojo.OAuthAppDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
-import com.mss.framework.base.user.server.pojo.User;
 
 /**
  * @Description: 授权相关Service
@@ -51,7 +50,7 @@ public interface OAuthService {
      * @param [user, oAuthAppDetail, grantType, scope, expireIn]
      * @return java.lang.String
      */
-    String createAccessToken(User user, OAuthAppDetail oAuthAppDetail, String grantType, String scope, Long expiresIn);
+    String createAccessToken(TokenUser tokenUser, OAuthAppDetail oAuthAppDetail, String grantType, String scope, Long expiresIn);
 
     /**
      * @description: 生成Refresh Token
@@ -61,7 +60,7 @@ public interface OAuthService {
      * @param [user, oAuthAccessToken] 生成的Access Token信息
      * @return java.lang.String
      */
-    String createRefreshToken(User user, OAuthAccessToken oAuthAccessToken);
+    String createRefreshToken(TokenUser tokenUser, OAuthAccessToken oAuthAccessToken);
 
     /**
      * @description: 通过id查询客户端信息
