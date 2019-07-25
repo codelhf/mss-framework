@@ -19,7 +19,7 @@ import java.io.IOException;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:11
  */
-@Component
+//@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     private static final String ADMIN = "admin";//管理员

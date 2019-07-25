@@ -1,7 +1,6 @@
 package com.mss.framework.base.user.server.web;
 
-import com.mss.framework.base.user.server.web.interceptor.LoginInterceptor;
-import com.mss.framework.base.user.server.web.interceptor.OauthInterceptor;
+import com.mss.framework.base.user.server.web.interceptor.*;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +27,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .excludePathPatterns("*/user/v1.0/**")//排除用户部分接口
                 .addPathPatterns("*/**");
+        registry.addInterceptor(new SSOInterceptor())
+                .addPathPatterns("*/sso/token");
+        registry.addInterceptor(new SSOAccessTokenInterceptor())
+                .addPathPatterns("*/**");
         registry.addInterceptor(new OauthInterceptor())
-                .addPathPatterns("/oauth2.0/authorize");
-//        registry.addInterceptor(accessTokenInterceptor()).addPathPatterns("/api/**");
-//        registry.addInterceptor(ssoAccessDomainInterceptor()).addPathPatterns("/sso/token");
-//        registry.addInterceptor(ssoAccessTokenInterceptor()).addPathPatterns("/sso/verify");
+                .addPathPatterns("*/oauth2.0/authorize");
+        registry.addInterceptor(new OAuthAccessTokenInterceptor())
+                .addPathPatterns("*/oauth2.0/**");
     }
 
 }

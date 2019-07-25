@@ -26,62 +26,61 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:14
  */
+//@Component
 public class OauthInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private OAuthAppDetailMapper oAuthClientDetailMapper;
+    private OAuthAppDetailMapper oAuthAppDetailMapper;
     @Autowired
-    private OAuthAppUserMapper oAuthClientUserMapper;
+    private OAuthAppUserMapper oAuthAppUserMapper;
     @Autowired
     private OAuthScopeMapper oAuthScopeMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        //参数信息
-        String params = "?redirectUri=" + SpringContextUtil.getRequestUrl(request);
+        //获取session中存储的token
+        User user = (User) session.getAttribute(Constants.SESSION_USER);
 
-        //客户端ID
-        String clientIdStr = request.getParameter("client_id");
+        //应用ID
+        String appId = request.getParameter("app_id");
         //权限范围
-        String scopeStr = request.getParameter("scope");
+        String scope = request.getParameter("scope");
         //回调URL
         String redirectUri = request.getParameter("redirect_uri");
         //返回形式
         String responseType = request.getParameter("response_type");
+        //参数为空并且不是验证码模式
+        if (StringUtils.isAnyBlank(appId, scope, redirectUri) || !"code".equals(responseType)) {
+            return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REQUEST);
+        }
+        //1. 查询是否存在授权信息
+        OAuthAppDetail oAuthAppDetail = oAuthAppDetailMapper.selectByAppId(appId);
+        OAuthScope oAuthScope = oAuthScopeMapper.selectByScope(scope);
 
-        //获取session中存储的token
-        User user = (User) session.getAttribute(Constants.SESSION_USER);
+        if (oAuthAppDetail == null) {
+            return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_CLIENT);
+        }
 
-        if(StringUtils.isNoneBlank(clientIdStr, scopeStr, redirectUri) && "code".equals(responseType)){
-            params = params + "&client_id=" + clientIdStr + "&scope=" + scopeStr;
+        if (oAuthScope == null) {
+            return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_SCOPE);
+        }
 
-            //1. 查询是否存在授权信息
-            OAuthAppDetail clientDetail = oAuthClientDetailMapper.selectByAppId(clientIdStr);
-            OAuthScope scope = oAuthScopeMapper.selectByScope(scopeStr);
+        if (!oAuthAppDetail.getRedirectUri().equals(redirectUri)) {
+            return this.generateErrorResponse(response, ErrorCodeEnum.REDIRECT_URI_MISMATCH);
+        }
 
-            if(clientDetail == null){
-                return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_CLIENT);
-            }
-
-            if(scope == null){
-                return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_SCOPE);
-            }
-
-            if(!clientDetail.getRedirectUri().equals(redirectUri)){
-                return this.generateErrorResponse(response, ErrorCodeEnum.REDIRECT_URI_MISMATCH);
-            }
-
-            //2. 查询用户给接入的客户端是否已经授权
-            OAuthAppUser clientUser = oAuthClientUserMapper.selectByExample(clientDetail.getId(), user.getId(), scope.getId());
-            if(clientUser != null){
-                return true;
-            }
+        //2. 查询用户给接入的APP是否已经授权
+        OAuthAppUser oAuthAppUser = oAuthAppUserMapper.selectByExample(oAuthAppDetail.getId(), user.getId(), oAuthScope.getId());
+        if (oAuthAppUser == null) {
+            //参数信息
+            String params = "?redirectUri=" + SpringContextUtil.getRequestUrl(request);
+            params = params + "&app_id=" + appId + "&scope=" + scope;
             //如果没有授权，则跳转到授权页面
             response.sendRedirect(request.getContextPath() + "/oauth2.0/authorizePage" + params);
             return false;
         }
-        return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REQUEST);
+        return true;
     }
 
     /**
@@ -92,9 +91,9 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-type", "application/json;charset=UTF-8");
 
-        Map<String,String> result = new HashMap<>(2);
+        Map<String, String> result = new HashMap<>(2);
         result.put("error", errorCodeEnum.getCode());
-        result.put("error_description",errorCodeEnum.getDesc());
+        result.put("error_description", errorCodeEnum.getDesc());
 
         response.getWriter().write(JsonUtil2.toJson(result));
         return false;

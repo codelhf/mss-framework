@@ -118,8 +118,7 @@ public class SSOController {
         //生成新的Access Token
         String newAccessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIp, ssoClientDetails);
 
-        log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】"
-                , user.getNickname(), requestIp, ssoAccessToken.getAccessToken(), newAccessTokenStr));
+        log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】", user.getNickname(), requestIp, ssoAccessToken.getAccessToken(), newAccessTokenStr));
 
         //组装返回信息
         result.put("access_token", newAccessTokenStr);
