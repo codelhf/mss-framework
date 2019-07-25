@@ -4,11 +4,9 @@ import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.dao.OAuthAccessTokenMapper;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
-import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;

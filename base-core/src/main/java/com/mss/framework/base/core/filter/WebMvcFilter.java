@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+//import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+//import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @Description: Webmvc相关配置
