@@ -6,7 +6,7 @@ import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
-import com.mss.framework.base.user.server.pojo.SSOAppDetail;
+import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.redis.RedisService;
@@ -49,7 +49,7 @@ public class SSOController {
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询接入客户端
-        SSOAppDetail ssoAppDetail = ssoService.selectByRedirectUri(redirectUri);
+        SSOClientDetail ssoAppDetail = ssoService.selectByRedirectUri(redirectUri);
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
         User user = redisService.get(Constants.SESSION_USER);
@@ -60,7 +60,7 @@ public class SSOController {
         //生成Refresh Token
         String refreshTokenStr = ssoService.createRefreshToken(user, accessToken);
 
-        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), ssoAppDetail.getAppName(), accessTokenStr, refreshTokenStr));
+        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), ssoAppDetail.getClientName(), accessTokenStr, refreshTokenStr));
         String params = "?code=" + accessTokenStr;
         return new ModelAndView("redirect:" + redirectUri + params);
     }
@@ -68,7 +68,6 @@ public class SSOController {
     //校验Access Token，并返回用户信息
     @GetMapping("/verify")
     public Map<String, Object> verify(@RequestParam("access_token") String accessTokenStr) {
-        Map<String, Object> result = new HashMap<>(8);
         //过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询Access Token
@@ -77,6 +76,7 @@ public class SSOController {
         SSORefreshToken refreshToken = ssoService.selectByTokenId(accessToken.getId());
         User user = userService.selectByUserId(accessToken.getUserId());
         //组装返回信息
+        Map<String, Object> result = new HashMap<>(8);
         result.put("access_token", accessToken.getAccessToken());
         result.put("refresh_token", refreshToken.getRefreshToken());
         result.put("expires_in", expiresIn);
@@ -109,7 +109,7 @@ public class SSOController {
         //获取存储的Access Token
         SSOAccessToken ssoAccessToken = ssoService.selectByAccessId(refreshToken.getTokenId());
         //查询接入客户端
-        SSOAppDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getAppId());
+        SSOClientDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getClientId());
         //获取对应的用户信息
         User user = userService.selectByUserId(ssoAccessToken.getUserId());
 

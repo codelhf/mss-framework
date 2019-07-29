@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Title: SSORefreshToken
- * @Description: SSORefreshToken实体对象
+ * @Title: SSOClientDetail
+ * @Description: SSOClientDetail实体对象
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-07-29 00:33:05
@@ -17,31 +17,28 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SSORefreshToken implements Serializable {
+public class SSOClientDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //
     private String id;
 
     //
-    private String tokenId;
+    private String clientName;
 
     //
-    private String refreshToken;
+    private String clientSecret;
 
     //
-    private long expiresIn;
+    private String description;
 
     //
-    private String createUser;
+    private String redirectUrl;
 
     //
-    private String updateUser;
+    private String logoutUrl;
 
     //
-    private Date createTime;
-
-    //
-    private Date updateTime;
+    private int status;
 
 }

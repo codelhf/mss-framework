@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mss.framework.base.user.server.dao.OAuthAppUserMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthAppUser">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
+<mapper namespace="com.mss.framework.base.user.server.dao.OAuthClientUserMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthClientUser">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
-        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="client_id" jdbcType="VARCHAR" property="clientId"/>
         <result column="scope_id" jdbcType="VARCHAR" property="scopeId"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, user_id, app_id, scope_id
+        id,user_id,client_id,scope_id,
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from oauth_app_user
-        where id = #{id}
+        from oauth_client_user
+        where id = #{id, jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="String">
-        delete from oauth_app_user
-        where id = #{id}
+        delete from oauth_client_user
+        where id = #{id, jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppUser">
-        insert into oauth_app_user
-        (id, user_id, app_id, scope_id)
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
+        insert into oauth_client_user
+        (id, user_id, client_id, scope_id, )
         values
-        (#{id, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{appId, jdbcType=VARCHAR}, #{scopeId, jdbcType=VARCHAR})
+        (#{id, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{clientId, jdbcType=VARCHAR}, #{scopeId, jdbcType=VARCHAR}, )
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppUser">
-        insert into oauth_app_user
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
+        insert into oauth_client_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -34,8 +34,8 @@
             <if test="userId != null">
                 user_id,
             </if>
-            <if test="appId != null">
-                app_id,
+            <if test="clientId != null">
+                client_id,
             </if>
             <if test="scopeId != null">
                 scope_id,
@@ -48,47 +48,51 @@
             <if test="userId != null">
                 #{userId, jdbcType=VARCHAR},
             </if>
-            <if test="appId != null">
-                #{appId, jdbcType=VARCHAR},
+            <if test="clientId != null">
+                #{clientId, jdbcType=VARCHAR},
             </if>
             <if test="scopeId != null">
                 #{scopeId, jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppUser">
-        update oauth_app_user
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
+        update oauth_client_user
         <set>
+            <if test="id != null">
+                id = #{id, jdbcType=VARCHAR},
+            </if>
             <if test="userId != null">
                 user_id = #{userId, jdbcType=VARCHAR},
             </if>
-            <if test="appId != null">
-                app_id = #{appId, jdbcType=VARCHAR},
+            <if test="clientId != null">
+                client_id = #{clientId, jdbcType=VARCHAR},
             </if>
             <if test="scopeId != null">
                 scope_id = #{scopeId, jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id}
+        where id = #{id, jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppUser">
-        update oauth_app_user
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser">
+        update oauth_client_user
         set
+            id = #{id, jdbcType=VARCHAR},
             user_id = #{userId, jdbcType=VARCHAR},
-            app_id = #{appId, jdbcType=VARCHAR},
-            scope_id = #{scopeId, jdbcType=VARCHAR}
-        where id = #{id}
+            client_id = #{clientId, jdbcType=VARCHAR},
+            scope_id = #{scopeId, jdbcType=VARCHAR},
+        where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">
-        delete from oauth_app_user
+        delete from oauth_client_user
         where id in
         <foreach collection="idList" index="index" item="id" open="(" separator="," close=")" >
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppUser" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientUser" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from oauth_app_user
+        from oauth_client_user
         <where>
             <if test="id != null">
                 and id like #{id}
@@ -96,19 +100,20 @@
             <if test="userId != null">
                 and user_id like #{userId}
             </if>
-            <if test="appId != null">
-                and app_id like #{appId}
+            <if test="clientId != null">
+                and client_id like #{clientId}
             </if>
             <if test="scopeId != null">
                 and scope_id like #{scopeId}
             </if>
         </where>
     </select>
+
     <select id="selectByExample" parameterType="string" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from oauth_app_user
+        from oauth_client_user
         where user_id = #{userId}
-        and appId = #{appId}
-        and scopeId = #{scopeId}
+        and client_id = #{clientId}
+        and scope_id = #{scopeId}
     </select>
 </mapper>

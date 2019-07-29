@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mss.framework.base.user.server.dao.SSOAppDetailMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.SSOAppDetail">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="app_name" jdbcType="VARCHAR" property="appName"/>
-        <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
+<mapper namespace="com.mss.framework.base.user.server.dao.SSOClientDetailMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.SSOClientDetail">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
+        <result column="client_secret" jdbcType="VARCHAR" property="clientSecret"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl"/>
         <result column="logout_url" jdbcType="VARCHAR" property="logoutUrl"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, app_name, app_secret, description, redirect_url, logout_url, status
+        id,client_name,client_secret,description,redirect_url,logout_url,status,
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from sso_app_detail
-        where id = #{id}
+        from sso_client_detail
+        where id = #{id, jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="String">
-        delete from sso_app_detail
-        where id = #{id}
+        delete from sso_client_detail
+        where id = #{id, jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.SSOAppDetail">
-        insert into sso_app_detail
-        (id, app_name, app_secret, description, redirect_url, logout_url, status)
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
+        insert into sso_client_detail
+        (id, client_name, client_secret, description, redirect_url, logout_url, status, )
         values
-        (#{id, jdbcType=VARCHAR}, #{appName, jdbcType=VARCHAR}, #{appSecret, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{redirectUrl, jdbcType=VARCHAR}, #{logoutUrl, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
+        (#{id, jdbcType=VARCHAR}, #{clientName, jdbcType=VARCHAR}, #{clientSecret, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{redirectUrl, jdbcType=VARCHAR}, #{logoutUrl, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER}, )
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.SSOAppDetail">
-        insert into sso_app_detail
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
+        insert into sso_client_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
-            <if test="appName != null">
-                app_name,
+            <if test="clientName != null">
+                client_name,
             </if>
-            <if test="appSecret != null">
-                app_secret,
+            <if test="clientSecret != null">
+                client_secret,
             </if>
             <if test="description != null">
                 description,
@@ -57,11 +57,11 @@
             <if test="id != null">
                 #{id, jdbcType=VARCHAR},
             </if>
-            <if test="appName != null">
-                #{appName, jdbcType=VARCHAR},
+            <if test="clientName != null">
+                #{clientName, jdbcType=VARCHAR},
             </if>
-            <if test="appSecret != null">
-                #{appSecret, jdbcType=VARCHAR},
+            <if test="clientSecret != null">
+                #{clientSecret, jdbcType=VARCHAR},
             </if>
             <if test="description != null">
                 #{description, jdbcType=VARCHAR},
@@ -77,14 +77,17 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.SSOAppDetail">
-        update sso_app_detail
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
+        update sso_client_detail
         <set>
-            <if test="appName != null">
-                app_name = #{appName, jdbcType=VARCHAR},
+            <if test="id != null">
+                id = #{id, jdbcType=VARCHAR},
             </if>
-            <if test="appSecret != null">
-                app_secret = #{appSecret, jdbcType=VARCHAR},
+            <if test="clientName != null">
+                client_name = #{clientName, jdbcType=VARCHAR},
+            </if>
+            <if test="clientSecret != null">
+                client_secret = #{clientSecret, jdbcType=VARCHAR},
             </if>
             <if test="description != null">
                 description = #{description, jdbcType=VARCHAR},
@@ -99,38 +102,39 @@
                 status = #{status, jdbcType=INTEGER},
             </if>
         </set>
-        where id = #{id}
+        where id = #{id, jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.SSOAppDetail">
-        update sso_app_detail
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail">
+        update sso_client_detail
         set
-            app_name = #{appName, jdbcType=VARCHAR},
-            app_secret = #{appSecret, jdbcType=VARCHAR},
+            id = #{id, jdbcType=VARCHAR},
+            client_name = #{clientName, jdbcType=VARCHAR},
+            client_secret = #{clientSecret, jdbcType=VARCHAR},
             description = #{description, jdbcType=VARCHAR},
             redirect_url = #{redirectUrl, jdbcType=VARCHAR},
             logout_url = #{logoutUrl, jdbcType=VARCHAR},
-            status = #{status, jdbcType=INTEGER}
-        where id = #{id}
+            status = #{status, jdbcType=INTEGER},
+        where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">
-        delete from sso_app_detail
+        delete from sso_client_detail
         where id in
         <foreach collection="idList" index="index" item="id" open="(" separator="," close=")" >
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.SSOAppDetail" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.SSOClientDetail" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from sso_app_detail
+        from sso_client_detail
         <where>
             <if test="id != null">
                 and id like #{id}
             </if>
-            <if test="appName != null">
-                and app_name like #{appName}
+            <if test="clientName != null">
+                and client_name like #{clientName}
             </if>
-            <if test="appSecret != null">
-                and app_secret like #{appSecret}
+            <if test="clientSecret != null">
+                and client_secret like #{clientSecret}
             </if>
             <if test="description != null">
                 and description like #{description}
@@ -146,9 +150,10 @@
             </if>
         </where>
     </select>
+
     <select id="selectByRedirectUrl" parameterType="string" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from sso_app_detail
-        where redirect_url = #{redirectUrl}
+        from sso_client_detail
+        where redirect_url = #{redirectUri}
     </select>
 </mapper>

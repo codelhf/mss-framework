@@ -85,10 +85,28 @@
 
     <!-- 数据库对应数据表-->
     <tables>
+        <table tableName="oauth_access_token" domainName="OAuthAccessToken">
+        </table>
+        <table tableName="oauth_client_detail" domainName="OAuthClientDetail">
+        </table>
+        <table tableName="oauth_client_user" domainName="OAuthClientUser">
+        </table>
+        <table tableName="oauth_refresh_token" domainName="OAuthRefreshToken">
+        </table>
+        <table tableName="oauth_scope" domainName="OAuthScope">
+        </table>
+        <table tableName="sso_access_token" domainName="SSOAccessToken">
+        </table>
+        <table tableName="sso_client_detail" domainName="SSOClientDetail">
+        </table>
+        <table tableName="sso_refresh_token" domainName="SSORefreshToken">
+        </table>
+        <!--<table tableName="user" domainName="User">-->
+        <!--</table>-->
         <!--<table tableName="user_login" domainName="UserLogin">-->
         <!--</table>-->
-        <table tableName="user_oauth" domainName="UserOAuth">
-        </table>
+        <!--<table tableName="user_oauth" domainName="UserOAuth">-->
+        <!--</table>-->
     </tables>
 
     <!-- 数据库对应数据视图-->

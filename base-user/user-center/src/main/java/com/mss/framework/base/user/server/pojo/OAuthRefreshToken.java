@@ -2,34 +2,46 @@ package com.mss.framework.base.user.server.pojo;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @Title: OAuthRefreshToken
+ * @Description: OAuthRefreshToken实体对象
+ * @Company: example
+ * @Author: liuhf
+ * @CreateTime: 2019-07-29 00:33:05
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OAuthRefreshToken {
+public class OAuthRefreshToken implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    //
     private String id;
-    /**
-     * Access Token
-     */
-    private String tokenId;
-    /**
-     * Refresh Token
-     */
-    private String refreshToken;
-    /**
-     * 过期时间戳
-     */
-    private Long expiresIn;
 
+    //
+    private String tokenId;
+
+    //
+    private String refreshToken;
+
+    //
+    private long expiresIn;
+
+    //
     private String createUser;
 
+    //
     private String updateUser;
 
+    //
     private Date createTime;
 
+    //
     private Date updateTime;
+
 }

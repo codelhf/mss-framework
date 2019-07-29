@@ -2,21 +2,31 @@ package com.mss.framework.base.user.server.pojo;
 
 import lombok.*;
 
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @Title: OAuthScope
+ * @Description: OAuthScope实体对象
+ * @Company: example
+ * @Author: liuhf
+ * @CreateTime: 2019-07-29 00:33:05
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OAuthScope {
+public class OAuthScope implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    //
     private String id;
-    /**
-     * 可被访问的用户的权限范围，比如：basic、super
-     */
+
+    //
     private String scope;
 
-    /**
-     * 描述信息
-     */
+    //
     private String description;
+
 }

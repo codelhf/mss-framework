@@ -28,60 +28,60 @@ public class OAuthServiceImpl implements OAuthService {
     @Autowired
     private OAuthAccessTokenMapper oAuthAccessTokenMapper;
     @Autowired
-    private OAuthAppDetailMapper oAuthAppDetailMapper;
+    private OAuthClientDetailMapper oAuthClientDetailMapper;
     @Autowired
-    private OAuthAppUserMapper oAuthAppUserMapper;
+    private OAuthClientUserMapper oAuthClientUserMapper;
     @Autowired
     private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;
     @Autowired
     private OAuthScopeMapper oAuthScopeMapper;
 
     @Override
-    public OAuthAppDetail register(OAuthAppDetail oAuthAppDetail) {
+    public OAuthClientDetail register(OAuthClientDetail oAuthClientDetail) {
         //客户端的名称和回调地址不能为空
-        if (StringUtils.isAnyBlank(oAuthAppDetail.getAppName(), oAuthAppDetail.getRedirectUri())) {
+        if (StringUtils.isAnyBlank(oAuthClientDetail.getClientName(), oAuthClientDetail.getRedirectUri())) {
             return null;
         }
         TokenUser user = UserUtil.getCurrentUser();
         Date currentTime = new Date();
-        oAuthAppDetail.setId(IDUtil.UUIDStr());
-        oAuthAppDetail.setAppId(IDUtil.UUIDStr());
-        oAuthAppDetail.setAppSecret(IDUtil.UUIDStr());
+        oAuthClientDetail.setId(IDUtil.UUIDStr());
+        oAuthClientDetail.setClientId(IDUtil.UUIDStr());
+        oAuthClientDetail.setClientSecret(IDUtil.UUIDStr());
         //此用户为开发者
-        oAuthAppDetail.setCreateUser(user.getId());
-        oAuthAppDetail.setUpdateUser(user.getId());
-        oAuthAppDetail.setCreateTime(currentTime);
-        oAuthAppDetail.setUpdateTime(currentTime);
-        oAuthAppDetail.setStatus(Constants.StatusEnum.ACTIVATED.getCode());
-        int rowCount = oAuthAppDetailMapper.insertSelective(oAuthAppDetail);
-        return rowCount == 1 ? oAuthAppDetail : null;
+        oAuthClientDetail.setCreateUser(user.getId());
+        oAuthClientDetail.setUpdateUser(user.getId());
+        oAuthClientDetail.setCreateTime(currentTime);
+        oAuthClientDetail.setUpdateTime(currentTime);
+        oAuthClientDetail.setStatus(Constants.StatusEnum.ACTIVATED.getCode());
+        int rowCount = oAuthClientDetailMapper.insertSelective(oAuthClientDetail);
+        return rowCount == 1 ? oAuthClientDetail : null;
     }
 
     @Override
-    public boolean saveOAuthAppUser(String userId, String appId, String scopeId) {
-        OAuthAppDetail clientDetail = oAuthAppDetailMapper.selectByAppId(appId);
+    public boolean saveOAuthClientUser(String userId, String clientId, String scopeId) {
+        OAuthClientDetail clientDetail = oAuthClientDetailMapper.selectByClientId(clientId);
         //在授权页面用户自己选择权限类型
         OAuthScope oAuthScope = oAuthScopeMapper.selectByPrimaryKey(scopeId);
         if (clientDetail == null || oAuthScope == null) {
             return false;
         }
-        OAuthAppUser oAuthAppUser = oAuthAppUserMapper.selectByExample(userId, clientDetail.getId(), oAuthScope.getId());
+        OAuthClientUser oAuthClientUser = oAuthClientUserMapper.selectByExample(userId, clientDetail.getId(), oAuthScope.getId());
         //如果数据库中不存在记录，则插入
-        if (oAuthAppUser == null) {
-            oAuthAppUser = new OAuthAppUser();
-            oAuthAppUser.setId(IDUtil.UUIDStr());
-            oAuthAppUser.setUserId(userId);
-            oAuthAppUser.setAppId(clientDetail.getId());
-            oAuthAppUser.setScopeId(oAuthScope.getId());
-            int rowCount = oAuthAppUserMapper.insertSelective(oAuthAppUser);
+        if (oAuthClientUser == null) {
+            oAuthClientUser = new OAuthClientUser();
+            oAuthClientUser.setId(IDUtil.UUIDStr());
+            oAuthClientUser.setUserId(userId);
+            oAuthClientUser.setClientId(clientDetail.getId());
+            oAuthClientUser.setScopeId(oAuthScope.getId());
+            int rowCount = oAuthClientUserMapper.insertSelective(oAuthClientUser);
             return rowCount != 0;
         }
         return true;
     }
 
     @Override
-    public String createAuthorizationCode(String appId, String scope, TokenUser tokenUser) {
-        tokenUser.setAppId(appId);
+    public String createAuthorizationCode(String clientId, String scope, TokenUser tokenUser) {
+        tokenUser.setClientId(clientId);
         tokenUser.setScope(scope);
         //生成Authorization Code
         String authorizationCode = TokenUtil.accessToken(tokenUser, null);
@@ -91,27 +91,27 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public String createAccessToken(TokenUser tokenUser, OAuthAppDetail oAuthAppDetail, String grantType, String scope, Long expireIn) {
+    public String createAccessToken(TokenUser tokenUser, OAuthClientDetail oAuthClientDetail, String grantType, String scope, Long expireIn) {
         //过期时间戳
         Long expireTime = DateUtil.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
 
-        //1. 拼装待加密字符串（username + appId + 当前精确到毫秒的时间戳）
-        String str = tokenUser.getUsername() + oAuthAppDetail.getAppId() + String.valueOf(DateUtil.currentTimeMillis());
+        //1. 拼装待加密字符串（username + clientId + 当前精确到毫秒的时间戳）
+        String str = tokenUser.getUsername() + oAuthClientDetail.getClientId() + String.valueOf(DateUtil.currentTimeMillis());
 
         //2. SHA1加密
         String accessTokenStr = "1." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
 
         //3. 保存Access Token
-        OAuthAccessToken accessToken = oAuthAccessTokenMapper.selectByUserIdAppIdScope(tokenUser.getId(), oAuthAppDetail.getAppId(), scope);
+        OAuthAccessToken accessToken = oAuthAccessTokenMapper.selectByUserIdClientIdScope(tokenUser.getId(), oAuthClientDetail.getClientId(), scope);
         Date current = new Date();
-        //如果存在userId + appId + scope匹配的记录，则更新原记录，否则向数据库中插入新记录
+        //如果存在userId + clientId + scope匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (accessToken == null) {
             accessToken = new OAuthAccessToken();
             accessToken.setId(IDUtil.UUIDStr());
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setUserId(tokenUser.getId());
             accessToken.setUserName(tokenUser.getUsername());
-            accessToken.setAppId(oAuthAppDetail.getId());
+            accessToken.setClientId(oAuthClientDetail.getId());
             accessToken.setScope(scope);
             accessToken.setExpiresIn(expireTime);
             accessToken.setGrantType(grantType);
@@ -170,13 +170,13 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public OAuthAppDetail selectById(String id) {
-        return oAuthAppDetailMapper.selectByPrimaryKey(id);
+    public OAuthClientDetail selectById(String id) {
+        return oAuthClientDetailMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public OAuthAppDetail selectByAppId(String appId) {
-        return oAuthAppDetailMapper.selectByAppId(appId);
+    public OAuthClientDetail selectByAppId(String clientId) {
+        return oAuthClientDetailMapper.selectByClientId(clientId);
     }
 
     @Override

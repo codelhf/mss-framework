@@ -1,6 +1,7 @@
 package com.mss.framework.base.user.server.dao;
 
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
+import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,10 +9,10 @@ import java.util.List;
 
 /**
  * @Title: SSOAccessTokenMapper
- * @Description: SSOAccessToken实体类
+ * @Description: SSOAccessToken持久层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-04 10:00:17
+ * @CreateTime: 2019-07-29 00:33:05
  */
 @Mapper
 public interface SSOAccessTokenMapper  {
@@ -32,7 +33,7 @@ public interface SSOAccessTokenMapper  {
     
     List<SSOAccessToken> selectPageList(SSOAccessToken example);
 
-    SSOAccessToken selectByAccessToken(String accessToken);
+    SSOAccessToken selectByAccessToken(@Param("accessToken") String accessToken);
 
-    SSOAccessToken selectByUserIdAppId(@Param("userId") String userId, @Param("appId") String appId);
+    SSOAccessToken selectByUserIdClientId(@Param("userId") String userId, @Param("clientId") String clientId);
 }

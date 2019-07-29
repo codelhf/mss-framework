@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * @Title: OAuthAccessTokenMapper
- * @Description: OAuthAccessToken实体类
+ * @Description: OAuthAccessToken持久层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-03 19:20:47
+ * @CreateTime: 2019-07-29 00:33:05
  */
 @Mapper
 public interface OAuthAccessTokenMapper  {
@@ -32,7 +32,7 @@ public interface OAuthAccessTokenMapper  {
     
     List<OAuthAccessToken> selectPageList(OAuthAccessToken example);
 
-    OAuthAccessToken selectByAccessToken(@Param("accessToken") String accessToken);
+    OAuthAccessToken selectByUserIdClientIdScope(@Param("userId") String userId, @Param("clientId") String clientId, @Param("scope") String scope);
 
-    OAuthAccessToken selectByUserIdAppIdScope(@Param("userId") String userId, @Param("appId") String appId, @Param("scope") String scope);
+    OAuthAccessToken selectByAccessToken(@Param("accessToken") String accessToken);
 }

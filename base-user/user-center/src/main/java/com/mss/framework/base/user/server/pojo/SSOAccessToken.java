@@ -5,56 +5,55 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @Title: SSOAccessToken
+ * @Description: SSOAccessToken实体对象
+ * @Company: example
+ * @Author: liuhf
+ * @CreateTime: 2019-07-29 00:33:05
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SSOAccessToken {
+public class SSOAccessToken implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    //
     private String id;
 
-    /**
-     * Access Token
-     */
+    //
     private String accessToken;
 
-    /**
-     * 关联的用户ID
-     */
+    //
     private String userId;
 
-    /**
-     * 关联的用户名
-     */
+    //
     private String userName;
 
-    /**
-     * 关联的用户来源IP
-     */
+    //
+    private String clientId;
+
+    //
+    private long expiresIn;
+
+    //
     private String userIp;
 
-    /**
-     * 关联的应用ID
-     */
-    private String appId;
-
-    /**
-     * 表示这个Token用于什么渠道，比如：官网、APP1、APP2等等
-     */
+    //
     private String channel;
 
-    /**
-     * 过期时间戳
-     */
-    private long expiresIn;
-    
+    //
     private String createUser;
-    
+
+    //
     private String updateUser;
-    
+
+    //
     private Date createTime;
-    
+
+    //
     private Date updateTime;
 
 }

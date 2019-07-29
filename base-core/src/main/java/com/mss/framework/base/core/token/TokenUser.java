@@ -20,7 +20,7 @@ public class TokenUser {
 
     private String email;
 
-    private String appId;
+    private String clientId;
 
     private String scope;
 }

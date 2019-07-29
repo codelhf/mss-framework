@@ -9,7 +9,7 @@ import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.enums.GrantTypeEnum;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
-import com.mss.framework.base.user.server.pojo.OAuthAppDetail;
+import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.OAuthService;
@@ -44,23 +44,23 @@ public class OauthController {
     private UserService userService;
 
     /**
-     * @param [appDetail]
+     * @param [clientDetail]
      * @return java.util.Map
      * @description: 注册需要接入的客户端信息
      * @author liuhf
      * @createtime 2019/5/3 23:20
      */
-    @PostMapping("/appRegister")
-    public Map<String, Object> clientRegister(@RequestBody OAuthAppDetail appDetail) {
-        OAuthAppDetail oAuthAppDetail = oAuthService.register(appDetail);
-        if (oAuthAppDetail == null) {
+    @PostMapping("/clientRegister")
+    public Map<String, Object> clientRegister(@RequestBody OAuthClientDetail clientDetail) {
+        OAuthClientDetail oAuthClientDetail = oAuthService.register(clientDetail);
+        if (oAuthClientDetail == null) {
             return OAuthUtil.errorMessage("注册失败");
         }
-        return OAuthUtil.success(oAuthAppDetail);
+        return OAuthUtil.success(oAuthClientDetail);
     }
 
     /**
-     * @param [appId, scope, redirectUri]
+     * @param [clientId, scope, redirectUri]
      * @return org.springframework.web.servlet.ModelAndView
      * @description: 授权页面
      * @author liuhf
@@ -68,8 +68,8 @@ public class OauthController {
      */
     @GetMapping("/authorizePage")
     public void authorizePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //app_id
-        String appId = request.getParameter("app_id");
+        //client_id
+        String appId = request.getParameter("client_id");
         //scope
         String scope = request.getParameter("scope");
         //redirectUri
@@ -80,28 +80,28 @@ public class OauthController {
             request.getSession().setAttribute(Constants.SESSION_AUTH_REDIRECT_URL, redirectUri);
         }
         //查询请求授权的客户端信息
-        OAuthAppDetail oAuthAppDetail = oAuthService.selectByAppId(appId);
+        OAuthClientDetail oAuthAppDetail = oAuthService.selectByAppId(appId);
         //将申请授权的服务的客户端跳转到授权页
-        String params = "appId=" + appId + "&appName=" + oAuthAppDetail.getAppName() + "&scope=" + scope;
+        String params = "clientId=" + appId + "&clientName=" + oAuthAppDetail.getClientName() + "&scope=" + scope;
         //授权页会有用户未登录的情况,登录后再次跳转回授权页
         response.sendRedirect("/page/authorize.html?" + params);
 //        return modelAndView;
     }
 
     /**
-     * @param [session, appId, scope]
+     * @param [session, clientId, scope]
      * @return java.util.Map
      * @description: 授权页同意授权
      * @author liuhf
      * @createtime 2019/5/3 23:21
      */
     @PostMapping("/agree")
-    public Map<String, Object> agree(HttpSession session, String appId, String scopeId) {
-        if (StringUtils.isAnyBlank(appId, scopeId)) {
-            return OAuthUtil.errorMessage("appId或scopeId不能为空");
+    public Map<String, Object> agree(HttpSession session, String clientId, String scopeId) {
+        if (StringUtils.isAnyBlank(clientId, scopeId)) {
+            return OAuthUtil.errorMessage("clientId或scopeId不能为空");
         }
         //1. 向数据库中保存授权信息
-        boolean success = oAuthService.saveOAuthAppUser(UserUtil.getCurrentUser().getId(), appId, scopeId);
+        boolean success = oAuthService.saveOAuthClientUser(UserUtil.getCurrentUser().getId(), clientId, scopeId);
         //2. 返回给页面的数据
         if (!success) {
             return OAuthUtil.errorMessage("授权失败");
@@ -113,7 +113,7 @@ public class OauthController {
     }
 
     /**
-     * @param [appId, scope, redirectUri, status]
+     * @param [clientId, scope, redirectUri, status]
      * @return org.springframework.web.servlet.ModelAndView
      * @description: 获取Authorization Code
      * @author liuhf
@@ -121,8 +121,8 @@ public class OauthController {
      */
     @GetMapping("/authorize")
     public void authorizeCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //app_id
-        String appId = request.getParameter("app_id");
+        //client_id
+        String clientId = request.getParameter("client_id");
         //scope
         String scope = request.getParameter("scope");
         //redirectUri
@@ -130,7 +130,7 @@ public class OauthController {
         //state，用于防止CSRF攻击（非必填）
         String state = request.getParameter("state");
         //生成Authorization Code
-        String authorizationCode = oAuthService.createAuthorizationCode(appId, scope, UserUtil.getCurrentUser());
+        String authorizationCode = oAuthService.createAuthorizationCode(clientId, scope, UserUtil.getCurrentUser());
 
         String params = "?code=" + authorizationCode;
         if (StringUtils.isNoneBlank(state)) {
@@ -154,10 +154,10 @@ public class OauthController {
         String grantType = request.getParameter("grant_type");
         //前面获取的Authorization Code
         String code = request.getParameter("code");
-        //appID
-        String appId = request.getParameter("app_id");
-        //接入的app的密钥
-        String appSecret = request.getParameter("app_secret");
+        //clientId
+        String clientId = request.getParameter("client_id");
+        //接入的client的密钥
+        String clientSecret = request.getParameter("client_secret");
         //回调URL
         String redirectUri = request.getParameter("redirect_uri");
 
@@ -165,14 +165,14 @@ public class OauthController {
         if (!GrantTypeEnum.AUTHORIZATION_CODE.getType().equals(grantType)) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.UNSUPPORTED_GRANT_TYPE);
         }
-        OAuthAppDetail oAuthAppDetail = oAuthService.selectByAppId(appId);
+        OAuthClientDetail oAuthClientDetail = oAuthService.selectByAppId(clientId);
         //校验请求的客户端秘钥和已保存的秘钥是否匹配
-        if (!(oAuthAppDetail != null && oAuthAppDetail.getAppSecret().equals(appSecret))) {
+        if (!(oAuthClientDetail != null && oAuthClientDetail.getClientSecret().equals(clientSecret))) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.INVALID_CLIENT);
         }
 
         //校验回调URL
-        if (!oAuthAppDetail.getRedirectUri().equals(redirectUri)) {
+        if (!oAuthClientDetail.getRedirectUri().equals(redirectUri)) {
             return OAuthUtil.errorResponse(ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
         TokenUser tokenUser = TokenUtil.verify(code);
@@ -184,7 +184,7 @@ public class OauthController {
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
 
         //生成Access Token
-        String accessToken = oAuthService.createAccessToken(tokenUser, oAuthAppDetail, grantType, tokenUser.getScope(), expiresIn);
+        String accessToken = oAuthService.createAccessToken(tokenUser, oAuthClientDetail, grantType, tokenUser.getScope(), expiresIn);
         //查询已经插入到数据库的Access Token
         OAuthAccessToken authAccessToken = oAuthService.selectByAccessToken(accessToken);
         //生成Refresh Token
@@ -244,7 +244,7 @@ public class OauthController {
         //获取存储的Access Token
         OAuthAccessToken authAccessToken = oAuthService.selectByAccessId(authRefreshToken.getTokenId());
         //获取对应的客户端信息
-        OAuthAppDetail savedClientDetail = oAuthService.selectById(authAccessToken.getAppId());
+        OAuthClientDetail savedClientDetail = oAuthService.selectById(authAccessToken.getClientId());
         //获取对应的用户信息
         User user = userService.selectByUserId(authAccessToken.getUserId());
         TokenUser tokenUser = new TokenUser();

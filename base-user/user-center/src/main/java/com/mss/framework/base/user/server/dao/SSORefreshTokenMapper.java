@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * @Title: SSORefreshTokenMapper
- * @Description: SSORefreshToken实体类
+ * @Description: SSORefreshToken持久层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-04 10:00:17
+ * @CreateTime: 2019-07-29 00:33:05
  */
 @Mapper
 public interface SSORefreshTokenMapper  {
@@ -32,7 +32,7 @@ public interface SSORefreshTokenMapper  {
     
     List<SSORefreshToken> selectPageList(SSORefreshToken example);
 
-    SSORefreshToken selectByTokenId(String tokenId);
+    SSORefreshToken selectByTokenId(@Param("tokenId") String tokenId);
 
-    SSORefreshToken selectByRefreshToken(String refreshToken);
+    SSORefreshToken selectByRefreshToken(@Param("refreshToken") String refreshToken);
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mss.framework.base.user.server.dao.OAuthAppDetailMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthAppDetail">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
-        <result column="app_name" jdbcType="VARCHAR" property="appName"/>
-        <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
+<mapper namespace="com.mss.framework.base.user.server.dao.OAuthClientDetailMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.server.pojo.OAuthClientDetail">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="client_id" jdbcType="VARCHAR" property="clientId"/>
+        <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
+        <result column="client_secret" jdbcType="VARCHAR" property="clientSecret"/>
         <result column="redirect_uri" jdbcType="VARCHAR" property="redirectUri"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
@@ -15,37 +15,37 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, app_id, app_name, app_secret, redirect_uri, description, status, create_user, update_user, create_time, update_time
+        id,client_id,client_name,client_secret,redirect_uri,description,status,create_user,update_user,create_time,update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from oauth_app_detail
-        where id = #{id}
+        from oauth_client_detail
+        where id = #{id, jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="String">
-        delete from oauth_app_detail
-        where id = #{id}
+        delete from oauth_client_detail
+        where id = #{id, jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppDetail">
-        insert into oauth_app_detail
-        (id, app_id, app_name, app_secret, redirect_uri, description, status, create_user, update_user, create_time, update_time)
+    <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientDetail">
+        insert into oauth_client_detail
+        (id, client_id, client_name, client_secret, redirect_uri, description, status, create_user, update_user, create_time, update_time )
         values
-        (#{id, jdbcType=VARCHAR}, #{appId, jdbcType=VARCHAR}, #{appName, jdbcType=VARCHAR}, #{appSecret, jdbcType=VARCHAR}, #{redirectUri, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP})
+        (#{id, jdbcType=VARCHAR}, #{clientId, jdbcType=VARCHAR}, #{clientName, jdbcType=VARCHAR}, #{clientSecret, jdbcType=VARCHAR}, #{redirectUri, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP} )
     </insert>
-    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppDetail">
-        insert into oauth_app_detail
+    <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientDetail">
+        insert into oauth_client_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
-            <if test="appId != null">
-                app_id,
+            <if test="clientId != null">
+                client_id,
             </if>
-            <if test="appName != null">
-                app_name,
+            <if test="clientName != null">
+                client_name,
             </if>
-            <if test="appSecret != null">
-                app_secret,
+            <if test="clientSecret != null">
+                client_secret,
             </if>
             <if test="redirectUri != null">
                 redirect_uri,
@@ -73,14 +73,14 @@
             <if test="id != null">
                 #{id, jdbcType=VARCHAR},
             </if>
-            <if test="appId != null">
-                #{appId, jdbcType=VARCHAR},
+            <if test="clientId != null">
+                #{clientId, jdbcType=VARCHAR},
             </if>
-            <if test="appName != null">
-                #{appName, jdbcType=VARCHAR},
+            <if test="clientName != null">
+                #{clientName, jdbcType=VARCHAR},
             </if>
-            <if test="appSecret != null">
-                #{appSecret, jdbcType=VARCHAR},
+            <if test="clientSecret != null">
+                #{clientSecret, jdbcType=VARCHAR},
             </if>
             <if test="redirectUri != null">
                 #{redirectUri, jdbcType=VARCHAR},
@@ -105,17 +105,20 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppDetail">
-        update oauth_app_detail
+    <update id="updateByPrimaryKeySelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientDetail">
+        update oauth_client_detail
         <set>
-            <if test="appId != null">
-                app_id = #{appId, jdbcType=VARCHAR},
+            <if test="id != null">
+                id = #{id, jdbcType=VARCHAR},
             </if>
-            <if test="appName != null">
-                app_name = #{appName, jdbcType=VARCHAR},
+            <if test="clientId != null">
+                client_id = #{clientId, jdbcType=VARCHAR},
             </if>
-            <if test="appSecret != null">
-                app_secret = #{appSecret, jdbcType=VARCHAR},
+            <if test="clientName != null">
+                client_name = #{clientName, jdbcType=VARCHAR},
+            </if>
+            <if test="clientSecret != null">
+                client_secret = #{clientSecret, jdbcType=VARCHAR},
             </if>
             <if test="redirectUri != null">
                 redirect_uri = #{redirectUri, jdbcType=VARCHAR},
@@ -139,14 +142,15 @@
                 update_time = #{updateTime, jdbcType=TIMESTAMP},
             </if>
         </set>
-        where id = #{id}
+        where id = #{id, jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppDetail">
-        update oauth_app_detail
+    <update id="updateByPrimaryKey" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientDetail">
+        update oauth_client_detail
         set
-            app_id = #{appId, jdbcType=VARCHAR},
-            app_name = #{appName, jdbcType=VARCHAR},
-            app_secret = #{appSecret, jdbcType=VARCHAR},
+            id = #{id, jdbcType=VARCHAR},
+            client_id = #{clientId, jdbcType=VARCHAR},
+            client_name = #{clientName, jdbcType=VARCHAR},
+            client_secret = #{clientSecret, jdbcType=VARCHAR},
             redirect_uri = #{redirectUri, jdbcType=VARCHAR},
             description = #{description, jdbcType=VARCHAR},
             status = #{status, jdbcType=INTEGER},
@@ -154,30 +158,30 @@
             update_user = #{updateUser, jdbcType=VARCHAR},
             create_time = #{createTime, jdbcType=TIMESTAMP},
             update_time = #{updateTime, jdbcType=TIMESTAMP}
-        where id = #{id}
+        where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">
-        delete from oauth_app_detail
+        delete from oauth_client_detail
         where id in
         <foreach collection="idList" index="index" item="id" open="(" separator="," close=")" >
             #{id}
         </foreach>
     </delete>
-    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.OAuthAppDetail" resultMap="BaseResultMap">
+    <select id="selectPageList" parameterType="com.mss.framework.base.user.server.pojo.OAuthClientDetail" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from oauth_app_detail
+        from oauth_client_detail
         <where>
             <if test="id != null">
                 and id like #{id}
             </if>
-            <if test="appId != null">
-                and app_id like #{appId}
+            <if test="clientId != null">
+                and client_id like #{clientId}
             </if>
-            <if test="appName != null">
-                and app_name like #{appName}
+            <if test="clientName != null">
+                and client_name like #{clientName}
             </if>
-            <if test="appSecret != null">
-                and app_secret like #{appSecret}
+            <if test="clientSecret != null">
+                and client_secret like #{clientSecret}
             </if>
             <if test="redirectUri != null">
                 and redirect_uri like #{redirectUri}
@@ -203,9 +207,9 @@
         </where>
     </select>
 
-    <select id="selectByAppId" parameterType="string" resultMap="BaseResultMap">
+    <select id="selectByClientId" parameterType="string" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
-        from oauth_app_detail
-        where app_id = #{appId}
+        from oauth_client_detail
+        where client_id = #{clientId}
     </select>
 </mapper>

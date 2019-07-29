@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * @Title: OAuthRefreshTokenMapper
- * @Description: OAuthRefreshToken实体类
+ * @Description: OAuthRefreshToken持久层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-03 19:20:47
+ * @CreateTime: 2019-07-29 00:33:05
  */
 @Mapper
 public interface OAuthRefreshTokenMapper  {
@@ -32,7 +32,7 @@ public interface OAuthRefreshTokenMapper  {
     
     List<OAuthRefreshToken> selectPageList(OAuthRefreshToken example);
 
-    OAuthRefreshToken selectByRefreshToken(@Param("refreshToken") String refreshToken);
-
     OAuthRefreshToken selectByTokenId(@Param("tokenId") String tokenId);
+
+    OAuthRefreshToken selectByRefreshToken(@Param("refreshToken") String refreshToken);
 }

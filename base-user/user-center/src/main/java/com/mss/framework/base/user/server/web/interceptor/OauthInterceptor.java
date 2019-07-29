@@ -2,12 +2,12 @@ package com.mss.framework.base.user.server.web.interceptor;
 
 import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.user.server.common.Constants;
-import com.mss.framework.base.user.server.dao.OAuthAppDetailMapper;
-import com.mss.framework.base.user.server.dao.OAuthAppUserMapper;
+import com.mss.framework.base.user.server.dao.OAuthClientDetailMapper;
+import com.mss.framework.base.user.server.dao.OAuthClientUserMapper;
 import com.mss.framework.base.user.server.dao.OAuthScopeMapper;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
-import com.mss.framework.base.user.server.pojo.OAuthAppDetail;
-import com.mss.framework.base.user.server.pojo.OAuthAppUser;
+import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
+import com.mss.framework.base.user.server.pojo.OAuthClientUser;
 import com.mss.framework.base.user.server.pojo.OAuthScope;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.util.JsonUtil2;
@@ -30,9 +30,9 @@ import java.util.Map;
 public class OauthInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private OAuthAppDetailMapper oAuthAppDetailMapper;
+    private OAuthClientDetailMapper oAuthClientDetailMapper;
     @Autowired
-    private OAuthAppUserMapper oAuthAppUserMapper;
+    private OAuthClientUserMapper oAuthClientUserMapper;
     @Autowired
     private OAuthScopeMapper oAuthScopeMapper;
 
@@ -43,7 +43,7 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
         User user = (User) session.getAttribute(Constants.SESSION_USER);
 
         //应用ID
-        String appId = request.getParameter("app_id");
+        String clientId = request.getParameter("client_id");
         //权限范围
         String scope = request.getParameter("scope");
         //回调URL
@@ -51,14 +51,14 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
         //返回形式
         String responseType = request.getParameter("response_type");
         //参数为空并且不是验证码模式
-        if (StringUtils.isAnyBlank(appId, scope, redirectUri) || !"code".equals(responseType)) {
+        if (StringUtils.isAnyBlank(clientId, scope, redirectUri) || !"code".equals(responseType)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REQUEST);
         }
         //1. 查询是否存在授权信息
-        OAuthAppDetail oAuthAppDetail = oAuthAppDetailMapper.selectByAppId(appId);
+        OAuthClientDetail oAuthClientDetail = oAuthClientDetailMapper.selectByClientId(clientId);
         OAuthScope oAuthScope = oAuthScopeMapper.selectByScope(scope);
 
-        if (oAuthAppDetail == null) {
+        if (oAuthClientDetail == null) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_CLIENT);
         }
 
@@ -66,16 +66,16 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_SCOPE);
         }
 
-        if (!oAuthAppDetail.getRedirectUri().equals(redirectUri)) {
+        if (!oAuthClientDetail.getRedirectUri().equals(redirectUri)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
 
         //2. 查询用户给接入的APP是否已经授权
-        OAuthAppUser oAuthAppUser = oAuthAppUserMapper.selectByExample(oAuthAppDetail.getId(), user.getId(), oAuthScope.getId());
+        OAuthClientUser oAuthAppUser = oAuthClientUserMapper.selectByExample(oAuthClientDetail.getId(), user.getId(), oAuthScope.getId());
         if (oAuthAppUser == null) {
             //参数信息
             String params = "?redirectUri=" + SpringContextUtil.getRequestUrl(request);
-            params = params + "&app_id=" + appId + "&scope=" + scope;
+            params = params + "&app_id=" + clientId + "&scope=" + scope;
             //如果没有授权，则跳转到授权页面
             response.sendRedirect(request.getContextPath() + "/oauth2.0/authorizePage" + params);
             return false;

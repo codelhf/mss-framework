@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * @Title: OAuthScopeMapper
- * @Description: OAuthScope实体类
+ * @Description: OAuthScope持久层
  * @Company: example
  * @Author: liuhf
- * @CreateTime: 2019-05-03 19:20:47
+ * @CreateTime: 2019-07-29 00:33:05
  */
 @Mapper
 public interface OAuthScopeMapper  {
