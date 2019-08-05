@@ -12,6 +12,7 @@ import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.redis.RedisService;
 import com.mss.framework.base.user.server.service.SSOService;
 import com.mss.framework.base.user.server.service.UserService;
+import com.mss.framework.base.user.server.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,13 +88,11 @@ public class SSOController {
     @GetMapping("/refreshToken")
     public Map<String, Object> refreshToken(@RequestParam("refresh_token") String refreshTokenStr,
                                             HttpServletRequest request) {
-        Map<String, Object> result = new HashMap<>(8);
         //获取用户IP
         String requestIp = SpringContextUtil.getRequestIp(request);
         SSORefreshToken refreshToken = ssoService.selectByRefreshToken(refreshTokenStr);
         if (refreshToken == null) {
-            this.generateErrorResponse(result, ErrorCodeEnum.INVALID_GRANT);
-            return result;
+            return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
         }
         Long savedExpiresAt = refreshToken.getExpiresIn();
         //过期日期
@@ -103,8 +102,7 @@ public class SSOController {
 
         //如果Refresh Token已经失效，则需要重新生成
         if (expiresDateTime.isBefore(nowDateTime)) {
-            this.generateErrorResponse(result, ErrorCodeEnum.EXPIRED_TOKEN);
-            return result;
+            return ResponseUtil.errorResponse(ErrorCodeEnum.EXPIRED_TOKEN);
         }
         //获取存储的Access Token
         SSOAccessToken ssoAccessToken = ssoService.selectByAccessId(refreshToken.getTokenId());
@@ -121,18 +119,11 @@ public class SSOController {
         log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】", user.getNickname(), requestIp, ssoAccessToken.getAccessToken(), newAccessTokenStr));
 
         //组装返回信息
+        Map<String, Object> result = new HashMap<>(8);
         result.put("access_token", newAccessTokenStr);
         result.put("refresh_token", refreshToken.getRefreshToken());
         result.put("expires_in", expiresIn);
         result.put("user_info", user);
         return result;
-    }
-
-    /**
-     * 组装错误请求的返回
-     */
-    private void generateErrorResponse(Map<String, Object> result, ErrorCodeEnum errorCodeEnum) {
-        result.put("error", errorCodeEnum.getCode());
-        result.put("error_description", errorCodeEnum.getDesc());
     }
 }

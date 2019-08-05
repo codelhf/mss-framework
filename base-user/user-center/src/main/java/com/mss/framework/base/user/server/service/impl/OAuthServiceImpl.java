@@ -175,7 +175,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public OAuthClientDetail selectByAppId(String clientId) {
+    public OAuthClientDetail selectByClientId(String clientId) {
         return oAuthClientDetailMapper.selectByClientId(clientId);
     }
 

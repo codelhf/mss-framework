@@ -10,7 +10,7 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/14 13:50
  */
-public class OAuthUtil {
+public class ResponseUtil {
 
     public static Map<String, Object> success(Object data) {
         Map<String, Object> result = new HashMap<>(2);

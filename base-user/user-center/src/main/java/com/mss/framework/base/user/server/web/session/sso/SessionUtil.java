@@ -1,73 +1,75 @@
-//package com.mss.framework.base.user.server.web.session.sso;
-//
-//import com.alibaba.fastjson.JSON;
-//import com.mss.framework.base.core.common.SpringContextUtil;
-//import com.mss.framework.base.core.token.TokenUser;
-//import com.mss.framework.base.core.util.IDUtil;
-//import com.mss.framework.base.user.server.redis.RedisUtil;
-//import lombok.extern.slf4j.Slf4j;
-//import org.apache.commons.lang3.StringUtils;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//
-///**
-// * @Description: session工具类
-// * @Auther: liuhf
-// * @CreateTime: 2019/5/16 13:56
-// */
-//@Slf4j
-//public class SessionUtil {
-//
+package com.mss.framework.base.user.server.web.session.sso;
+
+import com.mss.framework.base.core.token.TokenUser;
+import com.mss.framework.base.core.token.TokenUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+/**
+ * @Description: session工具类
+ * @Auther: liuhf
+ * @CreateTime: 2019/5/16 13:56
+ */
+@Slf4j
+public class SessionUtil {
+
 //    private static RedisUtil redisUtil;
-//    // 过期时间5分钟
-//    public static long EXPIRE_TIME = 5 * 60 * 1000;
-//
-//    public static boolean putTokenUser(HttpServletResponse response, TokenUser tokenUser, Long expiresMillis) {
+
+    private static final String COOKIE_NAME = "login_token";
+    // access token过期时间5分钟
+    public static final int EXPIRE_TIME = 60*5;
+    // refresh token过期时间
+    public static final int MAX_AGE = 60*60*24*365;
+
+    public static boolean putTokenUser(HttpServletResponse response, TokenUser tokenUser, Integer expiresMillis, List<String> cookieDomains) {
+        if (tokenUser == null) {
+            return false;
+        }
+        if (expiresMillis == null || expiresMillis < 0) {
+            expiresMillis = EXPIRE_TIME;
+        }
+        String loginToken = TokenUtil.accessToken(tokenUser, expiresMillis.longValue());
+        //将token写入所有域名下
+        for (String cookieDomain: cookieDomains) {
+            CookieUtil.writeLoginToken(response, loginToken, COOKIE_NAME, cookieDomain, expiresMillis);
+        }
+        return true;
+    }
+
+    public static TokenUser getTokenUser(HttpServletRequest request) {
 //        if (redisUtil == null) {
-//            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
+//            redisUtil = SpringContextUtil.getBeanByName("redisUtil", RedisUtil.class);
 //        }
-//        if (tokenUser == null) {
-//            return false;
-//        }
-//        if (expiresMillis != null && expiresMillis > 0) {
-//            EXPIRE_TIME = expiresMillis;
-//        }
-//        String loginToken = IDUtil.UUIDStr();
-//        String jsonUser = JSON.toJSONString(tokenUser);
-//        CookieUtil.writeLoginToken(response, loginToken);
-//        return redisUtil.setExpire(loginToken, jsonUser, EXPIRE_TIME);
-//    }
-//
-//    public static TokenUser getTokenUser(HttpServletRequest request) {
-//        if (redisUtil == null) {
-//            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
-//        }
-//        String loginToken = CookieUtil.readLoginToken(request);
-//        if (StringUtils.isBlank(loginToken)) {
+        String loginToken = CookieUtil.readLoginToken(request, COOKIE_NAME);
+        //未登录
+        if (StringUtils.isBlank(loginToken)) {
+            return null;
+        }
+        //验证token未过期，但是用户已登出的黑名单中
+//        String tokenStr = (String) redisUtil.get(loginToken);
+//        if (StringUtils.isNotBlank(tokenStr)) {
 //            return null;
 //        }
-//        String jsonUser = (String) redisUtil.get(loginToken);
-//        if (StringUtils.isBlank(jsonUser)) {
-//            return null;
-//        }
-//        return JSON.parseObject(jsonUser, TokenUser.class);
-//    }
-//
-//    public static boolean deleteTokenUser(HttpServletRequest request, HttpServletResponse response) {
+        return TokenUtil.getTokenUser(request);
+    }
+
+    public static boolean deleteTokenUser(HttpServletRequest request, HttpServletResponse response) {
 //        if (redisUtil == null) {
-//            redisUtil = (RedisUtil) SpringContextUtil.getBeanByName("redisUtil");
+//            redisUtil = SpringContextUtil.getBeanByName("redisUtil", RedisUtil.class);
 //        }
-//        String loginToken = CookieUtil.readLoginToken(request);
-//        if (StringUtils.isBlank(loginToken)) {
-//            return true;
+        String loginToken = CookieUtil.readLoginToken(request, COOKIE_NAME);
+        if (StringUtils.isBlank(loginToken)) {
+            return true;
+        }
+        CookieUtil.deleteLoginToken(request, response, COOKIE_NAME);
+//        String tokenStr = (String) redisUtil.get(loginToken);
+//        if (StringUtils.isBlank(tokenStr)) {
+//            redisUtil.setExpire(tokenStr, tokenStr, EXPIRE_TIME);
 //        }
-//        CookieUtil.deleteLoginToken(request, response);
-//        String jsonUser = (String) redisUtil.get(loginToken);
-//        if (StringUtils.isBlank(jsonUser)) {
-//            return true;
-//        }
-//        redisUtil.del(loginToken);
-//        return true;
-//    }
-//}
+        return true;
+    }
+}

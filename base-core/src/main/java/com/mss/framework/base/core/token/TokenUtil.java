@@ -36,11 +36,11 @@ public class TokenUtil {
         return JWTUtil.sign(jsonUser, secret, issuer, expiresMillis);
     }
     
-    public static String refreshToken(String userId, Long expiresMillis) {
+    public static String refreshToken(String tokenId, Long expiresMillis) {
         if (expiresMillis == null || expiresMillis < 0) {
-            expiresMillis = EXPIRE_TIME;
+            expiresMillis = REFRESH_TOKEN_EXPIRE_TIME;
         }
-        return JWTUtil.sign(userId, secret, issuer, expiresMillis);
+        return JWTUtil.sign(tokenId, secret, issuer, expiresMillis);
     }
 
     public static TokenUser getTokenUser(HttpServletRequest request) {
@@ -55,7 +55,7 @@ public class TokenUtil {
         return JSON.parseObject(jsonUser, TokenUser.class);
     }
 
-    public static String getUserId(String refreshToken) {
+    public static String getTokenId(String refreshToken) {
         if (StringUtils.isBlank(refreshToken)) {
             return null;
         }

@@ -9,7 +9,7 @@ import com.mss.framework.base.user.server.pojo.User;
  */
 public interface UserService {
 
-    public User selectUserInfoByScope(String userId, String scope);
+    User selectUserInfoByScope(String userId, String scope);
 
-    public User selectByUserId(String id);
+    User selectByUserId(String id);
 }

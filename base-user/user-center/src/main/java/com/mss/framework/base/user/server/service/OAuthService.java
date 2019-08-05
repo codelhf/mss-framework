@@ -80,7 +80,7 @@ public interface OAuthService {
      * @param [clientId]
      * @return OAuthClientDetail
      */
-    OAuthClientDetail selectByAppId(String clientId);
+    OAuthClientDetail selectByClientId(String clientId);
 
     /**
      * @description: 通过Access Token查询记录
