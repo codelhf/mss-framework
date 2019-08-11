@@ -1,6 +1,8 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.SpringContextUtil;
+import com.mss.framework.base.core.token.TokenUser;
+import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
@@ -38,30 +40,28 @@ import java.util.Map;
 public class SSOController {
 
     @Autowired
-    private RedisService redisService;
-
-    @Autowired
     private SSOService ssoService;
     @Autowired
     private UserService userService;
 
     @GetMapping("/token")
     public ModelAndView token(String redirectUri, HttpServletRequest request) {
-        //过期时间
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询接入客户端
-        SSOClientDetail ssoAppDetail = ssoService.selectByRedirectUri(redirectUri);
+        SSOClientDetail ssoClientDetail = ssoService.selectByRedirectUri(redirectUri);
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
-        User user = redisService.get(Constants.SESSION_USER);
+        //过期时间
+        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+        //获取用户信息
+        TokenUser tokenUser = UserUtil.getCurrentUser();
         //生成Access Token
-        String accessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIP, ssoAppDetail);
+        String accessTokenStr = ssoService.createAccessToken(tokenUser, expiresIn, requestIP, ssoClientDetail);
         //查询已经插入到数据库的Access Token
         SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //生成Refresh Token
-        String refreshTokenStr = ssoService.createRefreshToken(user, accessToken);
+        String refreshTokenStr = ssoService.createRefreshToken(tokenUser, accessToken);
 
-        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", user.getNickname(), ssoAppDetail.getClientName(), accessTokenStr, refreshTokenStr));
+        log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", tokenUser.getUsername(), ssoClientDetail.getClientName(), accessTokenStr, refreshTokenStr));
         String params = "?code=" + accessTokenStr;
         return new ModelAndView("redirect:" + redirectUri + params);
     }
@@ -110,11 +110,11 @@ public class SSOController {
         SSOClientDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getClientId());
         //获取对应的用户信息
         User user = userService.selectByUserId(ssoAccessToken.getUserId());
-
+        TokenUser tokenUser = UserUtil.getCurrentUser();
         //新的过期时间
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
-        String newAccessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIp, ssoClientDetails);
+        String newAccessTokenStr = ssoService.createAccessToken(tokenUser, expiresIn, requestIp, ssoClientDetails);
 
         log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】", user.getNickname(), requestIp, ssoAccessToken.getAccessToken(), newAccessTokenStr));
 

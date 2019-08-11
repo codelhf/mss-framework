@@ -1,6 +1,8 @@
 package com.mss.framework.base.user.server.web.interceptor;
 
 import com.mss.framework.base.core.common.SpringContextUtil;
+import com.mss.framework.base.core.token.TokenUser;
+import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.dao.OAuthClientDetailMapper;
 import com.mss.framework.base.user.server.dao.OAuthClientUserMapper;
@@ -38,9 +40,8 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session = request.getSession();
-        //获取session中存储的token
-        User user = (User) session.getAttribute(Constants.SESSION_USER);
+        //获取登录用户信息
+        TokenUser tokenUser = UserUtil.getCurrentUser();
 
         //应用ID
         String clientId = request.getParameter("client_id");
@@ -71,11 +72,11 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
         }
 
         //2. 查询用户给接入的APP是否已经授权
-        OAuthClientUser oAuthAppUser = oAuthClientUserMapper.selectByExample(oAuthClientDetail.getId(), user.getId(), oAuthScope.getId());
-        if (oAuthAppUser == null) {
+        OAuthClientUser oAuthClientUser = oAuthClientUserMapper.selectByExample(oAuthClientDetail.getId(), tokenUser.getId(), oAuthScope.getId());
+        if (oAuthClientUser == null) {
             //参数信息
             String params = "?redirectUri=" + SpringContextUtil.getRequestUrl(request);
-            params = params + "&app_id=" + clientId + "&scope=" + scope;
+            params = params + "&client_id=" + clientId + "&scope=" + scope;
             //如果没有授权，则跳转到授权页面
             response.sendRedirect(request.getContextPath() + "/oauth2.0/authorizePage" + params);
             return false;

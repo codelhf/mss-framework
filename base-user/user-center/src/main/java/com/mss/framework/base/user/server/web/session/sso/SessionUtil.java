@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.server.web.session.sso;
 
 import com.mss.framework.base.core.token.TokenUser;
-import com.mss.framework.base.core.token.TokenUtil;
+import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

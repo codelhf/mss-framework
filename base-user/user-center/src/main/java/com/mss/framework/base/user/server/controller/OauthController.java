@@ -1,7 +1,6 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.token.TokenUser;
-import com.mss.framework.base.core.token.TokenUtil;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.user.server.common.Constants;
@@ -16,6 +15,7 @@ import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.service.UserService;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import com.mss.framework.base.user.server.util.ResponseUtil;
+import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -99,8 +99,9 @@ public class OauthController {
         if (StringUtils.isAnyBlank(clientId, scopeId)) {
             return ResponseUtil.errorMessage("clientId或scopeId不能为空");
         }
+        String userId = UserUtil.getCurrentUser().getId();
         //1. 向数据库中保存授权信息
-        boolean success = oAuthService.saveOAuthClientUser(UserUtil.getCurrentUser().getId(), clientId, scopeId);
+        boolean success = oAuthService.saveOAuthClientUser(userId, clientId, scopeId);
         //2. 返回给页面的数据
         if (!success) {
             return ResponseUtil.errorMessage("授权失败");

@@ -1,9 +1,9 @@
 package com.mss.framework.base.user.server.service;
 
+import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
-import com.mss.framework.base.user.server.pojo.User;
 
 /**
  * @Description: SSO单点登录相关Service
@@ -80,7 +80,7 @@ public interface SSOService {
      * @param [user, expireIn, requestIP, ssoClientDetail]
      * @return java.lang.String
      */
-    String createAccessToken(User user, Long expireIn, String requestIP, SSOClientDetail ssoClientDetail);
+    String createAccessToken(TokenUser tokenUser, Long expireIn, String requestIP, SSOClientDetail ssoClientDetail);
 
     /**
      * @description: 生成Refresh Token
@@ -90,5 +90,5 @@ public interface SSOService {
      * @param [user, ssoAccessToken]
      * @return java.lang.String
      */
-    String createRefreshToken(User user, SSOAccessToken ssoAccessToken);
+    String createRefreshToken(TokenUser tokenUser, SSOAccessToken ssoAccessToken);
 }

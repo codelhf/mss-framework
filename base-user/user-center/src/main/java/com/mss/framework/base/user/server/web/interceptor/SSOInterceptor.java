@@ -22,7 +22,7 @@ import java.util.Map;
 public class SSOInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private SSOClientDetailMapper ssoAppDetailMapper;
+    private SSOClientDetailMapper ssoClientDetailMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -33,7 +33,7 @@ public class SSOInterceptor extends HandlerInterceptorAdapter {
         }
 
         //查询数据库中的回调地址的白名单
-        SSOClientDetail ssoClientDetail = ssoAppDetailMapper.selectByRedirectUrl(redirectUri);
+        SSOClientDetail ssoClientDetail = ssoClientDetailMapper.selectByRedirectUrl(redirectUri);
         if(ssoClientDetail == null){
             //如果回调URL不在白名单中，则返回错误提示
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REDIRECT_URI);

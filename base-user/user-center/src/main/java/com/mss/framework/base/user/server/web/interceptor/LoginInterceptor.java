@@ -3,10 +3,9 @@ package com.mss.framework.base.user.server.web.interceptor;
 import com.mss.framework.base.core.common.ResponseCode;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.core.token.TokenUser;
-import com.mss.framework.base.core.token.TokenUtil;
+import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.user.server.util.JsonUtil;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,8 +21,6 @@ import java.io.IOException;
 //@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final String ADMIN = "admin";//管理员
-
     /**
      * 检查是否已经登录
      */
@@ -38,11 +35,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         UserUtil.add(tokenUser);
         UserUtil.add(request);
-        String scope = tokenUser.getUsername();
-        if (!ADMIN.equals(scope)) {
-            noPermission(response, "没有权限");
-            return false;
-        }
         return true;
     }
 

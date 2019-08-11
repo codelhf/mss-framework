@@ -1,6 +1,7 @@
-package com.mss.framework.base.core.token;
+package com.mss.framework.base.user.server.web.token.jwt;
 
 import com.alibaba.fastjson.JSON;
+import com.mss.framework.base.core.token.TokenUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

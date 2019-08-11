@@ -1,15 +1,15 @@
-package com.mss.framework.base.core.token;
+package com.mss.framework.base.user.server.web.token.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.mss.framework.base.core.util.IDUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * @Description: jwt工具类
@@ -43,7 +43,7 @@ public class JWTUtil {
                     .withSubject(userInfo)
                     .withExpiresAt(expiresTime)
                     .withNotBefore(new Date())
-                    .withJWTId(IDUtil.UUIDStr())
+                    .withJWTId(UUID.randomUUID().toString().replaceAll("-", ""))
                     .sign(algorithm);
         } catch (UnsupportedEncodingException e) {
             return null;
