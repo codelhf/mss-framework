@@ -1,22 +1,17 @@
 server:
-  port: 8080
+  port: 8081
   servlet:
-    session.timeout: 300
     context-path: /
-
-logging:
-  level:
-    org.springframework.web: DEBUG
 
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cloud_user?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
-    username: root
-    password: root
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/cloud_user?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: root
       # 监控统计拦截的filters
       filters: stat,wall
       #配置初始化大小/最小/最大
@@ -38,27 +33,3 @@ spring:
       #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
       pool-prepared-statements: false
       max-pool-prepared-statement-per-connection-size: 20
-
-#  redis:
-#    cluster:
-#      nodes: namenode22:6379,datanode23:6379,datanode24:6379
-#      max-redirects: 6
-#    timeout: 300000
-#    jedis:
-#      pool:
-#        max-active: 8
-#        max-wait: 100000
-#        max-idle: 8
-#        min-idle: 0
-#  email:
-#    host: smtp.163.com
-#    username: lhf635@163.com
-#    password: 123456
-#    default-encoding: utf-8
-
-#  thymeleaf:
-#    mode: LEGACYHTML5
-#    prefix: classpath:/templates/
-#    suffix: .html
-#    template-resolver-order: 0
-#    cache: false

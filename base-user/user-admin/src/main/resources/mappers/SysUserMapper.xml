@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mss.framework.base.user.admin.dao.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.admin.pojo.SysUser">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="dept_id" jdbcType="VARCHAR" property="deptId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="operator" jdbcType="VARCHAR" property="operator"/>
+        <result column="operate_ip" jdbcType="VARCHAR" property="operateIp"/>
+        <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime"/>
+    </resultMap>
+</mapper>

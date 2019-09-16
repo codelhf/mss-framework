@@ -30,9 +30,9 @@ mybatis-plus:
 #Swagger2接口文档
 swagger:
   ui:
-    title: User Center Server APIs
+    title: User Admin Server APIs
     version: 1.0
-    description: User Center Server APIs
+    description: User Admin Server APIs
     contact:
       name: liuhf
       email: liuhf@si-tech.com.cn
@@ -42,7 +42,4 @@ swagger:
     licenseUrl: http://blog.didispace.com
     #服务条款URL
     termsOfServiceUrl: http://blog.didispace.com
-    basePackage: com.mss.framework.base.user.server.controller
-
-#MD5加密延值
-passwordSalt: djfi#$%a;ijejie@#%$##vfa;ljfi@#$d;jafoie
+    basePackage: com.mss.framework.base.user.admin.controller
