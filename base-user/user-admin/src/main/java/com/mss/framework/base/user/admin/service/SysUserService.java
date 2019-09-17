@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
 import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.dao.SysUserMapper;
 import com.mss.framework.base.user.admin.dto.SysUserDTO;
@@ -62,6 +63,7 @@ public class SysUserService {
         String password = "123456";
         String encryptedPassword = MD5Util.encrypt(password);
         SysUser user = SysUser.builder()
+                .id(IDUtil.UUIDStr())
                 .username(param.getUsername())
                 .phone(param.getPhone())
                 .email(param.getEmail())
@@ -125,9 +127,5 @@ public class SysUserService {
         wrapper.eq("email", mail);
         wrapper.eq("user_id", userId);
         return sysUserMapper.selectCount(wrapper) > 0;
-    }
-
-    public List<SysUser> getAll() {
-        return sysUserMapper.selectList(null);
     }
 }

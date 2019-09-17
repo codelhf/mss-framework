@@ -11,4 +11,8 @@ public class StringUtil {
         List<String> strList = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(str);
         return strList.stream().map(strItem -> Integer.parseInt(strItem)).collect(Collectors.toList());
     }
+
+    public static List<String> splitToListString(String str){
+        return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(str);
+    }
 }

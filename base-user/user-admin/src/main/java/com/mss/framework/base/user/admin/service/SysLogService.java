@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.admin.beans.LogType;
+import com.mss.framework.base.user.admin.common.LogType;
 import com.mss.framework.base.user.admin.common.Constants;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.dao.*;
-import com.mss.framework.base.user.admin.dto.SearchLogDto;
+import com.mss.framework.base.user.admin.dto.SysLogDTO;
 import com.mss.framework.base.user.admin.excepton.ParamException;
 import com.mss.framework.base.user.admin.pojo.*;
 import com.mss.framework.base.user.admin.util.IpUtil;
@@ -34,15 +34,15 @@ public class SysLogService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
-    private SysPowerMapper sysPowerMapper;
+    private SysFuncMapper sysFuncMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
-    private SysRolePowerService sysRolePowerService;
+    private SysRoleFuncService sysRoleFuncService;
     @Autowired
     private SysRoleUserService sysRoleUserService;
 
-    public ServerResponse searchPageList(int pageNum, int pageSize, SearchLogDto param) {
+    public ServerResponse searchPageList(int pageNum, int pageSize, SysLogDTO param) {
         IPage<SysLog> page = new Page<>(pageNum, pageSize);
         QueryWrapper<SysLog> wrapper = new QueryWrapper<>();
         if (param.getType() != null) {
@@ -105,20 +105,6 @@ public class SysLogService {
                 sysUserMapper.updateById(afterUser);
                 saveUserLog(beforeUser, afterUser);
                 break;
-            case LogType.TYPE_POWER:
-                SysPower beforePower = sysPowerMapper.selectById(sysLog.getTargetId());
-                Preconditions.checkNotNull(beforePower, "待还原的权限点已经不存在了");
-                if (StringUtils.isBlank(sysLog.getNewValue()) || StringUtils.isBlank(sysLog.getOldValue())) {
-                    throw new ParamException("新增和删除操作不做还原");
-                }
-                SysPower afterPower = JsonMapper.str2obj(sysLog.getOldValue(), new TypeReference<SysPower>() {
-                });
-                afterPower.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
-                afterPower.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
-                afterPower.setUpdateTime(new Date());
-                sysPowerMapper.updateById(afterPower);
-                savePowerLog(beforePower, afterPower);
-                break;
             case LogType.TYPE_ROLE:
                 SysRole beforeRole = sysRoleMapper.selectById(sysLog.getTargetId());
                 Preconditions.checkNotNull(beforeRole, "待还原的角色已经不存在了");
@@ -133,16 +119,30 @@ public class SysLogService {
                 sysRoleMapper.updateById(afterRole);
                 saveRoleLog(beforeRole, afterRole);
                 break;
-            case LogType.TYPE_ROLE_POWER:
-                SysRole aclRole = sysRoleMapper.selectById(sysLog.getTargetId());
-                Preconditions.checkNotNull(aclRole, "待还原的角色已经不存在了");
-                sysRolePowerService.changeRoleAcls(sysLog.getTargetId(), JsonMapper.str2obj(sysLog.getOldValue(), new TypeReference<List<Integer>>() {
+            case LogType.TYPE_FUNC:
+                SysFunc beforeFunc = sysFuncMapper.selectById(sysLog.getTargetId());
+                Preconditions.checkNotNull(beforeFunc, "待还原的权限点已经不存在了");
+                if (StringUtils.isBlank(sysLog.getNewValue()) || StringUtils.isBlank(sysLog.getOldValue())) {
+                    throw new ParamException("新增和删除操作不做还原");
+                }
+                SysFunc afterFunc = JsonMapper.str2obj(sysLog.getOldValue(), new TypeReference<SysFunc>() {
+                });
+                afterFunc.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
+                afterFunc.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+                afterFunc.setUpdateTime(new Date());
+                sysFuncMapper.updateById(afterFunc);
+                saveFuncLog(beforeFunc, afterFunc);
+                break;
+            case LogType.TYPE_ROLE_FUNC:
+                SysRole funcRole = sysRoleMapper.selectById(sysLog.getTargetId());
+                Preconditions.checkNotNull(funcRole, "待还原的角色已经不存在了");
+                sysRoleFuncService.changeRoleFunc(sysLog.getTargetId(), JsonMapper.str2obj(sysLog.getOldValue(), new TypeReference<List<Integer>>() {
                 }));
                 break;
             case LogType.TYPE_ROLE_USER:
                 SysRole userRole = sysRoleMapper.selectById(sysLog.getTargetId());
                 Preconditions.checkNotNull(userRole, "待还原的角色已经不存在了");
-                sysRoleUserService.changeRoleUsers(sysLog.getTargetId(), JsonMapper.str2obj(sysLog.getOldValue(), new TypeReference<List<Integer>>() {
+                sysRoleUserService.changeRoleUser(sysLog.getTargetId(), JsonMapper.str2obj(sysLog.getOldValue(), new TypeReference<List<Integer>>() {
                 }));
                 break;
             default:
@@ -159,7 +159,7 @@ public class SysLogService {
         sysLog.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         sysLog.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         sysLog.setUpdateTime(new Date());
-        sysLog.setStatus(Constants.SysLogStatue.RECOVER);
+        sysLog.setStatus(Constants.LogStatusEnum.RECOVER.getCode());
         sysLogMapper.insert(sysLog);
     }
 
@@ -172,20 +172,7 @@ public class SysLogService {
         sysLog.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         sysLog.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         sysLog.setUpdateTime(new Date());
-        sysLog.setStatus(Constants.SysLogStatue.RECOVER);
-        sysLogMapper.insert(sysLog);
-    }
-
-    public void savePowerLog(SysPower before, SysPower after) {
-        SysLog sysLog = new SysLog();
-        sysLog.setType(LogType.TYPE_POWER);
-        sysLog.setTargetId(after == null ? before.getId() : after.getId());
-        sysLog.setOldValue(before == null ? "" : JsonMapper.obj2Str(before));
-        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2Str(after));
-        sysLog.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
-        sysLog.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
-        sysLog.setUpdateTime(new Date());
-        sysLog.setStatus(Constants.SysLogStatue.RECOVER);
+        sysLog.setStatus(Constants.LogStatusEnum.RECOVER.getCode());
         sysLogMapper.insert(sysLog);
     }
 
@@ -198,7 +185,20 @@ public class SysLogService {
         sysLog.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         sysLog.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         sysLog.setUpdateTime(new Date());
-        sysLog.setStatus(Constants.SysLogStatue.RECOVER);
+        sysLog.setStatus(Constants.LogStatusEnum.RECOVER.getCode());
+        sysLogMapper.insert(sysLog);
+    }
+
+    public void saveFuncLog(SysFunc before, SysFunc after) {
+        SysLog sysLog = new SysLog();
+        sysLog.setType(LogType.TYPE_FUNC);
+        sysLog.setTargetId(after == null ? before.getId() : after.getId());
+        sysLog.setOldValue(before == null ? "" : JsonMapper.obj2Str(before));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2Str(after));
+        sysLog.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
+        sysLog.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+        sysLog.setUpdateTime(new Date());
+        sysLog.setStatus(Constants.LogStatusEnum.RECOVER.getCode());
         sysLogMapper.insert(sysLog);
     }
 }

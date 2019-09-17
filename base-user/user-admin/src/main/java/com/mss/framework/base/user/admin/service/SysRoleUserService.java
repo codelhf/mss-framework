@@ -1,13 +1,17 @@
 package com.mss.framework.base.user.admin.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.admin.beans.LogType;
+import com.mss.framework.base.core.util.IDUtil;
+import com.mss.framework.base.user.admin.common.Constants;
+import com.mss.framework.base.user.admin.common.LogType;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.dao.SysLogMapper;
 import com.mss.framework.base.user.admin.dao.SysRoleUserMapper;
 import com.mss.framework.base.user.admin.dao.SysUserMapper;
+import com.mss.framework.base.user.admin.pojo.SysLog;
 import com.mss.framework.base.user.admin.pojo.SysRoleUser;
 import com.mss.framework.base.user.admin.pojo.SysUser;
 import com.mss.framework.base.user.admin.util.IpUtil;
@@ -20,6 +24,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SysRoleUserService {
@@ -31,19 +36,23 @@ public class SysRoleUserService {
     @Resource
     private SysLogMapper sysLogMapper;
 
-    public List<SysUser> getListByRoleId(int roleId){
-        List<Integer> userIdList = sysRoleUserMapper.getUserIdListByRoleId(roleId);
+    public List<SysUser> getListByRoleId(String roleId){
+        QueryWrapper<SysRoleUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("role_id", roleId);
+        List<String> userIdList = sysRoleUserMapper.selectList(wrapper).stream().map(SysRoleUser::getUserId).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(userIdList)){
             return Lists.newArrayList();
         }
-        return sysUserMapper.getByIdList(userIdList);
+        return sysUserMapper.selectBatchIds(userIdList);
     }
 
-    public ServerResponse changeRoleUsers(String roleId, List<Integer> userIdList){
-        List<Integer> originUserIdList = sysRoleUserMapper.getUserIdListByRoleId(roleId);
+    public void changeRoleUser(String roleId, List<String> userIdList){
+        QueryWrapper<SysRoleUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("role_id", roleId);
+        List<String> originUserIdList = sysRoleUserMapper.selectList(wrapper).stream().map(SysRoleUser::getUserId).collect(Collectors.toList());
         if (originUserIdList.size() == userIdList.size()){
-            Set<Integer> originUserIdSet = Sets.newHashSet(originUserIdList);
-            Set<Integer> userIdSet = Sets.newHashSet(userIdList);
+            Set<String> originUserIdSet = Sets.newHashSet(originUserIdList);
+            Set<String> userIdSet = Sets.newHashSet(userIdList);
             originUserIdSet.removeAll(userIdSet);
             if (CollectionUtils.isEmpty(originUserIdSet)){
                 return;
@@ -53,35 +62,40 @@ public class SysRoleUserService {
         saveRoleUserLog(roleId, originUserIdList, userIdList);
     }
     @Transactional
-    void updateRoleUsers(int roleId, List<Integer> userIdList){
-        sysRoleUserMapper.deleteByRoleId(roleId);
+    void updateRoleUsers(String roleId, List<String> userIdList){
+        QueryWrapper<SysRoleUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("role_id", roleId);
+        //先删除角色所有用户
+        sysRoleUserMapper.delete(wrapper);
         if (CollectionUtils.isEmpty(userIdList)){
             return;
         }
         List<SysRoleUser> roleUserList = Lists.newArrayList();
-        for (Integer userId : userIdList){
+        for (String userId : userIdList){
             SysRoleUser roleUser = SysRoleUser.builder()
+                    .id(IDUtil.UUIDStr())
                     .roleId(roleId)
                     .userId(userId)
-                    .operator(RequestHolder.getCurrentUser().getUsername())
-                    .operateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()))
-                    .operateTime(new Date())
+                    .updateUser(RequestHolder.getCurrentUser().getUsername())
+                    .updateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()))
+                    .updateTime(new Date())
                     .build();
             roleUserList.add(roleUser);
         }
+        //在新增选中用户
         sysRoleUserMapper.batchInsert(roleUserList);
     }
 
-    public void saveRoleUserLog(int roleId, List<Integer> before, List<Integer> after){
-        SysLogWithBLOBs sysLog = new SysLogWithBLOBs();
+    public void saveRoleUserLog(String roleId, List<String> before, List<String> after){
+        SysLog sysLog = new SysLog();
         sysLog.setType(LogType.TYPE_ROLE_USER);
         sysLog.setTargetId(roleId);
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2Str(before));
         sysLog.setNewValue(after == null ? "" : JsonMapper.obj2Str(after));
-        sysLog.setOperator(RequestHolder.getCurrentUser().getUsername());
-        sysLog.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
-        sysLog.setOperateTime(new Date());
-        sysLog.setStatus(1);
-        sysLogMapper.insertSelective(sysLog);
+        sysLog.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
+        sysLog.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+        sysLog.setUpdateTime(new Date());
+        sysLog.setStatus(Constants.LogStatusEnum.RECOVER.getCode());
+        sysLogMapper.insert(sysLog);
     }
 }

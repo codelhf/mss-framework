@@ -1,6 +1,6 @@
 package com.mss.framework.base.user.admin.filter;
 
-
+import com.mss.framework.base.user.admin.common.Constants;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.pojo.SysUser;
 
@@ -20,7 +20,7 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
+        SysUser sysUser = (SysUser) request.getSession().getAttribute(Constants.CURRENT_USER);
         if (sysUser == null){
             String path = "/signin.jsp";
             response.sendRedirect(path);
@@ -29,7 +29,6 @@ public class LoginFilter implements Filter {
         RequestHolder.add(sysUser);
         RequestHolder.add(request);
         filterChain.doFilter(servletRequest, servletResponse);
-        return;
     }
 
     @Override

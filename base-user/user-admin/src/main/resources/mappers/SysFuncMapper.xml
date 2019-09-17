@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mss.framework.base.user.admin.dao.SysPowerMapper">
-    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.admin.pojo.SysPower">
+<mapper namespace="com.mss.framework.base.user.admin.dao.SysFuncMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.admin.pojo.SysFunc">
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="level" jdbcType="VARCHAR" property="level"/>
         <result column="seq" jdbcType="INTEGER" property="seq"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>

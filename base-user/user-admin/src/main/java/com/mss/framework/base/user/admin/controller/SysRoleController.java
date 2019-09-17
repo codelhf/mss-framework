@@ -18,7 +18,7 @@ public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
     @Autowired
-    private SysRolePowerService sysRolePowerService;
+    private SysRoleFuncService sysRoleFuncService;
     @Autowired
     private SysRoleUserService sysRoleUserService;
 
@@ -39,18 +39,20 @@ public class SysRoleController {
         return sysRoleService.update(param);
     }
 
-    @GetMapping("/changePowers")
-    public ServerResponse changePowers(@RequestParam("roleId") String roleId,
-                                       @RequestParam(value = "aclIds", required = false, defaultValue = "") String aclIds) {
-        List<Integer> aclIdList = StringUtil.splitToListInt(aclIds);
-        return sysRolePowerService.changeRoleAcls(roleId, aclIdList);
+    @GetMapping("/changeFunc")
+    public ServerResponse changeFunc(@RequestParam("roleId") String roleId,
+                                     @RequestParam(value = "aclIds", required = false, defaultValue = "") String aclIds) {
+        List<String> aclIdList = StringUtil.splitToListString(aclIds);
+        sysRoleFuncService.changeRoleFunc(roleId, aclIdList);
+        return ServerResponse.createBySuccess();
     }
 
-    @GetMapping("/changeUsers")
-    public ServerResponse changeUsers(@RequestParam("roleId") String roleId,
-                                      @RequestParam(value = "userIds", required = false, defaultValue = "") String userIds) {
-        List<Integer> userIdList = StringUtil.splitToListInt(userIds);
-        return sysRoleUserService.changeRoleUsers(roleId, userIdList);
+    @GetMapping("/changeUser")
+    public ServerResponse changeUser(@RequestParam("roleId") String roleId,
+                                     @RequestParam(value = "userIds", required = false, defaultValue = "") String userIds) {
+        List<String> userIdList = StringUtil.splitToListString(userIds);
+        sysRoleUserService.changeRoleUser(roleId, userIdList);
+        return ServerResponse.createBySuccess();
     }
 
 //    @GetMapping("/roleTree")

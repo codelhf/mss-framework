@@ -1,7 +1,7 @@
 package com.mss.framework.base.user.admin.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
-import com.mss.framework.base.user.admin.dto.SearchLogDto;
+import com.mss.framework.base.user.admin.dto.SysLogDTO;
 import com.mss.framework.base.user.admin.service.SysLogService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class SysLogController {
     @GetMapping("/list")
     public ServerResponse list(@RequestParam("pageNum") int pageNum,
                                @RequestParam("pageSize") int pageSize,
-                               SearchLogDto params){
+                               SysLogDTO params){
         return sysLogService.searchPageList(pageNum, pageSize, params);
     }
 

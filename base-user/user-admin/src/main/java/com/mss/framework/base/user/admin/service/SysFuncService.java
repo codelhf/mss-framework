@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
 import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.admin.common.RequestHolder;
-import com.mss.framework.base.user.admin.dao.SysPowerMapper;
-import com.mss.framework.base.user.admin.dto.SysPowerDTO;
-import com.mss.framework.base.user.admin.pojo.SysPower;
+import com.mss.framework.base.user.admin.dao.SysFuncMapper;
+import com.mss.framework.base.user.admin.dto.SysFuncDTO;
+import com.mss.framework.base.user.admin.pojo.SysFunc;
 import com.mss.framework.base.user.admin.util.BeanValidator;
 import com.mss.framework.base.user.admin.util.IpUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -19,16 +20,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class SysPowerService {
+public class SysFuncService {
 
     @Autowired
-    private SysPowerMapper sysPowerMapper;
+    private SysFuncMapper sysFuncMapper;
     @Autowired
     private SysLogService sysLogService;
 
     public ServerResponse list(int pageNum, int pageSize, String name, String parentId){
-        IPage<SysPower> page = new Page<>(pageNum, pageSize);
-        QueryWrapper<SysPower> wrapper = new QueryWrapper<>();
+        IPage<SysFunc> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<SysFunc> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
             wrapper.like("name", name);
         }
@@ -36,24 +37,25 @@ public class SysPowerService {
             wrapper.eq("parent_id", parentId);
         }
         wrapper.orderByDesc("update_time");
-        IPage<SysPower> sysPowerIPage = sysPowerMapper.selectPage(page, wrapper);
+        IPage<SysFunc> sysPowerIPage = sysFuncMapper.selectPage(page, wrapper);
         return ServerResponse.createBySuccess(sysPowerIPage);
     }
 
     public ServerResponse select(String id) {
-        SysPower sysPower = sysPowerMapper.selectById(id);
-        if (sysPower == null) {
+        SysFunc sysFunc = sysFuncMapper.selectById(id);
+        if (sysFunc == null) {
             return ServerResponse.createByErrorMessage("没有查询到该功能信息");
         }
-        return ServerResponse.createBySuccess(sysPower);
+        return ServerResponse.createBySuccess(sysFunc);
     }
 
-    public ServerResponse save(SysPowerDTO param){
+    public ServerResponse save(SysFuncDTO param){
         BeanValidator.check(param);
         if (checkExist(param.getParentId(), param.getName())){
             return ServerResponse.createByErrorMessage("当前功能模块下存在相同的功能点名称");
         }
-        SysPower power = SysPower.builder()
+        SysFunc power = SysFunc.builder()
+                .id(IDUtil.UUIDStr())
                 .name(param.getName())
                 .parentId(param.getParentId())
                 .url(param.getUrl())
@@ -66,19 +68,19 @@ public class SysPowerService {
         power.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         power.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         power.setUpdateTime(new Date());
-        int rowCount = sysPowerMapper.insert(power);
+        int rowCount = sysFuncMapper.insert(power);
         if (rowCount == 0) {
             return ServerResponse.createByErrorMessage("新增功能失败");
         }
-        sysLogService.savePowerLog(null, power);
+        sysLogService.saveFuncLog(null, power);
         return ServerResponse.createBySuccessMessage("新增功能正常");
     }
 
     private boolean checkExist(String parentId, String name){
-        QueryWrapper<SysPower> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysFunc> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", parentId);
         wrapper.eq("name", name);
-        return sysPowerMapper.selectCount(wrapper) > 0;
+        return sysFuncMapper.selectCount(wrapper) > 0;
     }
 
     private String generateCode(){
@@ -86,15 +88,15 @@ public class SysPowerService {
         return dateFormat.format(new Date()) + "_" + (int)(Math.random() * 100);
     }
 
-    public ServerResponse update(SysPowerDTO param){
+    public ServerResponse update(SysFuncDTO param){
         BeanValidator.check(param);
         if (checkExist(param.getParentId(), param.getName())){
             return ServerResponse.createByErrorMessage("当前功能模块下存在相同的功能点名称");
         }
-        SysPower before = sysPowerMapper.selectById(param.getId());
+        SysFunc before = sysFuncMapper.selectById(param.getId());
         Preconditions.checkNotNull(before, "待更新的功能点不存在");
 
-        SysPower after = SysPower.builder()
+        SysFunc after = SysFunc.builder()
                 .id(param.getId())
                 .name(param.getName())
                 .parentId(param.getParentId())
@@ -108,11 +110,11 @@ public class SysPowerService {
         after.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         after.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         after.setUpdateTime(new Date());
-        int rowCount = sysPowerMapper.updateById(after);
+        int rowCount = sysFuncMapper.updateById(after);
         if (rowCount == 0) {
             return ServerResponse.createByErrorMessage("更新功能失败");
         }
-        sysLogService.savePowerLog(before, after);
+        sysLogService.saveFuncLog(before, after);
         return ServerResponse.createBySuccessMessage("更新功能正常");
     }
 }

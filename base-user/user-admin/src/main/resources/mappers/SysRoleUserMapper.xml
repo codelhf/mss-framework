@@ -9,4 +9,8 @@
         <result column="update_ip" jdbcType="VARCHAR" property="updateIp"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
+    <insert id="batchInsert" parameterType="list">
+
+    </insert>
 </mapper>

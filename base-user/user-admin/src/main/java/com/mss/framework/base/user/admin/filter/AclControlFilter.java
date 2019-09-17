@@ -2,8 +2,8 @@ package com.mss.framework.base.user.admin.filter;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
+import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.admin.common.ApplicationContextHelper;
-import com.mss.framework.base.user.admin.common.JsonData;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.pojo.SysUser;
 import com.mss.framework.base.user.admin.service.SysCoreService;
@@ -57,19 +57,16 @@ public class AclControlFilter implements Filter {
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
-        return;
     }
 
     private void noAuth(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String servletPath = request.getServletPath();
         if (servletPath.endsWith(".json")){
-            JsonData jsonData = JsonData.fail("没有访问权限，如需要访问，请联系管理员");
+            ServerResponse response1 = ServerResponse.createByErrorMessage("没有访问权限，如需要访问，请联系管理员");
             response.setHeader("Content-Type", "application/json");
-            response.getWriter().print(JsonMapper.obj2Str(jsonData));
-            return;
+            response.getWriter().print(JsonMapper.obj2Str(response1));
         } else {
             clientRedirect(noAuthUrl, response);
-            return;
         }
     }
 

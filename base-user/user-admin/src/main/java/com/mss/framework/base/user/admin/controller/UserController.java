@@ -34,11 +34,11 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("/powers")
+    @GetMapping("/funcs")
     public ServerResponse powers(@RequestParam("userId") String userId) {
         Map<String, Object> map = new HashMap<>();
         map.put("roles", sysRoleService.getRoleListByUserId(userId));
-        map.put("powers", sysTreeService.userAclTree(userId));
+        map.put("funcs", sysTreeService.userFuncTree(userId));
         return ServerResponse.createBySuccess(map);
     }
 

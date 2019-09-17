@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Title: SysRolePower
- * @Description: SysRolePower实体对象
+ * @Title: SysFunc
+ * @Description: SysPower实体对象
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-09-16
@@ -17,17 +17,39 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SysRolePower implements Serializable {
+@EqualsAndHashCode(of = {"id"})
+public class SysFunc implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //
     private String id;
 
     //
-    private String roleId;
+    private String parentId;
 
     //
-    private String powerId;
+    private String code;
+
+    //
+    private String name;
+
+    //
+    private String url;
+
+    //
+    private Integer type;
+
+    //
+    private String level;
+
+    //
+    private Integer seq;
+
+    //
+    private Integer status;
+
+    //
+    private String remark;
 
     //
     private String updateUser;

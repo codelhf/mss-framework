@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class SearchLogDto {
+public class SysLogDTO {
 
     private Integer type; // LogType
 

@@ -1,6 +1,6 @@
 package com.mss.framework.base.user.admin.dto;
 
-import com.mss.framework.base.user.admin.pojo.SysPower;
+import com.mss.framework.base.user.admin.pojo.SysFunc;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -10,11 +10,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
- * @Title: SysPowerDTO
+ * @Title: SysFuncDTO
  * @Description: SysPowerDTO对象
  * @Company: example
  * @Author: liuhf
@@ -25,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SysPowerDTO implements Serializable {
+public class SysFuncDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
@@ -45,6 +44,8 @@ public class SysPowerDTO implements Serializable {
     @Max(value = 3, message = "权限点的类型不合法")
     private Integer type;
 
+    private String level;
+
     @NotNull(message = "必须指定权限点的展示顺序")
     private Integer seq;
 
@@ -63,10 +64,10 @@ public class SysPowerDTO implements Serializable {
     private boolean hasAcl = false;
 
     // 子权限列表
-    private List<SysPowerDTO> children = new ArrayList<>();
+    private List<SysFuncDTO> children = new ArrayList<>();
 
-    public static SysPowerDTO adapter(SysPower power) {
-        SysPowerDTO powerDTO = new SysPowerDTO();
+    public static SysFuncDTO adapter(SysFunc power) {
+        SysFuncDTO powerDTO = new SysFuncDTO();
         powerDTO.setId(power.getId());
         powerDTO.setParentId(power.getParentId());
         powerDTO.setName(power.getName());

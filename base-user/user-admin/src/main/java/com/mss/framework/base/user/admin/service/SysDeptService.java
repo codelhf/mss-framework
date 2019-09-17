@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
 import com.mss.framework.base.core.common.ServerResponse;
+import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.dao.SysDeptMapper;
 import com.mss.framework.base.user.admin.dao.SysUserMapper;
@@ -62,12 +63,13 @@ public class SysDeptService {
             throw new ParamException("同一部门下存在相同名称的部门");
         }
         SysDept dept = SysDept.builder()
+                .id(IDUtil.UUIDStr())
                 .name(param.getName())
                 .parentId(param.getParentId())
                 .seq(param.getSeq())
                 .remark(param.getRemark())
                 .build();
-        dept.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
+        dept.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getSeq()));
 
         dept.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         dept.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
@@ -97,7 +99,7 @@ public class SysDeptService {
                 .seq(param.getSeq())
                 .remark(param.getRemark())
                 .build();
-        after.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
+        after.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getSeq()));
 
         after.setUpdateUser(RequestHolder.getCurrentUser().getUsername());
         after.setUpdateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
@@ -149,7 +151,7 @@ public class SysDeptService {
         return dept.getLevel();
     }
 
-    public ServerResponse delete(int deptId){
+    public ServerResponse delete(String deptId){
         SysDept dept = sysDeptMapper.selectById(deptId);
         Preconditions.checkNotNull(dept, "待删除的部门不存在，无法删除");
         QueryWrapper<SysDept> wrapper = new QueryWrapper<>();

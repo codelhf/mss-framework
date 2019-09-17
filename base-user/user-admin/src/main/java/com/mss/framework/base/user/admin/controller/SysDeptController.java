@@ -50,7 +50,7 @@ public class SysDeptController {
     }
 
     @DeleteMapping("/delete")
-    public ServerResponse deleteDept(@RequestParam("id") int id){
+    public ServerResponse deleteDept(@RequestParam("id") String id){
         return sysDeptService.delete(id);
     }
 }

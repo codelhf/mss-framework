@@ -8,13 +8,13 @@ import com.google.common.collect.Lists;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.admin.common.RequestHolder;
 import com.mss.framework.base.user.admin.dao.SysRoleMapper;
-import com.mss.framework.base.user.admin.dao.SysRolePowerMapper;
+import com.mss.framework.base.user.admin.dao.SysRoleFuncMapper;
 import com.mss.framework.base.user.admin.dao.SysRoleUserMapper;
 import com.mss.framework.base.user.admin.dao.SysUserMapper;
 import com.mss.framework.base.user.admin.dto.SysRoleDTO;
 import com.mss.framework.base.user.admin.excepton.ParamException;
 import com.mss.framework.base.user.admin.pojo.SysRole;
-import com.mss.framework.base.user.admin.pojo.SysRolePower;
+import com.mss.framework.base.user.admin.pojo.SysRoleFunc;
 import com.mss.framework.base.user.admin.pojo.SysRoleUser;
 import com.mss.framework.base.user.admin.pojo.SysUser;
 import com.mss.framework.base.user.admin.util.BeanValidator;
@@ -35,7 +35,7 @@ public class SysRoleService {
     @Autowired
     private SysRoleUserMapper sysRoleUserMapper;
     @Autowired
-    private SysRolePowerMapper sysRolePowerMapper;
+    private SysRoleFuncMapper sysRoleFuncMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
@@ -115,11 +115,11 @@ public class SysRoleService {
     }
 
     public List<SysRole> getRoleListByAclId(String powerId){
-        QueryWrapper<SysRolePower> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysRoleFunc> wrapper = new QueryWrapper<>();
         wrapper.eq("power_id", powerId);
-        List<String> roleIdList = sysRolePowerMapper.selectList(wrapper).stream().map(SysRolePower::getRoleId).collect(Collectors.toList());
+        List<String> roleIdList = sysRoleFuncMapper.selectList(wrapper).stream().map(SysRoleFunc::getRoleId).collect(Collectors.toList());
 
-//        List<String> roleIdList = sysRolePowerMapper.getRoleIdListByAclId(powerId);
+//        List<String> roleIdList = sysRoleFuncMapper.getRoleIdListByAclId(funcId);
         if (CollectionUtils.isEmpty(roleIdList)){
             return Lists.newArrayList();
         }

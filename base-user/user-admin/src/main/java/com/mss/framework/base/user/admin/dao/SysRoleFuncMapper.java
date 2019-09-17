@@ -1,21 +1,21 @@
 package com.mss.framework.base.user.admin.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.mss.framework.base.user.admin.pojo.SysRoleUser;
+import com.mss.framework.base.user.admin.pojo.SysRoleFunc;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * @Title: SysRoleUserMapper
- * @Description: SysRoleUser持久层
+ * @Title: SysRoleFuncMapper
+ * @Description: SysRolePower持久层
  * @Company: example
  * @Author: liuhf
  * @CreateTime: 2019-09-16
  */
 @Mapper
-public interface SysRoleUserMapper extends BaseMapper<SysRoleUser> {
+public interface SysRoleFuncMapper extends BaseMapper<SysRoleFunc> {
 
-    int batchInsert(@Param("roleUserList") List<SysRoleUser> roleUserList);
+    int batchInsert(@Param("roleFuncList") List<SysRoleFunc> roleFuncList);
 }
