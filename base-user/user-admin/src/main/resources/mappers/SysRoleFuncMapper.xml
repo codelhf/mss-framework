@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mss.framework.base.user.admin.dao.SysRoleFuncMapper">
+    <resultMap id="BaseResultMap" type="com.mss.framework.base.user.admin.pojo.SysRoleFunc">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
+        <result column="power_id" jdbcType="VARCHAR" property="powerId"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="update_ip" jdbcType="VARCHAR" property="updateIp"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <insert id="batchInsert" parameterType="list">
+
+    </insert>
+</mapper>

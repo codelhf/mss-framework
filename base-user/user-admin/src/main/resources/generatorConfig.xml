@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE generatorConfiguration-->
+        <!--PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"-->
+        <!--"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">-->
+<!--标签为对象, property为对象的属性-->
+<generatorConfiguration>
+    <!--导入配置文件,非必须参数-->
+    <properties resource="datasource.properties"/>
+
+    <!--jdbc的数据库连接 -->
+    <jdbcConnection>
+        <!--driverLocation非必须参数-->
+        <property name="driverLocation" value="src/main/resources/mysql-connector-java-5.1.6-bin.jar"/>
+        <!--driverClass非必须参数-->
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/cloud_sys?characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </jdbcConnection>
+
+    <!--java类型适配-->
+    <javaTypeResolver>
+        <!-- 当表名或者字段名为SQL关键字的时候，可以设置该属性为true，MBG会自动给表名或字段名添加分隔符  -->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!--
+            默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer
+            true，把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal
+        -->
+        <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- optional，旨在创建class时，对注释进行控制 -->
+    <commentGenerator>
+        <!--代码注释配置-->
+        <property name="author" value="liuhf"/>
+        <property name="company" value="example"/>
+        <property name="httpPrefix" value="mm"/>
+        <property name="responseClass" value="ServerResponse"/>
+        <property name="suppressAllComments" value="true"/>
+        <property name="suppressDate" value="true"/>
+        <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+        <property name="addRemarkComments" value="true"/>
+    </commentGenerator>
+
+    <!--对应模板的配置-->
+    <templates>
+        <!--名称不能和api中的字段重复,否则被覆盖无效,并且被依赖模块不能注释-->
+        <template name="entity" template="template/Default/vm/dao/Entity.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.admin.pojo"
+                  suffix="" fileType="java" isGenerate="true" override="true"/>
+        <template name="entityDTO" template="template/Default/vm/dto/EntityDto.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.admin.dto"
+                  suffix="DTO" fileType="java" isGenerate="true" override="true"/>
+        <template name="mapper" template="template/Default/vm/dao/Mapper.vm"
+                  directory="./src/main/resources" packageName="mappers"
+                  suffix="Mapper" fileType="xml" isGenerate="true" override="true"/>
+        <template name="dao" template="template/Default/vm/dao/Dao.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.admin.dao"
+                  suffix="Mapper" fileType="java" isGenerate="true" override="true"/>
+        <template name="serviceImpl" template="template/Default/vm/service/ServiceImpl.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.admin.service.impl"
+                  suffix="ServiceImpl" fileType="java" isGenerate="false" override="true"/>
+        <template name="service" template="template/Default/vm/service/Service.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.admin.service"
+                  suffix="Service" fileType="java" isGenerate="false" override="true"/>
+        <template name="controller" template="template/Default/vm/service/Controller.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.user.admin.controller"
+                  suffix="Controller" fileType="java" isGenerate="false" override="true"/>
+        <!--common类型的以suffix为文件名-->
+        <template name="exceptionResolver" template="template/Default/vm/common/ExceptionResolver.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
+                  suffix="ExceptionResolver" fileType="java" common="true" isGenerate="false" override="true"/>
+        <template name="swagger2" template="template/Default/vm/common/Swagger2.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
+                  suffix="Swagger2" fileType="java" common="true" isGenerate="false" override="true"/>
+        <template name="responseCode" template="template/Default/vm/common/ResponseCode.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
+                  suffix="ResponseCode" fileType="java" common="true" isGenerate="false" override="true"/>
+        <template name="serverResponse" template="template/Default/vm/common/ServerResponse.vm"
+                  directory="./src/main/java" packageName="com.mss.framework.base.core.common"
+                  suffix="ServerResponse" fileType="java" common="true" isGenerate="false" override="true"/>
+    </templates>
+
+    <!-- 数据库对应数据表-->
+    <tables>
+        <table tableName="sys_log" domainName="SysLog">
+        </table>
+        <table tableName="sys_power" domainName="SysPower">
+        </table>
+        <table tableName="sys_power_module" domainName="SysPowerModule">
+        </table>
+        <table tableName="sys_role" domainName="SysRole">
+        </table>
+        <table tableName="sys_role_power" domainName="SysRolePower">
+        </table>
+        <table tableName="sys_role_user" domainName="SysRoleUser">
+        </table>
+        <table tableName="sys_role_user_group" domainName="SysRoleUserGroup">
+        </table>
+        <table tableName="sys_user" domainName="SysUser">
+        </table>
+        <table tableName="sys_user_group" domainName="SysUserGroup">
+        </table>
+        <table tableName="sys_user_group_user" domainName="SysUserGroupUser">
+        </table>
+    </tables>
+
+    <!-- 数据库对应数据视图-->
+    <views>
+        <!--<view viewName="lottery_result" domainName="Result">-->
+        <!--</view>-->
+    </views>
+
+    <!-- mybatis插件的搭建 -->
+</generatorConfiguration>

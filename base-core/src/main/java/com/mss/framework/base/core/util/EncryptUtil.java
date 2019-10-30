@@ -203,7 +203,7 @@ public class EncryptUtil {
 //        System.out.println("sha256Crypt:" + sha256Crypt(value,null)); //$5$yDFqXV2l$KoNVx2GncH3mudhy0p7XFj76U1r/ZCIgZgRcNpLLaRD
 //        System.out.println("sha512Crypt:" + sha512Crypt(value,null)); //$6$Z3Kab83Y$buAShiexlMZsTC1dnw.ogPE9ig/6fGo2gMlzO36u2haOKKXl1fA0RpH//3/tNoudSJv25nmbWHACcQZYdSUji1
 
-//        System.out.println(sha256Crypt("admin",null));
+//        System.out.println(sha256Crypt("social",null));
 //        System.out.println(sha256Crypt("123456",null));
 //        System.out.println(hmacMd5Hex("8e85be58c1c372ac29fe7bfa","e3c"));
 
