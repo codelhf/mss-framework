@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.util.DateUtil;
 import com.mss.framework.base.core.util.EncryptUtil;
@@ -10,7 +11,7 @@ import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.*;
 import com.mss.framework.base.user.server.service.OAuthService;
-import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,7 @@ public class OAuthServiceImpl implements OAuthService {
         tokenUser.setClientId(clientId);
         tokenUser.setScope(scope);
         //生成Authorization Code
-        return TokenUtil.sign(tokenUser, ExpireEnum.AUTHORIZATION_CODE.getTime(), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
+        return TokenUtil.sign(JSON.toJSONString(tokenUser), ExpireEnum.AUTHORIZATION_CODE.getTime(), ExpireEnum.AUTHORIZATION_CODE.getTimeUnit());
     }
 
     @Override

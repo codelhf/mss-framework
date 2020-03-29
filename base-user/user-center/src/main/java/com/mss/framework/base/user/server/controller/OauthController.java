@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
@@ -13,9 +14,8 @@ import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.OAuthService;
 import com.mss.framework.base.user.server.service.UserService;
-import com.mss.framework.base.user.server.util.JsonUtil2;
 import com.mss.framework.base.user.server.util.ResponseUtil;
-import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -175,7 +175,7 @@ public class OauthController {
         if (!oAuthClientDetail.getRedirectUri().equals(redirectUri)) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
-        TokenUser tokenUser = TokenUtil.verify(code);
+        TokenUser tokenUser = TokenUtil.getTokenUser(code);
         //如果能够通过Authorization Code获取到对应的用户信息，则说明该Authorization Code有效
         if (tokenUser == null || tokenUser.getScope() == null) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
@@ -209,10 +209,10 @@ public class OauthController {
     public String getInfo(@RequestParam("access_token") String accessToken) {
         OAuthAccessToken oAuthAccessToken = oAuthService.selectByAccessToken(accessToken);
         if (oAuthAccessToken == null) {
-            return JsonUtil2.toJson(ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT));
+            return JSON.toJSONString(ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT));
         }
         User user = userService.selectUserInfoByScope(oAuthAccessToken.getUserId(), oAuthAccessToken.getScope());
-        return JsonUtil2.toJson(user);
+        return JSON.toJSONString(user);
     }
 
     /**

@@ -19,6 +19,17 @@ import java.util.UUID;
 @Slf4j
 public class JWTUtil {
 
+    // 加密方式
+    public static final String secret = "HS256";
+    // 签发者
+    public static final String issuer = "adminIssuer";
+    // jwt令牌
+    public static final String ACCESS_TOKEN = "X-ACCESS-TOKEN";
+    // 过期时间5分钟
+    public static final long EXPIRE_TIME = 5 * 60 * 1000L;
+    // refreshToken过期时间
+    public static final long REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L;
+
     /**
      * 生成签名
      *

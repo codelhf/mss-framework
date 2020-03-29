@@ -1,10 +1,12 @@
-package com.mss.framework.base.user.server.web.session.sso;
+package com.mss.framework.base.user.server.web.token.cookie;
 
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Description: cookie工具类
@@ -16,6 +18,8 @@ public class CookieUtil {
 
     public static final String ACCESS_TOKEN = "access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
+    // 支持的域名
+    public static final List<String> cookieDomains = Arrays.asList(".taobao.com", ".tmall.com");
     // access token过期时间5分钟
     public static final int EXPIRE_TIME = 60 * 5;
     // refresh token过期时间

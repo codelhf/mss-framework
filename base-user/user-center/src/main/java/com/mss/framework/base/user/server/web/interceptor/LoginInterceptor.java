@@ -3,9 +3,11 @@ package com.mss.framework.base.user.server.web.interceptor;
 import com.mss.framework.base.core.common.ResponseCode;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.core.token.TokenUser;
-import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
 import com.mss.framework.base.core.token.UserUtil;
+import com.mss.framework.base.user.server.redis.RedisUtil;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import com.mss.framework.base.user.server.util.JsonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,12 +29,24 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override//在请求处理之前进行调用(Controller方法调用之前)
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        TokenUser tokenUser = TokenUtil.getTokenUser(request);
-        if(tokenUser == null){
+        String accessToken = TokenUtil.readAccessToken(request);
+        if (StringUtils.isBlank(accessToken)) {
             //如果token不存在，则跳转到登录页面
             noLogin(response);
             return false;
         }
+        TokenUser tokenUser = TokenUtil.getTokenUser(accessToken);
+        if(tokenUser == null) {
+            //token已过期
+            noLogin(response);
+            return false;
+        }
+//        String jsonUser = RedisUtil.getKey(tokenUser.getId());
+//        if (StringUtils.isNotBlank(jsonUser)) {
+//            //用户已登出
+//            noLogin(response);
+//            return false;
+//        }
         UserUtil.add(tokenUser);
         UserUtil.add(request);
         return true;

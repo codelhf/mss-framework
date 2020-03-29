@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.controller;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.UserPhoneService;
-import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
