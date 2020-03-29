@@ -1,5 +1,6 @@
 package com.mss.framework.base.user.server.util;
 
+import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 
 import java.util.HashMap;
@@ -59,12 +60,12 @@ public class ResponseUtil {
     }
 
     public static Map<String, Object> SSOData(String accessToken, String refreshToken,
-                                              Integer expiresIn, String jsonUser) {
+                                              Long expiresIn, String jsonUser) {
         Map<String, Object> result = new HashMap<>(4);
         result.put("access_token", accessToken);
         result.put("refresh_token", refreshToken);
         result.put("expires_in", expiresIn);
-        result.put("user_info", jsonUser);
+        result.put("user_info", JSON.parseObject(jsonUser));
         return result;
     }
 }

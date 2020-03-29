@@ -3,11 +3,15 @@ package com.mss.framework.base.user.server.controller;
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.UserNameService;
+import com.mss.framework.base.user.server.web.token.jwt.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * @Description: 用户名部分
@@ -32,7 +36,13 @@ public class UserNameController {
     }
 
     @PostMapping("/login_password")
-    public ServerResponse<User> loginPassword(String username, String md5Password) {
-        return userNameService.loginPassword(username, md5Password);
+    public ServerResponse loginPassword(String username, String md5Password, HttpServletResponse response) {
+        ServerResponse serverResponse = userNameService.loginPassword(username, md5Password);
+        if (!serverResponse.isSuccess()) {
+            return serverResponse;
+        }
+        User user = (User) serverResponse.getData();
+        Map<String, Object> map = TokenUtil.putSSOToken(user, response);
+        return ServerResponse.createBySuccess(map);
     }
 }
