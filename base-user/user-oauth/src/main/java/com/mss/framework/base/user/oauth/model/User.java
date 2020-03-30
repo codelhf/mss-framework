@@ -19,17 +19,15 @@ import java.util.Date;
 public class User {
     private Integer id;
 
-    private String username;
+    private String nickname;
 
-    private String password;
-
-    private String mobile;
+    private String phone;
 
     private String email;
+
+    private Integer status;
 
     private Date createTime;
 
     private Date updateTime;
-
-    private Integer status;
 }

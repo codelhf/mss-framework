@@ -12,7 +12,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,token_id,refresh_token,expires_in,create_user,update_user,create_time,update_time,
+        id,token_id,refresh_token,expires_in,create_user,update_user,create_time,update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -25,9 +25,9 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthRefreshToken">
         insert into oauth_refresh_token
-        (id, token_id, refresh_token, expires_in, create_user, update_user, create_time, update_time, )
+        (id, token_id, refresh_token, expires_in, create_user, update_user, create_time, update_time )
         values
-        (#{id, jdbcType=VARCHAR}, #{tokenId, jdbcType=VARCHAR}, #{refreshToken, jdbcType=VARCHAR}, #{expiresIn, jdbcType=BIGINT}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP}, )
+        (#{id, jdbcType=VARCHAR}, #{tokenId, jdbcType=VARCHAR}, #{refreshToken, jdbcType=VARCHAR}, #{expiresIn, jdbcType=BIGINT}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP} )
     </insert>
     <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthRefreshToken">
         insert into oauth_refresh_token
@@ -124,7 +124,7 @@
             create_user = #{createUser, jdbcType=VARCHAR},
             update_user = #{updateUser, jdbcType=VARCHAR},
             create_time = #{createTime, jdbcType=TIMESTAMP},
-            update_time = #{updateTime, jdbcType=TIMESTAMP},
+            update_time = #{updateTime, jdbcType=TIMESTAMP}
         where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">

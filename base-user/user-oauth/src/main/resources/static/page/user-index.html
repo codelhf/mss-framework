@@ -21,26 +21,23 @@
     </div>
 <script type="text/javascript">
     $(function () {
-        init();
+        $.ajax({
+            url: '/user/getUserInfo',
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                if (res.code === 200) {
+                    $('.username').text(JSON.stringify(res.data));
+                } else {
+                    alert("用户未登录");
+                    window.location.href = '/page/login.html?redirect=' + encodeURIComponent(window.location.href);
+                }
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
     });
-    function init() {
-       $.ajax({
-           url: '/user/getUserInfo',
-           type: 'GET',
-           dataType: 'json',
-           success: function (res) {
-               if (res.code == 200) {
-                   $('.username').text(res.data);
-               } else {
-                   alert("用户未登录");
-                   window.location.href = '/page/login.html?redirect=' + encodeURIComponent(window.location.href);
-               }
-           },
-           error: function (err) {
-               alert(err.statusText);
-           }
-       });
-    }
 </script>
 </body>
 </html>

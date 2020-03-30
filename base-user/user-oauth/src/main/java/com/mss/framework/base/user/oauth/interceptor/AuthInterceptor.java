@@ -27,21 +27,20 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         //当前系统请求认证服务器成功之后返回的Authorization Code
         String code = request.getParameter("code");
         //原样返回的状态码
-        String resultStatus = request.getParameter("status");
+        String status = request.getParameter("state");
 
         //code不为空，则说明当前请求是从认证服务器返回的回调请求
-        if (StringUtils.isNotBlank(code)) {
-            //从session获取保存的状态码
-            String savedStatus = (String) session.getAttribute(Constants.SESSION_AUTH_CODE_STATUS);
-            //1. 校验状态码是否匹配
-            if (savedStatus != null && savedStatus.equals(resultStatus)) {
-                return true;
-            } else {
-                error(response);
-                return false;
-            }
+        if (StringUtils.isBlank(code)) {
+            return true;
         }
-        return true;
+        //从session获取保存的状态码
+        String savedStatus = (String) session.getAttribute(Constants.SESSION_AUTH_CODE_STATUS);
+        //1. 校验状态码是否匹配
+        if (status.equals(savedStatus)) {
+            return true;
+        }
+        error(response);
+        return false;
     }
 
     private void error(HttpServletResponse response) throws IOException {

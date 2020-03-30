@@ -1,17 +1,11 @@
 server:
   port: 8081
-  servlet:
-    context-path: /
-debug: true
-#logging:
-#  level: debug
 
-own:
-  oauth2:
-    client-id: 7Ugj6XWmTDpyYp8M8njG3hqx
-    client-secret: tur2rlFfywR9OOP3fB5ZbsLTnNuNabI3
-    scope: super
-    user-authorization-uri: http://localhost:8080/oauth2.0/authorize?response_type=code&client_id={0}&scope=super&state={1}&redirect_uri={2}
-    access-token-uri: http://localhost:8080/oauth2.0/token?client_id={1}&client_secret={2}&grant_type=authorization_code&code={3}&redirect_uri={4}
-    resource:
-      userInfoUri: http://localhost:8080/api/users/getInfo?access_token={1}
+oauth2:
+  client-id: 7Ugj6XWmTDpyYp8M8njG3hqx
+  client-secret: tur2rlFfywR9OOP3fB5ZbsLTnNuNabI3
+  scope: super
+  user-authorization-uri: http://localhost:8080/oauth2.0/authorize?response_type=code&client_id={0}&scope=super&state={1}&redirect_uri={2}
+  access-token-uri: http://localhost:8080/oauth2.0/token?client_id={1}&client_secret={2}&grant_type=authorization_code&code={3}&redirect_uri={4}
+  resource:
+    userInfoUri: http://localhost:8080/oauth2.0/verify?access_token={1}

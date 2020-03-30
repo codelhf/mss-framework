@@ -16,7 +16,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,access_token,user_id,user_name,client_id,expires_in,grant_type,scope,create_user,update_user,create_time,update_time,
+        id,access_token,user_id,user_name,client_id,expires_in,grant_type,scope,create_user,update_user,create_time,update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -29,9 +29,9 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthAccessToken">
         insert into oauth_access_token
-        (id, access_token, user_id, user_name, client_id, expires_in, grant_type, scope, create_user, update_user, create_time, update_time, )
+        (id, access_token, user_id, user_name, client_id, expires_in, grant_type, scope, create_user, update_user, create_time, update_time )
         values
-        (#{id, jdbcType=VARCHAR}, #{accessToken, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{clientId, jdbcType=VARCHAR}, #{expiresIn, jdbcType=BIGINT}, #{grantType, jdbcType=VARCHAR}, #{scope, jdbcType=VARCHAR}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP}, )
+        (#{id, jdbcType=VARCHAR}, #{accessToken, jdbcType=VARCHAR}, #{userId, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{clientId, jdbcType=VARCHAR}, #{expiresIn, jdbcType=BIGINT}, #{grantType, jdbcType=VARCHAR}, #{scope, jdbcType=VARCHAR}, #{createUser, jdbcType=VARCHAR}, #{updateUser, jdbcType=VARCHAR}, #{createTime, jdbcType=TIMESTAMP}, #{updateTime, jdbcType=TIMESTAMP} )
     </insert>
     <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthAccessToken">
         insert into oauth_access_token
@@ -168,7 +168,7 @@
             create_user = #{createUser, jdbcType=VARCHAR},
             update_user = #{updateUser, jdbcType=VARCHAR},
             create_time = #{createTime, jdbcType=TIMESTAMP},
-            update_time = #{updateTime, jdbcType=TIMESTAMP},
+            update_time = #{updateTime, jdbcType=TIMESTAMP}
         where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">

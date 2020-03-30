@@ -24,7 +24,7 @@
 <script type="text/javascript">
     var redirectUrl = getUrlParam('redirect');
     var href = $('.login').attr('href');
-    $('.login').attr('href', href + "?redirect=" + redirectUrl);
+    $('.login').attr('href', href + "?redirectUrl=" + redirectUrl);
     //获取参数
     function getUrlParam(name) {
         var reg     = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');

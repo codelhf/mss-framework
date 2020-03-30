@@ -82,6 +82,11 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public String createAuthorizationCode(String clientId, String scope, TokenUser tokenUser) {
+        if (tokenUser == null) {
+            tokenUser = new TokenUser();
+        }
+        tokenUser.setId("1");
+        tokenUser.setUsername("liuhf");
         tokenUser.setClientId(clientId);
         tokenUser.setScope(scope);
         //生成Authorization Code

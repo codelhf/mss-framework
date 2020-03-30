@@ -68,9 +68,9 @@ public class RestTemplateConfig {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
         //设置客户端和服务端建立连接的超时时间
-        requestFactory.setConnectTimeout(5000);
+        requestFactory.setConnectTimeout(50000);
         //设置客户端从服务端读取数据的超时时间
-        requestFactory.setReadTimeout(5000);
+        requestFactory.setReadTimeout(50000);
         //设置从连接池获取连接的超时时间，不宜过长
         requestFactory.setConnectionRequestTimeout(200);
         //缓冲请求数据，默认为true。通过POST或者PUT大量发送数据时，建议将此更改为false，以免耗尽内存

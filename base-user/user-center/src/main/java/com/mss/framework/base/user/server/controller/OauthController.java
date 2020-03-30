@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -139,6 +140,7 @@ public class OauthController {
         }
         //重定向到申请方的服务地址
         response.sendRedirect(redirectUri + params);
+//        return new ModelAndView("redirect:" + redirectUri + params);
     }
 
     /**
