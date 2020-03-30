@@ -114,7 +114,7 @@ public class OAuthServiceImpl implements OAuthService {
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setUserId(tokenUser.getId());
             accessToken.setUserName(tokenUser.getUsername());
-            accessToken.setClientId(oAuthClientDetail.getId());
+            accessToken.setClientId(oAuthClientDetail.getClientId());
             accessToken.setScope(scope);
             accessToken.setExpiresIn(expireTime);
             accessToken.setGrantType(grantType);

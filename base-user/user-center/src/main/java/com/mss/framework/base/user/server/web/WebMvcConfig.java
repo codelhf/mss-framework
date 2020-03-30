@@ -20,18 +20,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")
                 //排除用户部分接口, refresh_token
-                .excludePathPatterns("*/user/v1.0/**", "*/oauth2.0/refresh_token", "*/sso/refresh_token")
-                .addPathPatterns("*/**");
+                .excludePathPatterns("/user/v1.0/**", "/oauth2.0/refresh_token", "/sso/refresh_token");
         registry.addInterceptor(new OauthInterceptor())
-                .addPathPatterns("*/oauth2.0/authorize");
+                .addPathPatterns("/oauth2.0/authorize");
         registry.addInterceptor(new OAuthAccessTokenInterceptor())
-                .addPathPatterns("*/oauth2.0/verify");
+                .addPathPatterns("/oauth2.0/verify");
         // 单点登录只在浏览器场景使用
         registry.addInterceptor(new SSOInterceptor())
-                .addPathPatterns("*/sso/token");
+                .addPathPatterns("/sso/token");
         registry.addInterceptor(new SSOAccessTokenInterceptor())
-                .addPathPatterns("*/sso/verify");
+                .addPathPatterns("/sso/verify");
     }
 
 }
