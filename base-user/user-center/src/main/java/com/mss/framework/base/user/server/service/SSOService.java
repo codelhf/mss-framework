@@ -5,6 +5,8 @@ import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
 
+import java.util.List;
+
 /**
  * @Description: SSO单点登录相关Service
  * @Auther: liuhf
@@ -91,4 +93,14 @@ public interface SSOService {
      * @return java.lang.String
      */
     String createRefreshToken(TokenUser tokenUser, SSOAccessToken ssoAccessToken);
+
+    /**
+     * @description: 获取所有注册的域名
+     * @author liuhf
+     * @createtime 2019/5/4 10:42
+     *
+     * @param []
+     * @return List<String>
+     */
+    List<String> getAllRedirectUri();
 }

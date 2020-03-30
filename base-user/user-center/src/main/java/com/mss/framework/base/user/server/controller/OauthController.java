@@ -137,7 +137,7 @@ public class OauthController {
         if (StringUtils.isNoneBlank(state)) {
             params = params + "&state=" + state;
         }
-        //重定向到第三方的服务地址
+        //重定向到申请方的服务地址
         response.sendRedirect(redirectUri + params);
     }
 

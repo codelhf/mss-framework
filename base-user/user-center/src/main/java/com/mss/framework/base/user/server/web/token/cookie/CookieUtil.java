@@ -18,8 +18,6 @@ public class CookieUtil {
 
     public static final String ACCESS_TOKEN = "access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
-    // 支持的域名
-    public static final List<String> cookieDomains = Arrays.asList(".taobao.com", ".tmall.com");
     // access token过期时间5分钟
     public static final int EXPIRE_TIME = 60 * 5;
     // refresh token过期时间
@@ -33,7 +31,7 @@ public class CookieUtil {
         cookie.setHttpOnly(true);
         //单位是秒
         //maxAge不设置的话，cookie不会写入硬盘，而是写在内存，只在当前页面有效
-        cookie.setMaxAge(maxAge);//如果是-1代表永久
+        cookie.setMaxAge(maxAge);//如果是-1代表永久，设置成0，代表删除此cookie
         log.info("write cookieName:{} cookieValue:{}", cookie.getName(), cookie.getValue());
         response.addCookie(cookie);
     }

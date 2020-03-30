@@ -39,7 +39,7 @@ public class ValidateCodeServerImpl implements ValidateCodeService {
             String base64Image = vCode.Base64();
             return ServerResponse.createBySuccess(base64Image);
         } catch (IOException e) {
-            log.error("create vCodeImage fail:{}", e);
+            log.error("create vCodeImage fail:{}", e.getMessage());
             return ServerResponse.createByErrorMessage("create vCodeImage fail");
         }
     }

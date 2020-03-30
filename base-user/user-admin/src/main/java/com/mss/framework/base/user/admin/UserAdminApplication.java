@@ -8,9 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.mss.framework.base"})
 @MapperScan(basePackages = {"com.mss.framework.base.user.admin.dao"})
-public class AdminApplication {
+public class UserAdminApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class, args);
+        SpringApplication.run(UserAdminApplication.class, args);
     }
 }

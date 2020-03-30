@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -70,16 +71,20 @@ public class TokenUtil {
     }
 
     public static String verify(String token) {
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
         return JWTUtil.verify(token, JWTUtil.secret, JWTUtil.issuer);
     }
 
-    public static Map<String, Object> putSSOToken(User user, HttpServletResponse response) {
-        TokenUser tokenUser = tokenUser(user);
+    public static Map<String, Object> putSSOToken(User user, List<String> cookieDomains, HttpServletResponse response) {
+        TokenUser tokenUser = getTokenUser(user);
         // 生成token
-        String accessToken = TokenUtil.accessToken(JSON.toJSONString(tokenUser), JWTUtil.EXPIRE_TIME);
-        String refreshToken = TokenUtil.refreshToken(tokenUser.getId(), JWTUtil.REFRESH_TOKEN_EXPIRE_TIME);
+        String accessToken = accessToken(JSON.toJSONString(tokenUser), JWTUtil.EXPIRE_TIME);
+        String refreshToken = refreshToken(tokenUser.getId(), JWTUtil.REFRESH_TOKEN_EXPIRE_TIME);
         // 将token写入所有域名下, 针对sso
-        for (String cookieDomain : CookieUtil.cookieDomains) {
+        for (String cookieDomain : cookieDomains) {
+            cookieDomain = getCookieDomain(cookieDomain);
             CookieUtil.writeToken(response, accessToken, CookieUtil.ACCESS_TOKEN, cookieDomain, CookieUtil.EXPIRE_TIME);
             CookieUtil.writeToken(response, refreshToken, CookieUtil.REFRESH_TOKEN, cookieDomain, CookieUtil.MAX_AGE);
         }
@@ -95,23 +100,37 @@ public class TokenUtil {
         return accessToken;
     }
 
-    public static boolean deleteSSOToken(String accessToken, HttpServletResponse response) {
+    public static boolean deleteSSOToken(String accessToken, List<String> cookieDomains, HttpServletResponse response) {
         // TODO 将token放入黑名单中
 
         // 删除所有域名下的token
-        for (String cookieDomain : CookieUtil.cookieDomains) {
+        for (String cookieDomain : cookieDomains) {
+            cookieDomain = getCookieDomain(cookieDomain);
             CookieUtil.writeToken(response, accessToken, CookieUtil.ACCESS_TOKEN, cookieDomain, 0);
 //            CookieUtil.writeToken(response, refreshToken, CookieUtil.REFRESH_TOKEN, cookieDomain, 0);
         }
         return true;
     }
 
-    public static TokenUser tokenUser(User user) {
+    private static TokenUser getTokenUser(User user) {
         TokenUser tokenUser = new TokenUser();
         tokenUser.setId(user.getId());
         tokenUser.setUsername(user.getNickname());
         tokenUser.setEmail(user.getEmail());
         tokenUser.setPhone(user.getPhone());
         return tokenUser;
+    }
+
+    private static String getCookieDomain(String fullDomain) {
+        // www.abc.aab.domain.com.cn
+        // www.domain.xxx
+        // login.domain.xxx
+        if (StringUtils.isBlank(fullDomain)) {
+            return null;
+        }
+        //只允许一级子域名
+        int begin = fullDomain.indexOf(".");
+        int end = fullDomain.indexOf("/");
+        return fullDomain.substring(begin, end);
     }
 }

@@ -2,6 +2,7 @@ package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.pojo.User;
+import com.mss.framework.base.user.server.service.SSOService;
 import com.mss.framework.base.user.server.service.UserEmailService;
 import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +26,8 @@ public class UserEmailController {
 
     @Autowired
     private UserEmailService userEmailService;
+    @Autowired
+    private SSOService ssoService;
 
     @GetMapping("/checkEmail")
     public ServerResponse<String> checkEmail(String email) {
@@ -42,7 +46,8 @@ public class UserEmailController {
             return serverResponse;
         }
         User user = (User) serverResponse.getData();
-        Map<String, Object> map = TokenUtil.putSSOToken(user, response);
+        List<String> cookieDomains = ssoService.getAllRedirectUri();
+        Map<String, Object> map = TokenUtil.putSSOToken(user, cookieDomains, response);
         return ServerResponse.createBySuccess(map);
     }
 

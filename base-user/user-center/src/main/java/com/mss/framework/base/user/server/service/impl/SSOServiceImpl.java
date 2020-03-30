@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description: TODO
@@ -131,5 +133,11 @@ public class SSOServiceImpl implements SSOService {
             ssoRefreshTokenMapper.updateByPrimaryKeySelective(refreshToken);
         }
         return refreshTokenStr;
+    }
+
+    @Override
+    public List<String> getAllRedirectUri() {
+        List<SSOClientDetail> ssoClientDetailList = ssoClientDetailMapper.selectPageList(new SSOClientDetail());
+        return ssoClientDetailList.stream().map(SSOClientDetail::getRedirectUrl).collect(Collectors.toList());
     }
 }

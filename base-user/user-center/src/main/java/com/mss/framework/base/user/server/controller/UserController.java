@@ -2,6 +2,7 @@ package com.mss.framework.base.user.server.controller;
 
 import com.mss.framework.base.core.common.ServerResponse;
 import com.mss.framework.base.user.server.pojo.User;
+import com.mss.framework.base.user.server.service.SSOService;
 import com.mss.framework.base.user.server.service.UserService;
 import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @Description: 用户部分接口
@@ -24,11 +26,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private SSOService ssoService;
 
     @PostMapping("/logout")
     public ServerResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = TokenUtil.readAccessToken(request);
-        boolean logout = TokenUtil.deleteSSOToken(accessToken, response);
+        List<String> cookieDomains = ssoService.getAllRedirectUri();
+        boolean logout = TokenUtil.deleteSSOToken(accessToken, cookieDomains, response);
         if (logout) {
             return ServerResponse.createBySuccess();
         }
