@@ -7,7 +7,7 @@
         <result column="description" jdbcType="VARCHAR" property="description"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,scope,description,
+        id,scope,description
     </sql>
     <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
@@ -20,9 +20,9 @@
     </delete>
     <insert id="insert" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         insert into oauth_scope
-        (id, scope, description, )
+        (id, scope, description )
         values
-        (#{id, jdbcType=VARCHAR}, #{scope, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, )
+        (#{id, jdbcType=VARCHAR}, #{scope, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR} )
     </insert>
     <insert id="insertSelective" parameterType="com.mss.framework.base.user.server.pojo.OAuthScope">
         insert into oauth_scope
@@ -69,7 +69,7 @@
         set
             id = #{id, jdbcType=VARCHAR},
             scope = #{scope, jdbcType=VARCHAR},
-            description = #{description, jdbcType=VARCHAR},
+            description = #{description, jdbcType=VARCHAR}
         where id = #{id, jdbcType=VARCHAR}
     </update>
     <delete id="deleteByIdList" parameterType="map">

@@ -3,7 +3,7 @@ package com.mss.framework.base.user.server.web.interceptor;
 import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.UserUtil;
-import com.mss.framework.base.user.server.common.Constants;
+import com.mss.framework.base.core.util.IPUtil;
 import com.mss.framework.base.user.server.dao.OAuthClientDetailMapper;
 import com.mss.framework.base.user.server.dao.OAuthClientUserMapper;
 import com.mss.framework.base.user.server.dao.OAuthScopeMapper;
@@ -11,7 +11,6 @@ import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthClientUser;
 import com.mss.framework.base.user.server.pojo.OAuthScope;
-import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +26,7 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:14
  */
-//@Component
-public class OauthInterceptor extends HandlerInterceptorAdapter {
+public class OAuthInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private OAuthClientDetailMapper oAuthClientDetailMapper;
@@ -40,9 +37,6 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //获取登录用户信息
-        TokenUser tokenUser = UserUtil.getCurrentUser();
-
         //应用ID
         String clientId = request.getParameter("client_id");
         //权限范围
@@ -57,25 +51,26 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
         }
         //1. 查询是否存在授权信息
         OAuthClientDetail oAuthClientDetail = oAuthClientDetailMapper.selectByClientId(clientId);
-        OAuthScope oAuthScope = oAuthScopeMapper.selectByScope(scope);
-
         if (oAuthClientDetail == null) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_CLIENT);
         }
-
-        if (oAuthScope == null) {
-            return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_SCOPE);
-        }
-
         if (!oAuthClientDetail.getRedirectUri().equals(redirectUri)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
-
+        OAuthScope oAuthScope = oAuthScopeMapper.selectByScope(scope);
+        if (oAuthScope == null) {
+            return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_SCOPE);
+        }
+        //获取登录用户信息
+        TokenUser tokenUser = UserUtil.getCurrentUser();
+        if (tokenUser == null) {
+            return true;
+        }
         //2. 查询用户给接入的APP是否已经授权
         OAuthClientUser oAuthClientUser = oAuthClientUserMapper.selectByExample(oAuthClientDetail.getId(), tokenUser.getId(), oAuthScope.getId());
         if (oAuthClientUser == null) {
             //参数信息
-            String params = "?redirectUri=" + SpringContextUtil.getRequestUrl(request);
+            String params = "?redirectUri=" + IPUtil.getRealIp(request);
             params = params + "&client_id=" + clientId + "&scope=" + scope;
             //如果没有授权，则跳转到授权页面
             response.sendRedirect(request.getContextPath() + "/oauth2.0/authorizePage" + params);
