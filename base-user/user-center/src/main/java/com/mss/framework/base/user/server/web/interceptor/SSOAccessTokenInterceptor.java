@@ -7,6 +7,7 @@ import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:25
  */
-//@Component
+@Component
 public class SSOAccessTokenInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired

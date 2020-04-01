@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.filter.HttpPutFormContentFilter;
-//import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-//import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.filter.FormContentFilter;
 
 /**
  * @Description: Webmvc相关配置
@@ -15,7 +13,6 @@ import org.springframework.web.filter.HttpPutFormContentFilter;
  * @CreateTime: 2019/5/3 22:48
  */
 @Configuration
-//@EnableWebMvc
 public class WebMvcFilter {
 
     @Bean
@@ -31,7 +28,7 @@ public class WebMvcFilter {
     @Order(2)//HttpPutFormContentFilter接口Put请求无法获取请求体的内容
     public FilterRegistrationBean HttpPutFormContentFilter() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(new HttpPutFormContentFilter());
+        filterRegistrationBean.setFilter(new FormContentFilter());
         filterRegistrationBean.addUrlPatterns("/*");
         return filterRegistrationBean;
     }

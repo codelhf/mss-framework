@@ -8,6 +8,7 @@ import com.mss.framework.base.user.server.redis.RedisUtil;
 import com.mss.framework.base.user.server.web.token.TokenUtil;
 import com.mss.framework.base.user.server.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,7 +21,7 @@ import java.io.IOException;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:11
  */
-//@Component
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     /**

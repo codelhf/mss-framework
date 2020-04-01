@@ -1,6 +1,5 @@
 package com.mss.framework.base.user.server.web.interceptor;
 
-import com.mss.framework.base.core.common.SpringContextUtil;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.IPUtil;
@@ -14,6 +13,7 @@ import com.mss.framework.base.user.server.pojo.OAuthScope;
 import com.mss.framework.base.user.server.util.JsonUtil2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +26,7 @@ import java.util.Map;
  * @Auther: liuhf
  * @CreateTime: 2019/5/4 11:14
  */
+@Component
 public class OAuthInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
