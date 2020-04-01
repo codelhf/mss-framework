@@ -64,9 +64,6 @@ public class OAuthInterceptor extends HandlerInterceptorAdapter {
         }
         //获取登录用户信息
         TokenUser tokenUser = UserUtil.getCurrentUser();
-        if (tokenUser == null) {
-            return true;
-        }
         //2. 查询用户给接入的APP是否已经授权
         OAuthClientUser oAuthClientUser = oAuthClientUserMapper.selectByExample(oAuthClientDetail.getId(), tokenUser.getId(), oAuthScope.getId());
         if (oAuthClientUser == null) {

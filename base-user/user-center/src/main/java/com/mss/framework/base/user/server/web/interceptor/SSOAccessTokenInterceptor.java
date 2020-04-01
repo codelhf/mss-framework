@@ -32,14 +32,13 @@ public class SSOAccessTokenInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String accessToken = request.getParameter("access_token");
 
+        String accessToken = request.getParameter("access_token");
         if (StringUtils.isBlank(accessToken)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REQUEST);
         }
         //查询数据库中的Access Token
         SSOAccessToken ssoAccessToken = ssoAccessTokenMapper.selectByAccessToken(accessToken);
-
         if (ssoAccessToken == null) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_GRANT);
         }
@@ -48,7 +47,6 @@ public class SSOAccessTokenInterceptor extends HandlerInterceptorAdapter {
         LocalDateTime expiresDateTime = DateUtil.ofEpochSecond(savedExpiresAt, null);
         //当前日期
         LocalDateTime nowDateTime = DateUtil.currentTime();
-
         //如果Access Token已经失效，则返回错误提示
         if (expiresDateTime.isBefore(nowDateTime)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.EXPIRED_TOKEN);

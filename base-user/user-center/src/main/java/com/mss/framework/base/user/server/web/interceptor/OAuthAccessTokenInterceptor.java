@@ -39,7 +39,6 @@ public class OAuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isBlank(accessToken)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REQUEST);
         }
-
         //查询数据库中的Access Token
         OAuthAccessToken authAccessToken = oAuthAccessTokenMapper.selectByAccessToken(accessToken);
         if(authAccessToken == null) {
@@ -50,7 +49,6 @@ public class OAuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
         LocalDateTime expiresDateTime = DateUtil.ofEpochSecond(savedExpiresAt, null);
         //当前日期
         LocalDateTime nowDateTime = DateUtil.currentTime();
-
         //如果Access Token已经失效，则返回错误提示
         if (expiresDateTime.isBefore(nowDateTime)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.EXPIRED_TOKEN);

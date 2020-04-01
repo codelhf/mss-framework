@@ -1,6 +1,7 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
@@ -20,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,7 +132,7 @@ public class OauthController {
         //state，用于防止CSRF攻击（非必填）
         String state = request.getParameter("state");
         //生成Authorization Code
-        String authorizationCode = oAuthService.createAuthorizationCode(clientId, scope, UserUtil.getCurrentUser());
+        String authorizationCode = oAuthService.createAuthorizationCode(clientId, scope, redirectUri);
 
         String params = "?code=" + authorizationCode;
         if (StringUtils.isNoneBlank(state)) {
@@ -172,7 +172,6 @@ public class OauthController {
         if (!(oAuthClientDetail != null && oAuthClientDetail.getClientSecret().equals(clientSecret))) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_CLIENT);
         }
-
         //校验回调URL
         if (!oAuthClientDetail.getRedirectUri().equals(redirectUri)) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.REDIRECT_URI_MISMATCH);
@@ -182,22 +181,20 @@ public class OauthController {
         if (tokenUser == null || tokenUser.getScope() == null) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
         }
-        //过期时间
+        //scope
+        String scope = tokenUser.getScope();
+        //过期时长
         Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+        //获取对应的用户信息
+        User user = userService.selectByUserId(tokenUser.getId());
 
         //生成Access Token
-        String accessToken = oAuthService.createAccessToken(tokenUser, oAuthClientDetail, grantType, tokenUser.getScope(), expiresIn);
+        String accessToken = oAuthService.createAccessToken(user, clientId, grantType, scope, expiresIn);
         //查询已经插入到数据库的Access Token
         OAuthAccessToken authAccessToken = oAuthService.selectByAccessToken(accessToken);
         //生成Refresh Token
-        String refreshToken = oAuthService.createRefreshToken(tokenUser, authAccessToken);
-        Map<String, Object> result = new HashMap<>(8);
-        //返回数据
-        result.put("access_token", authAccessToken.getAccessToken());
-        result.put("refresh_token", refreshToken);
-        result.put("expires_in", expiresIn);
-        result.put("scope", tokenUser.getScope());
-        return result;
+        String refreshToken = oAuthService.createRefreshToken(user, authAccessToken.getId());
+        return ResponseUtil.OAuthData(accessToken, refreshToken, expiresIn, scope);
     }
 
     /**
@@ -228,40 +225,31 @@ public class OauthController {
     public Map<String, Object> refreshToken(HttpServletRequest request) {
         //获取Refresh Token
         String refreshTokenStr = request.getParameter("refresh_token");
-        OAuthRefreshToken authRefreshToken = oAuthService.selectByRefreshToken(refreshTokenStr);
-
-        if (authRefreshToken == null) {
+        OAuthRefreshToken oAuthRefreshToken = oAuthService.selectByRefreshToken(refreshTokenStr);
+        if (oAuthRefreshToken == null) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
         }
-        Long savedExpiresAt = authRefreshToken.getExpiresIn();
+
+        Long savedExpiresAt = oAuthRefreshToken.getExpiresIn();
         //过期日期
         LocalDateTime expiresDateTime = DateUtil.ofEpochSecond(savedExpiresAt, null);
         //当前日期
         LocalDateTime nowDateTime = DateUtil.currentTime();
-
         //如果Refresh Token已经失效，则需要重新生成
         if (expiresDateTime.isBefore(nowDateTime)) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.EXPIRED_TOKEN);
         }
+
         //获取存储的Access Token
-        OAuthAccessToken authAccessToken = oAuthService.selectByAccessId(authRefreshToken.getTokenId());
+        OAuthAccessToken oAuthAccessToken = oAuthService.selectByAccessId(oAuthRefreshToken.getTokenId());
         //获取对应的客户端信息
-        OAuthClientDetail savedClientDetail = oAuthService.selectById(authAccessToken.getClientId());
+        OAuthClientDetail savedClientDetail = oAuthService.selectById(oAuthAccessToken.getClientId());
         //获取对应的用户信息
-        User user = userService.selectByUserId(authAccessToken.getUserId());
-        TokenUser tokenUser = new TokenUser();
-        tokenUser.setId(user.getId());
-        tokenUser.setUsername(user.getNickname());
+        User user = userService.selectByUserId(oAuthAccessToken.getUserId());
         //新的过期时间
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
-        String newAccessTokenStr = oAuthService.createAccessToken(tokenUser, savedClientDetail, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
-        Map<String, Object> result = new HashMap<>(8);
-        //返回数据
-        result.put("access_token", newAccessTokenStr);
-        result.put("refresh_token", refreshTokenStr);
-        result.put("expires_in", expiresIn);
-        result.put("scope", authAccessToken.getScope());
-        return result;
+        String newAccessTokenStr = oAuthService.createAccessToken(user, savedClientDetail.getClientId(), oAuthAccessToken.getGrantType(), oAuthAccessToken.getScope(), expiresIn);
+        return ResponseUtil.OAuthData(newAccessTokenStr, refreshTokenStr, expiresIn, oAuthAccessToken.getScope());
     }
 }

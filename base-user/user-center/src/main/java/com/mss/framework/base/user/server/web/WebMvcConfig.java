@@ -33,6 +33,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 用户服务拦截请求
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**")
+                //排除用户部分接口, refresh_token
+                .excludePathPatterns("/user/v1.0/**", "/sso/refresh_token", "/oauth2.0/refresh_token");
         // oauth2.0认证服务
         registry.addInterceptor(oAuthInterceptor)
                 .addPathPatterns("/oauth2.0/authorize");
@@ -43,11 +48,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/sso/token");
         registry.addInterceptor(ssoAccessTokenInterceptor)
                 .addPathPatterns("/sso/verify");
-        // 用户服务拦截请求
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/**")
-                //排除用户部分接口, refresh_token
-                .excludePathPatterns("/user/v1.0/**", "/sso/refresh_token", "/oauth2.0/refresh_token");
     }
 
 }

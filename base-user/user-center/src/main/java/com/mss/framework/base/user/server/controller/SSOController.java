@@ -49,7 +49,7 @@ public class SSOController {
         //获取用户IP
         String requestIP = SpringContextUtil.getRequestIp(request);
         //过期时间
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
         //获取用户信息
         TokenUser tokenUser = UserUtil.getCurrentUser();
         //生成Access Token
@@ -68,7 +68,7 @@ public class SSOController {
     @GetMapping("/verify")
     public Map<String, Object> verify(@RequestParam("access_token") String accessTokenStr) {
         //过期时间
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
         //查询Access Token
         SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //查询Refresh Token
@@ -110,7 +110,7 @@ public class SSOController {
         User user = userService.selectByUserId(ssoAccessToken.getUserId());
         TokenUser tokenUser = UserUtil.getCurrentUser();
         //新的过期时间
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
         String newAccessTokenStr = ssoService.createAccessToken(tokenUser, expiresIn, requestIp, ssoClientDetails);
 

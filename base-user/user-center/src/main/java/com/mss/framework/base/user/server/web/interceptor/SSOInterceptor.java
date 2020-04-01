@@ -27,8 +27,8 @@ public class SSOInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String redirectUri = request.getParameter("redirect_uri");
 
+        String redirectUri = request.getParameter("redirect_uri");
         if (StringUtils.isBlank(redirectUri)) {
             return this.generateErrorResponse(response, ErrorCodeEnum.INVALID_REQUEST);
         }

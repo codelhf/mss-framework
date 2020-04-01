@@ -259,6 +259,18 @@ public class DateUtil {
      * @return java.lang.Long
      */
     public static Long dayToSecond(Long days) {
-        return days * 86400;
+        return days * 86400L;
+    }
+
+    /**
+     * @description: 将天数转化为毫秒数
+     * @author liuhf
+     * @createtime 2019/5/27 19:15
+     *
+     * @param [days]
+     * @return java.lang.Long
+     */
+    public static Long dayToMillis(Long days) {
+        return days * 86400000L;
     }
 }

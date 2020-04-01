@@ -50,7 +50,7 @@ public class ResponseUtil {
     }
 
     public static Map<String, Object> OAuthData(String accessToken, String refreshToken,
-                                                Integer expiresIn, String scope) {
+                                                Long expiresIn, String scope) {
         Map<String, Object> result = new HashMap<>(4);
         result.put("access_token", accessToken);
         result.put("refresh_token", refreshToken);

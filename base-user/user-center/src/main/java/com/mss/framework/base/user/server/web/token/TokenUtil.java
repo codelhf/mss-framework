@@ -23,14 +23,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class TokenUtil {
 
-    public static String accessToken(String jsonUser, Long expiresMillis) {
-        if (jsonUser == null) {
+    public static String accessToken(User user, Long expiresMillis) {
+        if (user == null) {
             return null;
         }
+        TokenUser tokenUser = getTokenUser(user);
         if (expiresMillis == null || expiresMillis < 0) {
             expiresMillis = JWTUtil.EXPIRE_TIME;
         }
-        return JWTUtil.sign(jsonUser, JWTUtil.secret, JWTUtil.issuer, expiresMillis);
+        return JWTUtil.sign(JSON.toJSONString(tokenUser), JWTUtil.secret, JWTUtil.issuer, expiresMillis);
     }
     
     public static String refreshToken(String userId, Long expiresMillis) {
@@ -78,10 +79,9 @@ public class TokenUtil {
     }
 
     public static Map<String, Object> putSSOToken(User user, List<String> cookieDomains, HttpServletResponse response) {
-        TokenUser tokenUser = getTokenUser(user);
         // 生成token
-        String accessToken = accessToken(JSON.toJSONString(tokenUser), JWTUtil.EXPIRE_TIME);
-        String refreshToken = refreshToken(tokenUser.getId(), JWTUtil.REFRESH_TOKEN_EXPIRE_TIME);
+        String accessToken = accessToken(user, JWTUtil.EXPIRE_TIME);
+        String refreshToken = refreshToken(user.getId(), JWTUtil.REFRESH_TOKEN_EXPIRE_TIME);
         // 将token写入所有域名下, 针对sso
         for (String cookieDomain : cookieDomains) {
             cookieDomain = getCookieDomain(cookieDomain);

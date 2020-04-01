@@ -104,7 +104,7 @@ public class SSOServiceImpl implements SSOService {
     @Override
     public String createRefreshToken(TokenUser tokenUser, SSOAccessToken ssoAccessToken) {
         //过期时间
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.REFRESH_TOKEN.getTime());
+        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.REFRESH_TOKEN.getTime());
         //过期的时间戳
         Long expiresAt = DateUtil.nextDaysSecond(ExpireEnum.REFRESH_TOKEN.getTime(), null);
         //1. 拼装待加密字符串（username + accessToken + 当前精确到毫秒的时间戳）

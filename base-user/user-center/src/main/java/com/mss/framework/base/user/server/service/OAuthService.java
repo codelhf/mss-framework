@@ -4,6 +4,7 @@ import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
 import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
+import com.mss.framework.base.user.server.pojo.User;
 
 /**
  * @Description: 授权相关Service
@@ -23,6 +24,16 @@ public interface OAuthService {
     OAuthClientDetail register(OAuthClientDetail oAuthClientDetail);
 
     /**
+     * @description: 通过app_id查询客户端信息
+     * @author liuhf
+     * @createtime 2019/5/3 22:38
+     *
+     * @param [clientId]
+     * @return OAuthClientDetail
+     */
+    OAuthClientDetail selectByClientId(String clientId);
+
+    /**
      * @description: 保存哪个用户授权哪个接入的客户端哪种访问范围的权限
      * @author liuhf
      * @createtime 2019/5/3 22:39
@@ -37,50 +48,20 @@ public interface OAuthService {
      * @author liuhf
      * @createtime 2019/5/3 22:39
      *
-     * @param [clientId, scopeStr, user]
+     * @param [clientId, scopeStr, redirectUri]
      * @return java.lang.String
      */
-    String createAuthorizationCode(String clientId, String scope, TokenUser tokenUser);
+    String createAuthorizationCode(String clientId, String scope, String redirectUri);
 
     /**
      * @description: 生成Access Token
      * @author liuhf
      * @createtime 2019/5/3 22:39
      *
-     * @param [user, oAuthAppDetail, grantType, scope, expireIn]
+     * @param [user, clientId, grantType, scope, expireIn]
      * @return java.lang.String
      */
-    String createAccessToken(TokenUser tokenUser, OAuthClientDetail oAuthClientDetail, String grantType, String scope, Long expiresIn);
-
-    /**
-     * @description: 生成Refresh Token
-     * @author liuhf
-     * @createtime 2019/5/3 22:39
-     *
-     * @param [user, oAuthAccessToken] 生成的Access Token信息
-     * @return java.lang.String
-     */
-    String createRefreshToken(TokenUser tokenUser, OAuthAccessToken oAuthAccessToken);
-
-    /**
-     * @description: 通过id查询客户端信息
-     * @author liuhf
-     * @createtime 2019/5/3 22:38
-     *
-     * @param [id]
-     * @return OAuthClientDetail
-     */
-    OAuthClientDetail selectById(String id);
-
-    /**
-     * @description: 通过app_id查询客户端信息
-     * @author liuhf
-     * @createtime 2019/5/3 22:38
-     *
-     * @param [clientId]
-     * @return OAuthClientDetail
-     */
-    OAuthClientDetail selectByClientId(String clientId);
+    String createAccessToken(User user, String clientId, String grantType, String scope, Long expiresIn);
 
     /**
      * @description: 通过Access Token查询记录
@@ -93,6 +74,16 @@ public interface OAuthService {
     OAuthAccessToken selectByAccessToken(String accessToken);
 
     /**
+     * @description: 生成Refresh Token
+     * @author liuhf
+     * @createtime 2019/5/3 22:39
+     *
+     * @param [user, tokenId] 生成的Access Token信息
+     * @return java.lang.String
+     */
+    String createRefreshToken(User user, String tokenId);
+
+    /**
      * @description: 通过主键查询记录
      * @author liuhf
      * @createtime 2019/5/3 22:38
@@ -101,6 +92,16 @@ public interface OAuthService {
      * @return OAuthAccessToken
      */
     OAuthAccessToken selectByAccessId(String id);
+
+    /**
+     * @description: 通过id查询客户端信息
+     * @author liuhf
+     * @createtime 2019/5/3 22:38
+     *
+     * @param [id]
+     * @return OAuthClientDetail
+     */
+    OAuthClientDetail selectById(String id);
 
     /**
      * @description: 通过Refresh Token查询记录
