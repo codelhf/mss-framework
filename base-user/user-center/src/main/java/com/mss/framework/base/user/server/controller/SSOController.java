@@ -1,9 +1,10 @@
 package com.mss.framework.base.user.server.controller;
 
-import com.mss.framework.base.core.common.SpringContextUtil;
+import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
+import com.mss.framework.base.core.util.IPUtil;
 import com.mss.framework.base.user.server.enums.ErrorCodeEnum;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
@@ -13,6 +14,7 @@ import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.SSOService;
 import com.mss.framework.base.user.server.service.UserService;
 import com.mss.framework.base.user.server.util.ResponseUtil;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -47,17 +48,18 @@ public class SSOController {
         //查询接入客户端
         SSOClientDetail ssoClientDetail = ssoService.selectByRedirectUri(redirectUri);
         //获取用户IP
-        String requestIP = SpringContextUtil.getRequestIp(request);
+        String requestIP = IPUtil.getRealIp(request);
         //过期时间
         Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
-        //获取用户信息
+        //获取用户信息(此时已登录)
         TokenUser tokenUser = UserUtil.getCurrentUser();
+        User user = userService.selectByUserId(tokenUser.getId());
         //生成Access Token
-        String accessTokenStr = ssoService.createAccessToken(tokenUser, expiresIn, requestIP, ssoClientDetail);
+        String accessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIP, ssoClientDetail);
         //查询已经插入到数据库的Access Token
         SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //生成Refresh Token
-        String refreshTokenStr = ssoService.createRefreshToken(tokenUser, accessToken);
+        String refreshTokenStr = ssoService.createRefreshToken(user, accessToken.getId());
 
         log.info(MessageFormat.format("单点登录获取Token：username:【{0}】,channel:【{1}】,Access Token:【{2}】,Refresh Token:【{3}】", tokenUser.getUsername(), ssoClientDetail.getClientName(), accessTokenStr, refreshTokenStr));
         String params = "?code=" + accessTokenStr;
@@ -73,21 +75,14 @@ public class SSOController {
         SSOAccessToken accessToken = ssoService.selectByAccessToken(accessTokenStr);
         //查询Refresh Token
         SSORefreshToken refreshToken = ssoService.selectByTokenId(accessToken.getId());
+        //查询用户信息
         User user = userService.selectByUserId(accessToken.getUserId());
-        //组装返回信息
-        Map<String, Object> result = new HashMap<>(8);
-        result.put("access_token", accessToken.getAccessToken());
-        result.put("refresh_token", refreshToken.getRefreshToken());
-        result.put("expires_in", expiresIn);
-        result.put("user_info", user);
-        return result;
+        return ResponseUtil.SSOData(accessToken.getAccessToken(), refreshToken.getRefreshToken(), expiresIn, JSON.toJSONString(user));
     }
 
     @GetMapping("/refreshToken")
-    public Map<String, Object> refreshToken(@RequestParam("refresh_token") String refreshTokenStr,
-                                            HttpServletRequest request) {
-        //获取用户IP
-        String requestIp = SpringContextUtil.getRequestIp(request);
+    public Map<String, Object> refreshToken(@RequestParam("refresh_token") String refreshTokenStr, HttpServletRequest request) {
+
         SSORefreshToken refreshToken = ssoService.selectByRefreshToken(refreshTokenStr);
         if (refreshToken == null) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
@@ -102,26 +97,21 @@ public class SSOController {
         if (expiresDateTime.isBefore(nowDateTime)) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.EXPIRED_TOKEN);
         }
+
         //获取存储的Access Token
-        SSOAccessToken ssoAccessToken = ssoService.selectByAccessId(refreshToken.getTokenId());
+        SSOAccessToken accessToken = ssoService.selectByAccessId(refreshToken.getTokenId());
         //查询接入客户端
-        SSOClientDetail ssoClientDetails = ssoService.selectById(ssoAccessToken.getClientId());
+        SSOClientDetail clientDetail = ssoService.selectById(accessToken.getClientId());
         //获取对应的用户信息
-        User user = userService.selectByUserId(ssoAccessToken.getUserId());
-        TokenUser tokenUser = UserUtil.getCurrentUser();
+        User user = userService.selectByUserId(accessToken.getUserId());
+        //获取用户IP
+        String requestIp = IPUtil.getRealIp(request);
         //新的过期时间
         Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
         //生成新的Access Token
-        String newAccessTokenStr = ssoService.createAccessToken(tokenUser, expiresIn, requestIp, ssoClientDetails);
+        String newAccessTokenStr = ssoService.createAccessToken(user, expiresIn, requestIp, clientDetail);
 
-        log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】", user.getNickname(), requestIp, ssoAccessToken.getAccessToken(), newAccessTokenStr));
-
-        //组装返回信息
-        Map<String, Object> result = new HashMap<>(8);
-        result.put("access_token", newAccessTokenStr);
-        result.put("refresh_token", refreshToken.getRefreshToken());
-        result.put("expires_in", expiresIn);
-        result.put("user_info", user);
-        return result;
+        log.info(MessageFormat.format("单点登录重新刷新Token：username:【{0}】,requestIp:【{1}】,old token:【{2}】,new token:【{3}】", user.getNickname(), requestIp, accessToken.getAccessToken(), newAccessTokenStr));
+        return ResponseUtil.SSOData(newAccessTokenStr, refreshTokenStr, expiresIn, JSON.toJSONString(user));
     }
 }

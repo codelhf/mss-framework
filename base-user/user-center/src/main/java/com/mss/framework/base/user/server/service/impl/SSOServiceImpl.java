@@ -1,8 +1,6 @@
 package com.mss.framework.base.user.server.service.impl;
 
-import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.util.DateUtil;
-import com.mss.framework.base.core.util.EncryptUtil;
 import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.server.dao.SSOAccessTokenMapper;
 import com.mss.framework.base.user.server.dao.SSOClientDetailMapper;
@@ -11,7 +9,9 @@ import com.mss.framework.base.user.server.enums.ExpireEnum;
 import com.mss.framework.base.user.server.pojo.SSOAccessToken;
 import com.mss.framework.base.user.server.pojo.SSOClientDetail;
 import com.mss.framework.base.user.server.pojo.SSORefreshToken;
+import com.mss.framework.base.user.server.pojo.User;
 import com.mss.framework.base.user.server.service.SSOService;
+import com.mss.framework.base.user.server.web.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,36 +65,35 @@ public class SSOServiceImpl implements SSOService {
     }
 
     @Override
-    public String createAccessToken(TokenUser tokenUser, Long expireIn, String requestIP, SSOClientDetail ssoClientDetail) {
+    public String createAccessToken(User user, Long expireIn, String requestIP, SSOClientDetail ssoClientDetail) {
         //过期的时间戳
-        Long expireTime = DateUtil.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
-        //1. 拼装待加密字符串（username + 渠道CODE + 当前精确到毫秒的时间戳）
-        String str = tokenUser.getUsername() + ssoClientDetail.getClientName() + String.valueOf(DateUtil.currentTimeMillis());
-        //2. SHA1加密
-        String accessTokenStr = "11." + EncryptUtil.sha1Hex(str) + "." + expireIn + "." + expireTime;
-        //3. 保存Access Token
-        SSOAccessToken accessToken = ssoAccessTokenMapper.selectByUserIdClientId(tokenUser.getId(), ssoClientDetail.getId());
+        long expireTime = DateUtil.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
+
+        String accessTokenStr = TokenUtil.accessToken(user, expireIn);
+        //保存Access Token
+        SSOAccessToken accessToken = ssoAccessTokenMapper.selectByUserIdClientId(user.getId(), ssoClientDetail.getId());
+
         Date currentTime = new Date();
         //如果存在匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (accessToken == null) {
             accessToken = new SSOAccessToken();
             accessToken.setId(IDUtil.UUIDStr());
             accessToken.setAccessToken(accessTokenStr);
-            accessToken.setUserId(tokenUser.getId());
-            accessToken.setUserName(tokenUser.getUsername());
+            accessToken.setUserId(user.getId());
+            accessToken.setUserName(user.getNickname());
             accessToken.setUserIp(requestIP);
             accessToken.setClientId(ssoClientDetail.getId());
             accessToken.setChannel(ssoClientDetail.getClientName());
-            accessToken.setExpiresIn(expireIn);
-            accessToken.setCreateUser(tokenUser.getId());
-            accessToken.setUpdateUser(tokenUser.getId());
+            accessToken.setExpiresIn(expireTime);
+            accessToken.setCreateUser(user.getId());
+            accessToken.setUpdateUser(user.getId());
             accessToken.setCreateTime(currentTime);
             accessToken.setUpdateTime(currentTime);
             ssoAccessTokenMapper.insertSelective(accessToken);
         } else {
             accessToken.setAccessToken(accessTokenStr);
             accessToken.setExpiresIn(expireIn);
-            accessToken.setUpdateUser(tokenUser.getId());
+            accessToken.setUpdateUser(user.getId());
             accessToken.setUpdateTime(currentTime);
             ssoAccessTokenMapper.updateByPrimaryKeySelective(accessToken);
         }
@@ -102,34 +101,33 @@ public class SSOServiceImpl implements SSOService {
     }
 
     @Override
-    public String createRefreshToken(TokenUser tokenUser, SSOAccessToken ssoAccessToken) {
-        //过期时间
-        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.REFRESH_TOKEN.getTime());
+    public String createRefreshToken(User user, String accessTokenId) {
+        //过期时长
+        long expiresIn = DateUtil.dayToMillis(ExpireEnum.REFRESH_TOKEN.getTime());
         //过期的时间戳
-        Long expiresAt = DateUtil.nextDaysSecond(ExpireEnum.REFRESH_TOKEN.getTime(), null);
-        //1. 拼装待加密字符串（username + accessToken + 当前精确到毫秒的时间戳）
-        String str = tokenUser.getUsername() + ssoAccessToken.getAccessToken() + String.valueOf(DateUtil.currentTimeMillis());
-        //2. SHA1加密
-        String refreshTokenStr = "12." + EncryptUtil.sha1Hex(str) + "." + expiresIn + "." + expiresAt;
+        long expiresTime = DateUtil.nextDaysSecond(ExpireEnum.REFRESH_TOKEN.getTime(), null);
+
+        String refreshTokenStr = TokenUtil.refreshToken(user.getId(), expiresIn);
         //3. 保存Refresh Token
-        SSORefreshToken refreshToken = ssoRefreshTokenMapper.selectByTokenId(ssoAccessToken.getId());
-        Date current = new Date();
+        SSORefreshToken refreshToken = ssoRefreshTokenMapper.selectByTokenId(accessTokenId);
+
+        Date currentTime = new Date();
         //如果存在tokenId匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (refreshToken == null) {
             refreshToken = new SSORefreshToken();
             refreshToken.setId(IDUtil.UUIDStr());
-            refreshToken.setTokenId(ssoAccessToken.getId());
+            refreshToken.setTokenId(accessTokenId);
             refreshToken.setRefreshToken(refreshTokenStr);
-            refreshToken.setExpiresIn(expiresIn);
-            refreshToken.setCreateUser(tokenUser.getId());
-            refreshToken.setUpdateUser(tokenUser.getId());
-            refreshToken.setCreateTime(current);
+            refreshToken.setExpiresIn(expiresTime);
+            refreshToken.setCreateUser(user.getId());
+            refreshToken.setUpdateUser(user.getId());
+            refreshToken.setCreateTime(currentTime);
             ssoRefreshTokenMapper.insertSelective(refreshToken);
         } else {
             refreshToken.setRefreshToken(refreshTokenStr);
             refreshToken.setExpiresIn(expiresIn);
-            refreshToken.setUpdateUser(tokenUser.getId());
-            refreshToken.setUpdateTime(current);
+            refreshToken.setUpdateUser(user.getId());
+            refreshToken.setUpdateTime(currentTime);
             ssoRefreshTokenMapper.updateByPrimaryKeySelective(refreshToken);
         }
         return refreshTokenStr;

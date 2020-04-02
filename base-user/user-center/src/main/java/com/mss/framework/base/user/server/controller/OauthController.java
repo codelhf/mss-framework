@@ -1,7 +1,6 @@
 package com.mss.framework.base.user.server.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.core.token.UserUtil;
 import com.mss.framework.base.core.util.DateUtil;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -176,25 +174,26 @@ public class OauthController {
         if (!oAuthClientDetail.getRedirectUri().equals(redirectUri)) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.REDIRECT_URI_MISMATCH);
         }
+        //获取用户信息(此时已登录)
         TokenUser tokenUser = TokenUtil.getTokenUser(code);
         //如果能够通过Authorization Code获取到对应的用户信息，则说明该Authorization Code有效
         if (tokenUser == null || tokenUser.getScope() == null) {
             return ResponseUtil.errorResponse(ErrorCodeEnum.INVALID_GRANT);
         }
+        //获取对应的用户信息
+        User user = userService.selectByUserId(tokenUser.getId());
         //scope
         String scope = tokenUser.getScope();
         //过期时长
-        Long expiresIn = DateUtil.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
-        //获取对应的用户信息
-        User user = userService.selectByUserId(tokenUser.getId());
+        Long expiresIn = DateUtil.dayToMillis(ExpireEnum.ACCESS_TOKEN.getTime());
 
         //生成Access Token
-        String accessToken = oAuthService.createAccessToken(user, clientId, grantType, scope, expiresIn);
+        String accessTokenStr = oAuthService.createAccessToken(user, clientId, grantType, scope, expiresIn);
         //查询已经插入到数据库的Access Token
-        OAuthAccessToken authAccessToken = oAuthService.selectByAccessToken(accessToken);
+        OAuthAccessToken accessToken = oAuthService.selectByAccessToken(accessTokenStr);
         //生成Refresh Token
-        String refreshToken = oAuthService.createRefreshToken(user, authAccessToken.getId());
-        return ResponseUtil.OAuthData(accessToken, refreshToken, expiresIn, scope);
+        String refreshToken = oAuthService.createRefreshToken(user, accessToken.getId());
+        return ResponseUtil.OAuthData(accessTokenStr, refreshToken, expiresIn, scope);
     }
 
     /**

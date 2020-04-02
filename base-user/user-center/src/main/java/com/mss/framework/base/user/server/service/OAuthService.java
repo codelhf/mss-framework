@@ -1,6 +1,5 @@
 package com.mss.framework.base.user.server.service;
 
-import com.mss.framework.base.core.token.TokenUser;
 import com.mss.framework.base.user.server.pojo.OAuthAccessToken;
 import com.mss.framework.base.user.server.pojo.OAuthClientDetail;
 import com.mss.framework.base.user.server.pojo.OAuthRefreshToken;
@@ -81,7 +80,7 @@ public interface OAuthService {
      * @param [user, tokenId] 生成的Access Token信息
      * @return java.lang.String
      */
-    String createRefreshToken(User user, String tokenId);
+    String createRefreshToken(User user, String accessTokenId);
 
     /**
      * @description: 通过主键查询记录

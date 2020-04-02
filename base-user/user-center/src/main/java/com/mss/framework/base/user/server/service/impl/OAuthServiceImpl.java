@@ -2,10 +2,9 @@ package com.mss.framework.base.user.server.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.mss.framework.base.core.token.TokenUser;
-import com.mss.framework.base.core.util.DateUtil;
-import com.mss.framework.base.core.util.EncryptUtil;
-import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.core.token.UserUtil;
+import com.mss.framework.base.core.util.DateUtil;
+import com.mss.framework.base.core.util.IDUtil;
 import com.mss.framework.base.user.server.common.Constants;
 import com.mss.framework.base.user.server.dao.*;
 import com.mss.framework.base.user.server.enums.ExpireEnum;
@@ -141,7 +140,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public String createRefreshToken(User user, String tokenId) {
+    public String createRefreshToken(User user, String accessTokenId) {
         //过期时长
         long expireIn = DateUtil.dayToSecond(ExpireEnum.REFRESH_TOKEN.getTime());
         //过期时间戳
@@ -150,14 +149,14 @@ public class OAuthServiceImpl implements OAuthService {
         String refreshTokenStr = TokenUtil.refreshToken(user.getId(), expireIn);
 
         //3. 保存Refresh Token
-        OAuthRefreshToken refreshToken = oAuthRefreshTokenMapper.selectByTokenId(tokenId);
+        OAuthRefreshToken refreshToken = oAuthRefreshTokenMapper.selectByTokenId(accessTokenId);
 
         Date currentTime = new Date();
         //如果存在tokenId匹配的记录，则更新原记录，否则向数据库中插入新记录
         if (refreshToken == null) {
             refreshToken = new OAuthRefreshToken();
             refreshToken.setId(IDUtil.UUIDStr());
-            refreshToken.setTokenId(tokenId);
+            refreshToken.setTokenId(accessTokenId);
             refreshToken.setRefreshToken(refreshTokenStr);
             refreshToken.setExpiresIn(expireTime);
             refreshToken.setCreateUser(user.getId());
