@@ -112,6 +112,15 @@ public class TokenUtil {
         return true;
     }
 
+    public static User getUser(TokenUser tokenUser) {
+        User user = new User();
+        user.setId(tokenUser.getId());
+        user.setNickname(tokenUser.getUsername());
+        user.setPhone(tokenUser.getPhone());
+        user.setEmail(tokenUser.getEmail());
+        return user;
+    }
+
     private static TokenUser getTokenUser(User user) {
         TokenUser tokenUser = new TokenUser();
         tokenUser.setId(user.getId());

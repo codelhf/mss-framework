@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
 
     <artifactId>base-user</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
 
     <properties>
         <project.encoding>UTF-8</project.encoding>
@@ -22,6 +21,7 @@
         <module>user-center</module>
         <module>user-oauth</module>
         <module>user-social</module>
+        <module>user-sso</module>
     </modules>
 
     <dependencies>

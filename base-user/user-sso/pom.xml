@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>user-oauth</artifactId>
+    <artifactId>user-sso</artifactId>
 
     <properties>
         <!-- Apache Commons系列公共库 -->

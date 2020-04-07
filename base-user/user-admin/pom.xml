@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>user-admin</artifactId>
-    <version>${parent.version}</version>
 
     <dependencies>
         <dependency>

@@ -32,9 +32,9 @@ public class OAuthServiceImpl implements OAuthService {
     @Autowired
     private OAuthClientUserMapper oAuthClientUserMapper;
     @Autowired
-    private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;
-    @Autowired
     private OAuthScopeMapper oAuthScopeMapper;
+    @Autowired
+    private OAuthRefreshTokenMapper oAuthRefreshTokenMapper;
 
     @Override
     public OAuthClientDetail register(OAuthClientDetail oAuthClientDetail) {

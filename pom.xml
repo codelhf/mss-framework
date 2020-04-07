@@ -12,8 +12,8 @@
 
     <groupId>com.mss.framework</groupId>
     <artifactId>mss-framework</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>mss-framework</name>
+    <version>${framework.version}</version>
+
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -23,8 +23,6 @@
         <spring-cloud.version>Greenwich.M3</spring-cloud.version>
 
         <framework.version>0.0.1-SNAPSHOT</framework.version>
-        <base-core.version>0.0.1-SNAPSHOT</base-core.version>
-        <base-user.version>0.0.1-SNAPSHOT</base-user.version>
     </properties>
 
     <modules>
@@ -49,12 +47,12 @@
             <dependency>
                 <groupId>com.mss.framework</groupId>
                 <artifactId>base-core</artifactId>
-                <version>${base-core.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mss.framework</groupId>
                 <artifactId>base-user</artifactId>
-                <version>${base-user.version}</version>
+                <version>${framework.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

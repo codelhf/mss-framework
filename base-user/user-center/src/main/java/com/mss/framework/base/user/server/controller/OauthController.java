@@ -83,7 +83,7 @@ public class OauthController {
         //将申请授权的服务的客户端跳转到授权页
         String params = "clientId=" + clientId + "&clientName=" + oAuthClientDetail.getClientName() + "&scope=" + scope;
         //授权页会有用户未登录的情况,登录后再次跳转回授权页
-        response.sendRedirect("/page/authorize.html?" + params);
+        response.sendRedirect("/oauth2.0/authorize.html?" + params);
     }
 
     /**
